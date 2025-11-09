@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="SmartAssistant.Api/SmartAssistant.Api.csproj" />
+  <Project Path="SmartAssistant.App/SmartAssistant.App.csproj">
+    <Deploy Solution="Debug|*" />
+  </Project>
+  <Project Path="SmartAssistant.Core/SmartAssistant.Core.csproj" />
+</Solution>
