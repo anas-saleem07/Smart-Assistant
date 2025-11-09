@@ -1,0 +1,155 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\hp\\source\\repos\\SmartAssistant\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{3B6781D5-BD8C-48CF-A141-4A467728CC5E}|SmartAssistant.Core\\SmartAssistant.Core.csproj|c:\\users\\hp\\source\\repos\\smartassistant\\smartassistant.core\\scripts\\addmigration.ps1||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{3B6781D5-BD8C-48CF-A141-4A467728CC5E}|SmartAssistant.Core\\SmartAssistant.Core.csproj|solutionrelative:smartassistant.core\\scripts\\addmigration.ps1||{3B902123-F8A7-4915-9F01-361F908088D0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{87314585-2244-44E9-A69C-DB4035580402}|SmartAssistant.Api\\SmartAssistant.Api.csproj|c:\\users\\hp\\source\\repos\\smartassistant\\smartassistant.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{87314585-2244-44E9-A69C-DB4035580402}|SmartAssistant.Api\\SmartAssistant.Api.csproj|solutionrelative:smartassistant.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3B6781D5-BD8C-48CF-A141-4A467728CC5E}|SmartAssistant.Core\\SmartAssistant.Core.csproj|c:\\users\\hp\\source\\repos\\smartassistant\\smartassistant.core\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3B6781D5-BD8C-48CF-A141-4A467728CC5E}|SmartAssistant.Core\\SmartAssistant.Core.csproj|solutionrelative:smartassistant.core\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{87314585-2244-44E9-A69C-DB4035580402}|SmartAssistant.Api\\SmartAssistant.Api.csproj|c:\\users\\hp\\source\\repos\\smartassistant\\smartassistant.api\\smartassistant.api.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{87314585-2244-44E9-A69C-DB4035580402}|SmartAssistant.Api\\SmartAssistant.Api.csproj|solutionrelative:smartassistant.api\\smartassistant.api.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{87314585-2244-44E9-A69C-DB4035580402}|SmartAssistant.Api\\SmartAssistant.Api.csproj|c:\\users\\hp\\source\\repos\\smartassistant\\smartassistant.api\\controllers\\reminderscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{87314585-2244-44E9-A69C-DB4035580402}|SmartAssistant.Api\\SmartAssistant.Api.csproj|solutionrelative:smartassistant.api\\controllers\\reminderscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{87314585-2244-44E9-A69C-DB4035580402}|SmartAssistant.Api\\SmartAssistant.Api.csproj|c:\\users\\hp\\source\\repos\\smartassistant\\smartassistant.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{87314585-2244-44E9-A69C-DB4035580402}|SmartAssistant.Api\\SmartAssistant.Api.csproj|solutionrelative:smartassistant.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3B6781D5-BD8C-48CF-A141-4A467728CC5E}|SmartAssistant.Core\\SmartAssistant.Core.csproj|c:\\users\\hp\\source\\repos\\smartassistant\\smartassistant.core\\entities\\reminder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3B6781D5-BD8C-48CF-A141-4A467728CC5E}|SmartAssistant.Core\\SmartAssistant.Core.csproj|solutionrelative:smartassistant.core\\entities\\reminder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Program Files\\dotnet\\sdk\\10.0.100-rc.2.25502.107\\Sdks\\Microsoft.NET.Sdk.StaticWebAssets\\targets\\Microsoft.NET.Sdk.StaticWebAssets.Compression.targets||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "AddMigration.ps1",
+              "DocumentMoniker": "C:\\Users\\hp\\source\\repos\\SmartAssistant\\SmartAssistant.Core\\Scripts\\AddMigration.ps1",
+              "RelativeDocumentMoniker": "SmartAssistant.Core\\Scripts\\AddMigration.ps1",
+              "ToolTip": "C:\\Users\\hp\\source\\repos\\SmartAssistant\\SmartAssistant.Core\\Scripts\\AddMigration.ps1",
+              "RelativeToolTip": "SmartAssistant.Core\\Scripts\\AddMigration.ps1",
+              "ViewState": "AgIAABUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "00000000-0000-0000-0000-000000000000.000000|iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAANOSURBVDhPjVRLTBtXFD1jsEmgBBMwhFQKICtNUEJWXaTKrpG6aJAiISRWWXaTqs2KLmBXKatIEeomUqTumixY5NcqqyiNEhXk8IlCim3ANr/BgAf/xjOeYT7Pve/ZBCchlCOdee/emXvm3vs\u002BEggzMzOMjwfBNM3C6Ojoj2NjYw/ILJa9H6FUKokxGo2y/8Paygr788mTRH9//zWfz9ckAveBpzIK8YN4vLUVx1tauoaGhob7\u002Bvquejyehkrop\u002BAZuq57IHVdZ5OTk8wwDBYKhRYHBgauUWh9WWEP7zM8DBRFwcTEBFRVDQ4ODt4mVxfRJ15Wg2foOM6hqGkak2WZzc7O8oW8QmwWIhUcuoe7rKurQ3t7O3p6engYL7mGT3Yhtk00GmHBYFA4dlEsGthStuGpKX/P9wPp0ciFy/bwyMh9msQd2y68fP7sj3wuuykEI5EPBWmXYHlVhlLQ0dDkh0sKqulAkiR4az1wyOY\u002Bl9GjJEFZX2XD13/4ZjURm6paFJGDIBdc30qBNbch3diG5foAHq7bsBv8\u002BC1m4pFWj0dmIx4UjkpT1hEpqxWZZVk8eP8ecsGUqiPFahE3GJZ0Fyb17lzrF7j8ZRP\u002BWVIwny5iKVOEkisgmdxMO7a1w3WqBKtIdo7E1kgsrtlY0Cy8y1n4PZzCd93N8PtqEE2piCkq1GwB6c2NiGtbea6zb8lqQUMGXizoDP\u002BqFibiCvq6/LjY0Yhb4wksbuaRzWgwNAMeU4eWUV7TltrmKhXBvXI55\u002BNLkO0aTGouprI7sDUd356ox/NYCt\u002BfDuDmpU4EPAyOYRI1FotG1oq6bnClqgz3sCBvIF0sIaCkcEHdwkkvw69/z2NKzuJOKIF7b1bQfQT4utkHW82ZamZbp\u002BMpYmv5o9w7Xm4ZjmXjlx4vWo\u002BVjyrfLrSK1AoV2XweLYEA5sKLOH/2DB6/yGyNG3pSfEgQgh8jTyW\u002BWVwGP1sS2/1RSYhm0xmc7KAFScjIW3CTyfV5e8eMVj4qn5RwOMw6O08JB0fo7RzvKs0kSO8z36tAlERZ//zTjbumrv21Ia885bcRfyUEe3t7r9Kl\u002BRVNP3/H7YPp6elXfCDmhIMgBAlcyE/0Cuvw0IlczBYWgP8Ad15o\u002B6vo50EAAAAASUVORK5CYII=",
+              "WhenOpened": "2025-11-09T05:55:02.951Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ApplicationDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\hp\\source\\repos\\SmartAssistant\\SmartAssistant.Core\\Data\\ApplicationDbContext.cs",
+              "RelativeDocumentMoniker": "SmartAssistant.Core\\Data\\ApplicationDbContext.cs",
+              "ToolTip": "C:\\Users\\hp\\source\\repos\\SmartAssistant\\SmartAssistant.Core\\Data\\ApplicationDbContext.cs",
+              "RelativeToolTip": "SmartAssistant.Core\\Data\\ApplicationDbContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-09T05:06:00.149Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "SmartAssistant.Api",
+              "DocumentMoniker": "C:\\Users\\hp\\source\\repos\\SmartAssistant\\SmartAssistant.Api\\SmartAssistant.Api.csproj",
+              "RelativeDocumentMoniker": "SmartAssistant.Api\\SmartAssistant.Api.csproj",
+              "ToolTip": "C:\\Users\\hp\\source\\repos\\SmartAssistant\\SmartAssistant.Api\\SmartAssistant.Api.csproj",
+              "RelativeToolTip": "SmartAssistant.Api\\SmartAssistant.Api.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-11-09T05:02:16.46Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\hp\\source\\repos\\SmartAssistant\\SmartAssistant.Api\\Program.cs",
+              "RelativeDocumentMoniker": "SmartAssistant.Api\\Program.cs",
+              "ToolTip": "C:\\Users\\hp\\source\\repos\\SmartAssistant\\SmartAssistant.Api\\Program.cs",
+              "RelativeToolTip": "SmartAssistant.Api\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAHAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-08T11:53:53.902Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "RemindersController.cs",
+              "DocumentMoniker": "C:\\Users\\hp\\source\\repos\\SmartAssistant\\SmartAssistant.Api\\Controllers\\RemindersController.cs",
+              "RelativeDocumentMoniker": "SmartAssistant.Api\\Controllers\\RemindersController.cs",
+              "ToolTip": "C:\\Users\\hp\\source\\repos\\SmartAssistant\\SmartAssistant.Api\\Controllers\\RemindersController.cs",
+              "RelativeToolTip": "SmartAssistant.Api\\Controllers\\RemindersController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-02T17:27:36.866Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\hp\\source\\repos\\SmartAssistant\\SmartAssistant.Api\\appsettings.json",
+              "RelativeDocumentMoniker": "SmartAssistant.Api\\appsettings.json",
+              "ToolTip": "C:\\Users\\hp\\source\\repos\\SmartAssistant\\SmartAssistant.Api\\appsettings.json",
+              "RelativeToolTip": "SmartAssistant.Api\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-11-02T16:56:13.699Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Reminder.cs",
+              "DocumentMoniker": "C:\\Users\\hp\\source\\repos\\SmartAssistant\\SmartAssistant.Core\\Entities\\Reminder.cs",
+              "RelativeDocumentMoniker": "SmartAssistant.Core\\Entities\\Reminder.cs",
+              "ToolTip": "C:\\Users\\hp\\source\\repos\\SmartAssistant\\SmartAssistant.Core\\Entities\\Reminder.cs",
+              "RelativeToolTip": "SmartAssistant.Core\\Entities\\Reminder.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAvAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-08T11:49:23.997Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Microsoft.NET.Sdk.StaticWebAssets.Compression.targets",
+              "DocumentMoniker": "C:\\Program Files\\dotnet\\sdk\\10.0.100-rc.2.25502.107\\Sdks\\Microsoft.NET.Sdk.StaticWebAssets\\targets\\Microsoft.NET.Sdk.StaticWebAssets.Compression.targets",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\Program Files\\dotnet\\sdk\\10.0.100-rc.2.25502.107\\Sdks\\Microsoft.NET.Sdk.StaticWebAssets\\targets\\Microsoft.NET.Sdk.StaticWebAssets.Compression.targets",
+              "ToolTip": "C:\\Program Files\\dotnet\\sdk\\10.0.100-rc.2.25502.107\\Sdks\\Microsoft.NET.Sdk.StaticWebAssets\\targets\\Microsoft.NET.Sdk.StaticWebAssets.Compression.targets",
+              "RelativeToolTip": "..\\..\\..\\..\\..\\Program Files\\dotnet\\sdk\\10.0.100-rc.2.25502.107\\Sdks\\Microsoft.NET.Sdk.StaticWebAssets\\targets\\Microsoft.NET.Sdk.StaticWebAssets.Compression.targets",
+              "ViewState": "AgIAAHcBAAAAAAAAAAArwI8BAABRAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003801|",
+              "WhenOpened": "2025-11-02T16:44:01.74Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
