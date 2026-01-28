@@ -21,10 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Mappings\" />
     <Folder Include="MiddleWare\" />
-    <Folder Include="Services\" />
-    <Folder Include="ViewModels\" />
   </ItemGroup>
 
 </Project>

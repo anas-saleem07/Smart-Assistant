@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using SmartAssistant.Api.Data;
+using SmartAssistant.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,8 +10,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
         b => b.MigrationsHistoryTable("__EFMigrationsHistory", "dbo")
               .MigrationsAssembly("SmartAssistant.Core")
     ));
+builder.Services.AddAutoMapper(typeof(Program));
 // Add services to the container.
-
+builder.Services.AddScoped<IReminderService, ReminderService>();
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
