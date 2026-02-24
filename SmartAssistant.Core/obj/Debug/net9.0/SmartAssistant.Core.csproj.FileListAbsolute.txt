@@ -12,3 +12,18 @@ C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.Core\obj\Debug\net9.0\ref
 C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.Core\obj\Debug\net9.0\SmartAssistant.Core.pdb
 C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.Core\obj\Debug\net9.0\SmartAssistant.Core.genruntimeconfig.cache
 C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.Core\obj\Debug\net9.0\ref\SmartAssistant.Core.dll
+D:\Anas FYP\SmartAssistant.Core\bin\Debug\net9.0\SmartAssistant.Core.deps.json
+D:\Anas FYP\SmartAssistant.Core\bin\Debug\net9.0\SmartAssistant.Core.runtimeconfig.json
+D:\Anas FYP\SmartAssistant.Core\bin\Debug\net9.0\SmartAssistant.Core.dll
+D:\Anas FYP\SmartAssistant.Core\bin\Debug\net9.0\SmartAssistant.Core.pdb
+D:\Anas FYP\SmartAssistant.Core\obj\Debug\net9.0\SmartAssistant.Core.csproj.AssemblyReference.cache
+D:\Anas FYP\SmartAssistant.Core\obj\Debug\net9.0\SmartAssistant.Core.GeneratedMSBuildEditorConfig.editorconfig
+D:\Anas FYP\SmartAssistant.Core\obj\Debug\net9.0\SmartAssistant.Core.AssemblyInfoInputs.cache
+D:\Anas FYP\SmartAssistant.Core\obj\Debug\net9.0\SmartAssistant.Core.AssemblyInfo.cs
+D:\Anas FYP\SmartAssistant.Core\obj\Debug\net9.0\SmartAssistant.Core.csproj.CoreCompileInputs.cache
+D:\Anas FYP\SmartAssistant.Core\obj\Debug\net9.0\SmartAssistant.Core.sourcelink.json
+D:\Anas FYP\SmartAssistant.Core\obj\Debug\net9.0\SmartAssistant.Core.dll
+D:\Anas FYP\SmartAssistant.Core\obj\Debug\net9.0\refint\SmartAssistant.Core.dll
+D:\Anas FYP\SmartAssistant.Core\obj\Debug\net9.0\SmartAssistant.Core.pdb
+D:\Anas FYP\SmartAssistant.Core\obj\Debug\net9.0\SmartAssistant.Core.genruntimeconfig.cache
+D:\Anas FYP\SmartAssistant.Core\obj\Debug\net9.0\ref\SmartAssistant.Core.dll
