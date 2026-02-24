@@ -1,24 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Anas FYP\\SmartAssistant.App\\SmartAssistant.App.csproj": {}
+    "C:\\Users\\hp\\source\\repos\\SmartAssistant\\SmartAssistant.App\\SmartAssistant.App.csproj": {}
   },
   "projects": {
-    "D:\\Anas FYP\\SmartAssistant.App\\SmartAssistant.App.csproj": {
+    "C:\\Users\\hp\\source\\repos\\SmartAssistant\\SmartAssistant.App\\SmartAssistant.App.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Anas FYP\\SmartAssistant.App\\SmartAssistant.App.csproj",
+        "projectUniqueName": "C:\\Users\\hp\\source\\repos\\SmartAssistant\\SmartAssistant.App\\SmartAssistant.App.csproj",
         "projectName": "SmartAssistant.App",
-        "projectPath": "D:\\Anas FYP\\SmartAssistant.App\\SmartAssistant.App.csproj",
-        "packagesPath": "C:\\Users\\Basit Ali Khan\\.nuget\\packages\\",
-        "outputPath": "D:\\Anas FYP\\SmartAssistant.App\\obj\\",
+        "projectPath": "C:\\Users\\hp\\source\\repos\\SmartAssistant\\SmartAssistant.App\\SmartAssistant.App.csproj",
+        "packagesPath": "C:\\Users\\hp\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\hp\\source\\repos\\SmartAssistant\\SmartAssistant.App\\obj\\",
         "projectStyle": "PackageReference",
         "crossTargeting": true,
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Basit Ali Khan\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\hp\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -37,32 +37,32 @@
           "net9.0-android35.0": {
             "targetAlias": "net9.0-android",
             "projectReferences": {
-              "D:\\Anas FYP\\SmartAssistant.Core\\SmartAssistant.Core.csproj": {
-                "projectPath": "D:\\Anas FYP\\SmartAssistant.Core\\SmartAssistant.Core.csproj"
+              "C:\\Users\\hp\\source\\repos\\SmartAssistant\\SmartAssistant.Core\\SmartAssistant.Core.csproj": {
+                "projectPath": "C:\\Users\\hp\\source\\repos\\SmartAssistant\\SmartAssistant.Core\\SmartAssistant.Core.csproj"
               }
             }
           },
           "net9.0-ios26.0": {
             "targetAlias": "net9.0-ios",
             "projectReferences": {
-              "D:\\Anas FYP\\SmartAssistant.Core\\SmartAssistant.Core.csproj": {
-                "projectPath": "D:\\Anas FYP\\SmartAssistant.Core\\SmartAssistant.Core.csproj"
+              "C:\\Users\\hp\\source\\repos\\SmartAssistant\\SmartAssistant.Core\\SmartAssistant.Core.csproj": {
+                "projectPath": "C:\\Users\\hp\\source\\repos\\SmartAssistant\\SmartAssistant.Core\\SmartAssistant.Core.csproj"
               }
             }
           },
           "net9.0-maccatalyst26.0": {
             "targetAlias": "net9.0-maccatalyst",
             "projectReferences": {
-              "D:\\Anas FYP\\SmartAssistant.Core\\SmartAssistant.Core.csproj": {
-                "projectPath": "D:\\Anas FYP\\SmartAssistant.Core\\SmartAssistant.Core.csproj"
+              "C:\\Users\\hp\\source\\repos\\SmartAssistant\\SmartAssistant.Core\\SmartAssistant.Core.csproj": {
+                "projectPath": "C:\\Users\\hp\\source\\repos\\SmartAssistant\\SmartAssistant.Core\\SmartAssistant.Core.csproj"
               }
             }
           },
           "net9.0-windows10.0.19041": {
             "targetAlias": "net9.0-windows10.0.19041.0",
             "projectReferences": {
-              "D:\\Anas FYP\\SmartAssistant.Core\\SmartAssistant.Core.csproj": {
-                "projectPath": "D:\\Anas FYP\\SmartAssistant.Core\\SmartAssistant.Core.csproj"
+              "C:\\Users\\hp\\source\\repos\\SmartAssistant\\SmartAssistant.Core\\SmartAssistant.Core.csproj": {
+                "projectPath": "C:\\Users\\hp\\source\\repos\\SmartAssistant\\SmartAssistant.Core\\SmartAssistant.Core.csproj"
               }
             }
           }
@@ -77,7 +77,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.300"
+        "SdkAnalysisLevel": "10.0.100"
       },
       "frameworks": {
         "net9.0-android35.0": {
@@ -98,7 +98,7 @@
             "Microsoft.NET.ILLink.Tasks": {
               "suppressParent": "All",
               "target": "Package",
-              "version": "[9.0.9, )",
+              "version": "[9.0.10, )",
               "autoReferenced": true
             }
           },
@@ -115,8 +115,16 @@
           "warn": true,
           "downloadDependencies": [
             {
-              "name": "Microsoft.NETCore.App.Ref",
-              "version": "[9.0.11, 9.0.11]"
+              "name": "Microsoft.Android.Ref.35",
+              "version": "[35.0.105, 35.0.105]"
+            },
+            {
+              "name": "Microsoft.Android.Runtime.35.android-arm64",
+              "version": "[35.0.105, 35.0.105]"
+            },
+            {
+              "name": "Microsoft.Android.Runtime.35.android-x64",
+              "version": "[35.0.105, 35.0.105]"
             }
           ],
           "frameworkReferences": {
@@ -127,7 +135,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.100-rc.2.25502.107/PortableRuntimeIdentifierGraph.json"
         },
         "net9.0-ios26.0": {
           "targetAlias": "net9.0-ios",
@@ -147,7 +155,7 @@
             "Microsoft.NET.ILLink.Tasks": {
               "suppressParent": "All",
               "target": "Package",
-              "version": "[9.0.9, )",
+              "version": "[9.0.10, )",
               "autoReferenced": true
             }
           },
@@ -164,8 +172,12 @@
           "warn": true,
           "downloadDependencies": [
             {
-              "name": "Microsoft.NETCore.App.Ref",
-              "version": "[9.0.11, 9.0.11]"
+              "name": "Microsoft.iOS.Ref.net9.0_26.0",
+              "version": "[26.0.9752, 26.0.9752]"
+            },
+            {
+              "name": "Microsoft.iOS.Runtime.iossimulator-x64.net9.0_26.0",
+              "version": "[26.0.9752, 26.0.9752]"
             }
           ],
           "frameworkReferences": {
@@ -176,7 +188,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.100-rc.2.25502.107/PortableRuntimeIdentifierGraph.json"
         },
         "net9.0-maccatalyst26.0": {
           "targetAlias": "net9.0-maccatalyst",
@@ -196,7 +208,7 @@
             "Microsoft.NET.ILLink.Tasks": {
               "suppressParent": "All",
               "target": "Package",
-              "version": "[9.0.9, )",
+              "version": "[9.0.10, )",
               "autoReferenced": true
             }
           },
@@ -214,8 +226,12 @@
           "warn": true,
           "downloadDependencies": [
             {
-              "name": "Microsoft.NETCore.App.Ref",
-              "version": "[9.0.11, 9.0.11]"
+              "name": "Microsoft.MacCatalyst.Ref.net9.0_26.0",
+              "version": "[26.0.9752, 26.0.9752]"
+            },
+            {
+              "name": "Microsoft.MacCatalyst.Runtime.maccatalyst-x64.net9.0_26.0",
+              "version": "[26.0.9752, 26.0.9752]"
             }
           ],
           "frameworkReferences": {
@@ -226,7 +242,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.100-rc.2.25502.107/PortableRuntimeIdentifierGraph.json"
         },
         "net9.0-windows10.0.19041": {
           "targetAlias": "net9.0-windows10.0.19041.0",
@@ -269,7 +285,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.100-rc.2.25502.107\\RuntimeIdentifierGraph.json"
         }
       },
       "runtimes": {
@@ -290,20 +306,20 @@
         }
       }
     },
-    "D:\\Anas FYP\\SmartAssistant.Core\\SmartAssistant.Core.csproj": {
+    "C:\\Users\\hp\\source\\repos\\SmartAssistant\\SmartAssistant.Core\\SmartAssistant.Core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Anas FYP\\SmartAssistant.Core\\SmartAssistant.Core.csproj",
+        "projectUniqueName": "C:\\Users\\hp\\source\\repos\\SmartAssistant\\SmartAssistant.Core\\SmartAssistant.Core.csproj",
         "projectName": "SmartAssistant.Core",
-        "projectPath": "D:\\Anas FYP\\SmartAssistant.Core\\SmartAssistant.Core.csproj",
-        "packagesPath": "C:\\Users\\Basit Ali Khan\\.nuget\\packages\\",
-        "outputPath": "D:\\Anas FYP\\SmartAssistant.Core\\obj\\",
+        "projectPath": "C:\\Users\\hp\\source\\repos\\SmartAssistant\\SmartAssistant.Core\\SmartAssistant.Core.csproj",
+        "packagesPath": "C:\\Users\\hp\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\hp\\source\\repos\\SmartAssistant\\SmartAssistant.Core\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Basit Ali Khan\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\hp\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -331,20 +347,12 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.300"
+        "SdkAnalysisLevel": "10.0.100"
       },
       "frameworks": {
         "net9.0": {
           "targetAlias": "net9.0",
           "dependencies": {
-            "AutoMapper": {
-              "target": "Package",
-              "version": "[15.1.0, )"
-            },
-            "AutoMapper.Extensions.Microsoft.DependencyInjection": {
-              "target": "Package",
-              "version": "[12.0.1, )"
-            },
             "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
               "target": "Package",
               "version": "[9.0.10, )"
@@ -380,7 +388,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.100-rc.2.25502.107/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

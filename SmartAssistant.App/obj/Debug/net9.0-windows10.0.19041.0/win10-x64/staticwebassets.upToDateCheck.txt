@@ -1,7 +1,7 @@
-D:\Anas FYP\SmartAssistant.App\wwwroot\css\app.css
-D:\Anas FYP\SmartAssistant.App\wwwroot\index.html
-D:\Anas FYP\SmartAssistant.App\wwwroot\css\bootstrap\bootstrap.min.css.map
-D:\Anas FYP\SmartAssistant.App\wwwroot\css\bootstrap\bootstrap.min.css
+C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\wwwroot\index.html
+C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\wwwroot\css\app.css
+C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\wwwroot\css\bootstrap\bootstrap.min.css
+C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\wwwroot\css\bootstrap\bootstrap.min.css.map
 wwwroot\css\app.css
 wwwroot\css\bootstrap\bootstrap.min.css
 wwwroot\css\bootstrap\bootstrap.min.css.map

@@ -1,23 +1,23 @@
 {
   "Files": [
     {
-      "Id": "D:\\Anas FYP\\SmartAssistant.App\\obj\\Debug\\net9.0-android\\scopedcss\\bundle\\SmartAssistant.App.styles.css",
+      "Id": "C:\\Users\\hp\\source\\repos\\SmartAssistant\\SmartAssistant.App\\obj\\Debug\\net9.0-android\\scopedcss\\bundle\\SmartAssistant.App.styles.css",
       "PackagePath": "staticwebassets\\SmartAssistant.App.styles.css"
     },
     {
-      "Id": "D:\\Anas FYP\\SmartAssistant.App\\wwwroot\\css\\app.css",
+      "Id": "C:\\Users\\hp\\source\\repos\\SmartAssistant\\SmartAssistant.App\\wwwroot\\css\\app.css",
       "PackagePath": "staticwebassets\\css\\app.css"
     },
     {
-      "Id": "D:\\Anas FYP\\SmartAssistant.App\\wwwroot\\css\\bootstrap\\bootstrap.min.css",
+      "Id": "C:\\Users\\hp\\source\\repos\\SmartAssistant\\SmartAssistant.App\\wwwroot\\css\\bootstrap\\bootstrap.min.css",
       "PackagePath": "staticwebassets\\css\\bootstrap\\bootstrap.min.css"
     },
     {
-      "Id": "D:\\Anas FYP\\SmartAssistant.App\\wwwroot\\css\\bootstrap\\bootstrap.min.css.map",
+      "Id": "C:\\Users\\hp\\source\\repos\\SmartAssistant\\SmartAssistant.App\\wwwroot\\css\\bootstrap\\bootstrap.min.css.map",
       "PackagePath": "staticwebassets\\css\\bootstrap\\bootstrap.min.css.map"
     },
     {
-      "Id": "D:\\Anas FYP\\SmartAssistant.App\\wwwroot\\index.html",
+      "Id": "C:\\Users\\hp\\source\\repos\\SmartAssistant\\SmartAssistant.App\\wwwroot\\index.html",
       "PackagePath": "staticwebassets\\index.html"
     },
     {
