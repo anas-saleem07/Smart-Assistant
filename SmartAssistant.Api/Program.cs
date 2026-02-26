@@ -1,36 +1,44 @@
 using Microsoft.EntityFrameworkCore;
 using SmartAssistant.Api.Data;
 using SmartAssistant.Api.Services;
+using SmartAssistant.Api.Services.Automation;
+using SmartAssistant.Api.Services.Email;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(
-        builder.Configuration.GetConnectionString("DefaultConnection"),
-        b => b.MigrationsHistoryTable("__EFMigrationsHistory", "dbo")
-              .MigrationsAssembly("SmartAssistant.Core")
-    ));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 builder.Services.AddAutoMapper(typeof(Program));
-// Add services to the container.
 builder.Services.AddScoped<IReminderService, ReminderService>();
+builder.Services.AddScoped<IEmailClient, FakeEmailClient>(); // replace later with Gmail/Graph client
+builder.Services.AddScoped<IReminderAutomationService, ReminderAutomationService>();
+
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+
+//  Swagger (Swashbuckle)
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    // Swagger JSON + UI
+    app.UseSwagger();
+    app.UseSwaggerUI();
+    //app.MapOpenApi();
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "api/{controller}/{action}/{id?}");
+//  Map controllers (recommended)
+app.MapControllers();
+
+// (Optional) if you REALLY want your custom route style, keep this instead of MapControllers():
+// app.MapControllerRoute(
+//     name: "default",
+//     pattern: "api/{controller}/{action}/{id?}");
 
 app.Run();

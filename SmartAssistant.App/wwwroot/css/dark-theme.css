@@ -1,0 +1,65 @@
+﻿/* ===== Global Dark Theme ===== */
+:root {
+    --bg0: #070A12;
+    --bg1: #0B1020;
+    --card: rgba(255,255,255,.06);
+    --cardBorder: rgba(255,255,255,.10);
+    --text: #E8ECFF;
+    --muted: rgba(232,236,255,.70);
+    --accent1: #7C5CFF;
+    --accent2: #00C8FF;
+}
+
+html, body {
+    height: 100%;
+    background: radial-gradient(1200px 800px at 20% 10%, rgba(124, 92, 255, 0.18), transparent 55%), radial-gradient(1000px 700px at 80% 30%, rgba(0, 200, 255, 0.10), transparent 55%), linear-gradient(180deg, var(--bg1) 0%, var(--bg0) 100%) !important;
+    color: var(--text) !important;
+}
+
+/* Make the main app surfaces dark (Bootstrap layout defaults are light) */
+.page, .content, main, .main, .container, .container-fluid {
+    background: transparent !important;
+    color: var(--text) !important;
+}
+
+/* Top bar */
+.top-row {
+    background: rgba(0,0,0,.25) !important;
+    border-bottom: 1px solid rgba(255,255,255,.08) !important;
+    color: var(--text) !important;
+}
+
+/* Links */
+a, .btn-link {
+    color: rgba(232,236,255,.90) !important;
+}
+
+    a:hover {
+        color: #ffffff !important;
+    }
+
+/* Inputs globally */
+input, textarea, select {
+    background: rgba(0,0,0,.28) !important;
+    border: 1px solid rgba(255,255,255,.10) !important;
+    color: var(--text) !important;
+    border-radius: 12px;
+}
+
+    input::placeholder, textarea::placeholder {
+        color: rgba(232,236,255,.45) !important;
+    }
+
+/* Scrollbar (optional, looks nicer on Windows) */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,.12);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(0,0,0,.20);
+}

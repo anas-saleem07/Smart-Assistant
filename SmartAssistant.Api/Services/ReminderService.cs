@@ -9,7 +9,7 @@ namespace SmartAssistant.Api.Services
     {
         Task<Reminder> AddReminderAsync(Reminder reminder);
         Task<IEnumerable<Reminder>> GetAllAsync();
-        Task<bool> DeleteAsync(int id);
+        Task<bool> DeleteAsync(Guid id);
     }
     public class ReminderService : IReminderService
     {
@@ -32,7 +32,7 @@ namespace SmartAssistant.Api.Services
             return await _context.Reminder.ToListAsync();
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(Guid id)
         {
             var reminder = await _context.Reminder.FindAsync(id);
             if (reminder == null)

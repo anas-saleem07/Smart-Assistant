@@ -1,575 +1,621 @@
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Platforms\Windows\App.xbf
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\AboutAssets.txt
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\wwwroot\SmartAssistant.App.xgwscxtq2t.bundle.scp.css.gz
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\wwwroot\index.html.gz
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\wwwroot\SmartAssistant.App.xgwscxtq2t.bundle.scp.css.br
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\wwwroot\index.html.br
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\wwwroot\css\app.css.br
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\wwwroot\SmartAssistant.App.styles.css.br
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\wwwroot\css\bootstrap\bootstrap.min.css.br
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\wwwroot\css\bootstrap\bootstrap.min.css.map.br
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\wwwroot\css\app.css.gz
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\wwwroot\SmartAssistant.App.styles.css.gz
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\wwwroot\css\bootstrap\bootstrap.min.css.gz
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\wwwroot\css\bootstrap\bootstrap.min.css.map.gz
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\wwwroot\SmartAssistant.App.styles.css
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\wwwroot\SmartAssistant.App.xgwscxtq2t.bundle.scp.css
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\wwwroot\css\app.css
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\wwwroot\css\bootstrap\bootstrap.min.css
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\wwwroot\css\bootstrap\bootstrap.min.css.map
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\wwwroot\index.html
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appicon.ico
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconLargeTile.scale-100.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconLargeTile.scale-125.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconLargeTile.scale-150.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconLargeTile.scale-200.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconLargeTile.scale-400.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconLogo.altform-lightunplated_targetsize-16.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconLogo.altform-lightunplated_targetsize-24.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconLogo.altform-lightunplated_targetsize-256.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconLogo.altform-lightunplated_targetsize-32.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconLogo.altform-lightunplated_targetsize-48.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconLogo.altform-unplated_targetsize-16.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconLogo.altform-unplated_targetsize-24.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconLogo.altform-unplated_targetsize-256.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconLogo.altform-unplated_targetsize-32.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconLogo.altform-unplated_targetsize-48.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconLogo.scale-100.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconLogo.scale-125.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconLogo.scale-150.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconLogo.scale-200.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconLogo.scale-400.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconLogo.targetsize-16.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconLogo.targetsize-24.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconLogo.targetsize-256.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconLogo.targetsize-32.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconLogo.targetsize-48.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconMediumTile.scale-100.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconMediumTile.scale-125.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconMediumTile.scale-150.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconMediumTile.scale-200.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconMediumTile.scale-400.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconSmallTile.scale-100.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconSmallTile.scale-125.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconSmallTile.scale-150.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconSmallTile.scale-200.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconSmallTile.scale-400.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconStoreLogo.scale-100.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconStoreLogo.scale-125.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconStoreLogo.scale-150.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconStoreLogo.scale-200.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconStoreLogo.scale-400.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconWideTile.scale-100.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconWideTile.scale-125.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconWideTile.scale-150.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconWideTile.scale-200.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconWideTile.scale-400.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\dotnet_bot.scale-100.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\dotnet_bot.scale-125.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\dotnet_bot.scale-150.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\dotnet_bot.scale-200.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\dotnet_bot.scale-400.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Components\Layout\MainLayout.razor.css
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Components\Layout\NavMenu.razor.css
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\SmartAssistant.App.staticwebassets.endpoints.json
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\CoreMessagingXP.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\dcompi.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\dwmcorei.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\DwmSceneI.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\DWriteCore.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\marshal.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.DirectManipulation.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Graphics.Display.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Graphics.Imaging.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.InputStateManager.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Internal.FrameworkUdk.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.UI.Composition.OSSupport.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.UI.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.UI.Input.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.UI.Windowing.Core.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.UI.Windowing.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.UI.Xaml.Controls.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.ui.xaml.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.UI.Xaml.Internal.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.UI.Xaml.Phone.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.ui.xaml.resources.19h1.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.ui.xaml.resources.common.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.AI.ContentSafety.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.AI.Imaging.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.AI.Text.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.ApplicationModel.Resources.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.Widgets.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.Workloads.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.Workloads.Resources.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.Workloads.Resources_ec.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.WindowsAppRuntime.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.WindowsAppRuntime.Insights.Resource.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\MRM.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\NpuDetect\NPUDetect.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\PushNotificationsLongRunningTask.ProxyStub.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\SessionHandleIPCProxyStub.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\WindowsAppRuntime.DeploymentExtensions.OneCore.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\WindowsAppSdk.AppxDeploymentExtensions.Desktop-EventLog-Instrumentation.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\WindowsAppSdk.AppxDeploymentExtensions.Desktop.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\WinUIEdit.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\wuceffectsi.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\workloads.365.json
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\workloads.json
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\workloads.lnl.json
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\workloads.qnn.json
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\workloads.stx.json
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\RestartAgent.exe
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.UI.Xaml\Assets\map.html
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\af-ZA\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\af-ZA\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\am-ET\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\am-ET\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ar-SA\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ar-SA\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\as-IN\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\as-IN\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\az-Latn-AZ\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\az-Latn-AZ\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\bg-BG\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\bg-BG\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\bn-IN\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\bn-IN\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\bs-Latn-BA\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\bs-Latn-BA\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ca-Es-VALENCIA\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ca-Es-VALENCIA\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ca-ES\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ca-ES\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\cs-CZ\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\cs-CZ\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\cy-GB\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\cy-GB\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\da-DK\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\da-DK\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\de-DE\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\de-DE\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\el-GR\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\el-GR\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\en-GB\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\en-GB\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\en-us\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\en-us\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\es-ES\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\es-ES\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\es-MX\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\es-MX\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\et-EE\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\et-EE\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\eu-ES\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\eu-ES\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\fa-IR\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\fa-IR\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\fi-FI\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\fi-FI\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\fil-PH\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\fil-PH\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\fr-CA\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\fr-CA\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\fr-FR\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\fr-FR\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ga-IE\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ga-IE\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\gd-gb\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\gd-gb\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\gl-ES\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\gl-ES\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\gu-IN\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\gu-IN\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\he-IL\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\he-IL\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\hi-IN\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\hi-IN\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\hr-HR\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\hr-HR\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\hu-HU\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\hu-HU\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\hy-AM\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\hy-AM\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\id-ID\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\id-ID\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\is-IS\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\is-IS\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\it-IT\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\it-IT\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ja-JP\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ja-JP\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ka-GE\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ka-GE\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\kk-KZ\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\kk-KZ\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\km-KH\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\km-KH\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\kn-IN\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\kn-IN\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ko-KR\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ko-KR\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\kok-IN\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\kok-IN\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\lb-LU\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\lb-LU\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\lo-LA\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\lo-LA\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\lt-LT\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\lt-LT\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\lv-LV\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\lv-LV\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\mi-NZ\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\mi-NZ\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\mk-MK\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\mk-MK\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ml-IN\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ml-IN\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\mr-IN\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\mr-IN\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ms-MY\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ms-MY\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\mt-MT\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\mt-MT\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\nb-NO\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\nb-NO\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ne-NP\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ne-NP\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\nl-NL\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\nl-NL\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\nn-NO\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\nn-NO\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\or-IN\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\or-IN\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\pa-IN\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\pa-IN\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\pl-PL\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\pl-PL\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\pt-BR\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\pt-BR\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\pt-PT\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\pt-PT\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\quz-PE\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\quz-PE\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ro-RO\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ro-RO\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ru-RU\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ru-RU\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\sk-SK\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\sk-SK\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\sl-SI\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\sl-SI\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\sq-AL\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\sq-AL\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\sr-Cyrl-BA\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\sr-Cyrl-BA\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\sr-Cyrl-RS\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\sr-Cyrl-RS\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\sr-Latn-RS\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\sr-Latn-RS\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\sv-SE\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\sv-SE\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ta-IN\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ta-IN\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\te-IN\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\te-IN\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\th-TH\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\th-TH\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\tr-TR\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\tr-TR\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\tt-RU\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\tt-RU\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ug-CN\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ug-CN\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\uk-UA\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\uk-UA\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ur-PK\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ur-PK\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\uz-Latn-UZ\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\uz-Latn-UZ\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\vi-VN\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\vi-VN\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\zh-CN\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\zh-CN\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\zh-TW\Microsoft.ui.xaml.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\zh-TW\Microsoft.UI.Xaml.Phone.dll.mui
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.UI.Xaml\Assets\NoiseAsset_256x256_PNG.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\WindowsAppRuntime.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Foundation.winmd
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Graphics.Imaging.winmd
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Graphics.ImagingInternal.winmd
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Graphics.Internal.Imaging.winmd
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Graphics.winmd
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Security.Authentication.OAuth.winmd
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.UI.Text.winmd
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.UI.winmd
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.UI.Xaml.winmd
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.AI.ContentModerationInternal.winmd
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.AI.ContentSafety.winmd
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.AI.Foundation.winmd
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.AI.FoundationInternal.winmd
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.AI.GenerativeInternal.winmd
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.AI.Imaging.winmd
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.AI.Text.winmd
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.AI.winmd
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.ApplicationModel.Background.UniversalBGTask.winmd
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.ApplicationModel.Background.winmd
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.ApplicationModel.DynamicDependency.winmd
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.ApplicationModel.Resources.winmd
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.ApplicationModel.WindowsAppRuntime.winmd
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.AppLifecycle.winmd
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.AppNotifications.Builder.winmd
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.AppNotifications.winmd
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.BadgeNotifications.winmd
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.Globalization.winmd
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.Internal.Vision.winmd
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.Management.Deployment.winmd
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.Media.Capture.winmd
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.Private.Workloads.SessionManager.winmd
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.PrivateCommon.winmd
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.PushNotifications.winmd
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.Security.AccessControl.winmd
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.SemanticSearch.winmd
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.Storage.winmd
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.System.Power.winmd
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.System.winmd
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.Vision.winmd
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.VisionInternal.winmd
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.Widgets.winmd
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.Workloads.winmd
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\SmartAssistant.App.exe
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\SmartAssistant.App.deps.json
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\SmartAssistant.App.runtimeconfig.json
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\SmartAssistant.App.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\SmartAssistant.App.pdb
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\resources.pri
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Web.WebView2.Core.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.AspNetCore.Authorization.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.AspNetCore.Components.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.AspNetCore.Components.Forms.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.AspNetCore.Components.Web.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.AspNetCore.Components.WebView.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.AspNetCore.Components.WebView.Maui.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.AspNetCore.Metadata.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Extensions.Configuration.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Extensions.Configuration.Abstractions.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Extensions.Configuration.Binder.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Extensions.Configuration.FileExtensions.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Extensions.Configuration.Json.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Extensions.DependencyInjection.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Extensions.DependencyInjection.Abstractions.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Extensions.FileProviders.Abstractions.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Extensions.FileProviders.Composite.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Extensions.FileProviders.Embedded.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Extensions.FileProviders.Physical.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Extensions.FileSystemGlobbing.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Extensions.Logging.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Extensions.Logging.Abstractions.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Extensions.Logging.Debug.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Extensions.Options.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Extensions.Primitives.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Graphics.Canvas.Interop.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.IO.RecyclableMemoryStream.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.JSInterop.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Maui.Controls.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Maui.Controls.Xaml.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Maui.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Maui.Essentials.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Maui.Graphics.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Maui.Graphics.Win2D.WinUI.Desktop.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Graphics.Imaging.Projection.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.InteractiveExperiences.Projection.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Security.Authentication.OAuth.Projection.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.WinUI.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.AI.ContentSafety.Projection.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.AI.Imaging.Projection.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.AI.Projection.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.AI.Text.Projection.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.AppLifecycle.Projection.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.AppNotifications.Builder.Projection.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.AppNotifications.Projection.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.ApplicationModel.Background.Projection.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.ApplicationModel.DynamicDependency.Projection.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.ApplicationModel.Resources.Projection.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.ApplicationModel.WindowsAppRuntime.Projection.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.BadgeNotifications.Projection.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.Management.Deployment.Projection.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.Media.Capture.Projection.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.PushNotifications.Projection.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.Security.AccessControl.Projection.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.Storage.Projection.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.System.Power.Projection.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.System.Projection.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.Widgets.Projection.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.WindowsAppRuntime.Bootstrap.Net.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ar\Microsoft.Maui.Controls.resources.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ca\Microsoft.Maui.Controls.resources.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\cs\Microsoft.Maui.Controls.resources.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\da\Microsoft.Maui.Controls.resources.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\de\Microsoft.Maui.Controls.resources.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\el\Microsoft.Maui.Controls.resources.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\es\Microsoft.Maui.Controls.resources.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\fi\Microsoft.Maui.Controls.resources.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\fr\Microsoft.Maui.Controls.resources.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\he\Microsoft.Maui.Controls.resources.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\hi\Microsoft.Maui.Controls.resources.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\hr\Microsoft.Maui.Controls.resources.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\hu\Microsoft.Maui.Controls.resources.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\id\Microsoft.Maui.Controls.resources.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\it\Microsoft.Maui.Controls.resources.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ja\Microsoft.Maui.Controls.resources.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ko\Microsoft.Maui.Controls.resources.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ms\Microsoft.Maui.Controls.resources.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\nb\Microsoft.Maui.Controls.resources.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\nl\Microsoft.Maui.Controls.resources.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\pl\Microsoft.Maui.Controls.resources.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\pt-BR\Microsoft.Maui.Controls.resources.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\pt\Microsoft.Maui.Controls.resources.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ro\Microsoft.Maui.Controls.resources.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ru\Microsoft.Maui.Controls.resources.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\sk\Microsoft.Maui.Controls.resources.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\sv\Microsoft.Maui.Controls.resources.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\th\Microsoft.Maui.Controls.resources.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\tr\Microsoft.Maui.Controls.resources.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\uk\Microsoft.Maui.Controls.resources.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\vi\Microsoft.Maui.Controls.resources.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\zh-HK\Microsoft.Maui.Controls.resources.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\zh-Hans\Microsoft.Maui.Controls.resources.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\zh-Hant\Microsoft.Maui.Controls.resources.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Graphics.Canvas.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\WebView2Loader.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.ApplicationModel.Background.UniversalBGTask.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.WindowsAppRuntime.Bootstrap.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.SDK.NET.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\WinRT.Runtime.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Web.WebView2.Core.Projection.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\SmartAssistant.Core.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\SmartAssistant.Core.pdb
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.UI.pri
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.UI.Xaml.Controls.pri
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\SmartAssistant.App.csproj.AssemblyReference.cache
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\rpswa.dswa.cache.json
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\rjimswa.dswa.cache.json
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\rjsmrazor.dswa.cache.json
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\rjsmcshtml.dswa.cache.json
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\scopedcss\Components\Layout\MainLayout.razor.rz.scp.css
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\scopedcss\Components\Layout\NavMenu.razor.rz.scp.css
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\scopedcss\bundle\SmartAssistant.App.styles.css
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\scopedcss\projectbundle\SmartAssistant.App.bundle.scp.css
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\compressed\qjnqj5yaei-{0}-e5tk7yf482-e5tk7yf482.gz
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\compressed\xwjsieon3q-{0}-6gzpyzhau4-6gzpyzhau4.gz
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\compressed\z1tbndbx91-{0}-8inm30yfxf-8inm30yfxf.gz
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\compressed\nh17crao5w-{0}-zyd1lffp94-zyd1lffp94.gz
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\compressed\tku6biskex-{0}-xgwscxtq2t-xgwscxtq2t.gz
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\compressed\jcnv2eekw4-{0}-xgwscxtq2t-xgwscxtq2t.gz
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\staticwebassets.build.json
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\staticwebassets.build.json.cache
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\staticwebassets.development.json
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\staticwebassets.build.endpoints.json
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\swae.build.ex.cache
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\staticwebassets\msbuild.SmartAssistant.App.Microsoft.AspNetCore.StaticWebAssets.props
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\staticwebassets\msbuild.SmartAssistant.App.Microsoft.AspNetCore.StaticWebAssetEndpoints.props
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\staticwebassets\msbuild.build.SmartAssistant.App.props
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\staticwebassets\msbuild.buildMultiTargeting.SmartAssistant.App.props
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\staticwebassets\msbuild.buildTransitive.SmartAssistant.App.props
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\staticwebassets.pack.json
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\staticwebassets.upToDateCheck.txt
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\compressed\publish\tku6biskex-{0}-xgwscxtq2t-xgwscxtq2t.br
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\compressed\publish\jcnv2eekw4-{0}-xgwscxtq2t-xgwscxtq2t.br
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\compressed\publish\qjnqj5yaei-{0}-e5tk7yf482-e5tk7yf482.br
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\compressed\publish\xwjsieon3q-{0}-6gzpyzhau4-6gzpyzhau4.br
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\compressed\publish\z1tbndbx91-{0}-8inm30yfxf-8inm30yfxf.br
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\compressed\publish\nh17crao5w-{0}-zyd1lffp94-zyd1lffp94.br
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\staticwebassets.publish.json
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\staticwebassets.publish.endpoints.json
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\swae.publish.ex.cache
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\mauiimage.inputs
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\mauifont.inputs
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\mauisplash.inputs
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\mauimanifest.stamp
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\Platforms\Windows\App.g.i.cs
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\Platforms\Windows\App.g.cs
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\XamlTypeInfo.g.cs
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\Platforms\Windows\App.xaml
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\Platforms\Windows\App.xbf
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\XamlSaveStateFile.xml
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\SmartAssistant.App.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\mauisplash.stamp
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\mauifont.stamp
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appicon.ico
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLargeTile.scale-100.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLargeTile.scale-125.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLargeTile.scale-150.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLargeTile.scale-200.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLargeTile.scale-400.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.altform-lightunplated_targetsize-16.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.altform-lightunplated_targetsize-24.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.altform-lightunplated_targetsize-256.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.altform-lightunplated_targetsize-32.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.altform-lightunplated_targetsize-48.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.altform-unplated_targetsize-16.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.altform-unplated_targetsize-24.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.altform-unplated_targetsize-256.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.altform-unplated_targetsize-32.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.altform-unplated_targetsize-48.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.scale-100.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.scale-125.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.scale-150.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.scale-200.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.scale-400.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.targetsize-16.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.targetsize-24.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.targetsize-256.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.targetsize-32.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.targetsize-48.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconMediumTile.scale-100.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconMediumTile.scale-125.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconMediumTile.scale-150.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconMediumTile.scale-200.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconMediumTile.scale-400.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconSmallTile.scale-100.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconSmallTile.scale-125.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconSmallTile.scale-150.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconSmallTile.scale-200.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconSmallTile.scale-400.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconStoreLogo.scale-100.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconStoreLogo.scale-125.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconStoreLogo.scale-150.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconStoreLogo.scale-200.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconStoreLogo.scale-400.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconWideTile.scale-100.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconWideTile.scale-125.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconWideTile.scale-150.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconWideTile.scale-200.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconWideTile.scale-400.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\dotnet_bot.scale-100.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\dotnet_bot.scale-125.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\dotnet_bot.scale-150.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\dotnet_bot.scale-200.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\dotnet_bot.scale-400.png
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\mauiimage.stamp
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\mauiimage.outputs
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\SmartAssistant.App.AssemblyInfoInputs.cache
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\SmartAssistant.App.AssemblyInfo.cs
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\SmartAssistant.App.csproj.CoreCompileInputs.cache
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\XamlC.stamp
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\SmartAss.01F68228.Up2Date
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\SmartAssistant.App.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\refint\SmartAssistant.App.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\SmartAssistant.App.pdb
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\SmartAssistant.App.genruntimeconfig.cache
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\ref\SmartAssistant.App.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\priconfig.xml
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\priconfig.xml.intermediate
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\unfiltered.layout.resfiles
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\unfiltered.layout.resfiles.intermediate
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\filtered.layout.resfiles
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\filtered.layout.resfiles.intermediate
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\excluded.layout.resfiles
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\excluded.layout.resfiles.intermediate
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resources.resfiles
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resources.resfiles.intermediate
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\pri.resfiles
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\pri.resfiles.intermediate
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\qualifiers.txt
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\qualifiers.txt.intermediate
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\MultipleQualifiersPerDimensionFound.txt
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Platforms\Windows\App.xbf
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\AboutAssets.txt
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\wwwroot\SmartAssistant.App.xgwscxtq2t.bundle.scp.css.gz
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\wwwroot\js\Reminder.js.gz
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\wwwroot\css\app.css.gz
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\wwwroot\index.html.gz
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\wwwroot\SmartAssistant.App.styles.css.gz
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\wwwroot\SmartAssistant.App.xgwscxtq2t.bundle.scp.css.br
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\wwwroot\js\Reminder.js.br
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\wwwroot\css\app.css.br
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\wwwroot\index.html.br
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\wwwroot\SmartAssistant.App.styles.css.br
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\wwwroot\css\bootstrap\bootstrap.min.css.map.br
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\wwwroot\css\bootstrap\bootstrap.min.css.br
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\wwwroot\css\bootstrap\bootstrap.min.css.map.gz
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\wwwroot\css\bootstrap\bootstrap.min.css.gz
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\wwwroot\SmartAssistant.App.styles.css
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\wwwroot\SmartAssistant.App.xgwscxtq2t.bundle.scp.css
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\wwwroot\css\app.css
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\wwwroot\css\bootstrap\bootstrap.min.css
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\wwwroot\css\bootstrap\bootstrap.min.css.map
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\wwwroot\index.html
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\wwwroot\js\Reminder.js
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\dotnet_bot.scale-400.png
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\dotnet_bot.scale-200.png
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\dotnet_bot.scale-150.png
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\dotnet_bot.scale-125.png
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\dotnet_bot.scale-100.png
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconLargeTile.scale-400.png
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconLargeTile.scale-200.png
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconLargeTile.scale-150.png
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconLargeTile.scale-125.png
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconLargeTile.scale-100.png
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconWideTile.scale-400.png
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconWideTile.scale-200.png
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconWideTile.scale-150.png
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconWideTile.scale-125.png
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconWideTile.scale-100.png
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconMediumTile.scale-400.png
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconMediumTile.scale-200.png
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconMediumTile.scale-150.png
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconMediumTile.scale-125.png
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconMediumTile.scale-100.png
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconSmallTile.scale-400.png
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconSmallTile.scale-200.png
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconSmallTile.scale-150.png
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconSmallTile.scale-125.png
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconSmallTile.scale-100.png
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconStoreLogo.scale-400.png
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconStoreLogo.scale-200.png
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconStoreLogo.scale-150.png
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconStoreLogo.scale-125.png
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconStoreLogo.scale-100.png
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconLogo.altform-lightunplated_targetsize-256.png
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconLogo.altform-lightunplated_targetsize-48.png
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconLogo.altform-lightunplated_targetsize-32.png
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconLogo.altform-lightunplated_targetsize-24.png
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconLogo.altform-lightunplated_targetsize-16.png
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconLogo.altform-unplated_targetsize-256.png
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconLogo.altform-unplated_targetsize-48.png
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconLogo.altform-unplated_targetsize-32.png
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconLogo.altform-unplated_targetsize-24.png
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconLogo.altform-unplated_targetsize-16.png
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconLogo.targetsize-256.png
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconLogo.targetsize-48.png
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconLogo.targetsize-32.png
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconLogo.targetsize-24.png
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconLogo.targetsize-16.png
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconLogo.scale-400.png
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconLogo.scale-200.png
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconLogo.scale-150.png
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconLogo.scale-125.png
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appiconLogo.scale-100.png
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\appicon.ico
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Components\Layout\MainLayout.razor.css
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Components\Layout\NavMenu.razor.css
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\SmartAssistant.App.staticwebassets.endpoints.json
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\CoreMessagingXP.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\dcompi.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\dwmcorei.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\DwmSceneI.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\DWriteCore.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\marshal.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.DirectManipulation.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Graphics.Display.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Graphics.Imaging.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.InputStateManager.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Internal.FrameworkUdk.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.UI.Composition.OSSupport.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.UI.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.UI.Input.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.UI.Windowing.Core.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.UI.Windowing.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.UI.Xaml.Controls.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.ui.xaml.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.UI.Xaml.Internal.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.UI.Xaml.Phone.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.ui.xaml.resources.19h1.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.ui.xaml.resources.common.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.AI.ContentSafety.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.AI.Imaging.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.AI.Text.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.ApplicationModel.Resources.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.Widgets.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.Workloads.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.Workloads.Resources.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.Workloads.Resources_ec.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.WindowsAppRuntime.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.WindowsAppRuntime.Insights.Resource.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\MRM.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\NpuDetect\NPUDetect.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\PushNotificationsLongRunningTask.ProxyStub.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\SessionHandleIPCProxyStub.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\WindowsAppRuntime.DeploymentExtensions.OneCore.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\WindowsAppSdk.AppxDeploymentExtensions.Desktop-EventLog-Instrumentation.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\WindowsAppSdk.AppxDeploymentExtensions.Desktop.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\WinUIEdit.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\wuceffectsi.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\workloads.365.json
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\workloads.json
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\workloads.lnl.json
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\workloads.qnn.json
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\workloads.stx.json
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\RestartAgent.exe
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.UI.Xaml\Assets\map.html
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\af-ZA\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\af-ZA\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\am-ET\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\am-ET\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ar-SA\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ar-SA\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\as-IN\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\as-IN\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\az-Latn-AZ\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\az-Latn-AZ\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\bg-BG\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\bg-BG\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\bn-IN\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\bn-IN\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\bs-Latn-BA\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\bs-Latn-BA\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ca-Es-VALENCIA\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ca-Es-VALENCIA\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ca-ES\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ca-ES\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\cs-CZ\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\cs-CZ\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\cy-GB\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\cy-GB\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\da-DK\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\da-DK\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\de-DE\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\de-DE\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\el-GR\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\el-GR\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\en-GB\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\en-GB\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\en-us\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\en-us\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\es-ES\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\es-ES\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\es-MX\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\es-MX\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\et-EE\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\et-EE\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\eu-ES\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\eu-ES\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\fa-IR\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\fa-IR\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\fi-FI\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\fi-FI\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\fil-PH\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\fil-PH\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\fr-CA\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\fr-CA\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\fr-FR\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\fr-FR\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ga-IE\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ga-IE\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\gd-gb\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\gd-gb\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\gl-ES\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\gl-ES\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\gu-IN\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\gu-IN\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\he-IL\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\he-IL\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\hi-IN\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\hi-IN\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\hr-HR\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\hr-HR\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\hu-HU\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\hu-HU\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\hy-AM\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\hy-AM\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\id-ID\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\id-ID\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\is-IS\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\is-IS\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\it-IT\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\it-IT\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ja-JP\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ja-JP\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ka-GE\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ka-GE\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\kk-KZ\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\kk-KZ\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\km-KH\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\km-KH\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\kn-IN\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\kn-IN\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ko-KR\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ko-KR\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\kok-IN\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\kok-IN\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\lb-LU\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\lb-LU\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\lo-LA\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\lo-LA\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\lt-LT\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\lt-LT\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\lv-LV\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\lv-LV\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\mi-NZ\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\mi-NZ\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\mk-MK\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\mk-MK\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ml-IN\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ml-IN\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\mr-IN\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\mr-IN\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ms-MY\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ms-MY\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\mt-MT\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\mt-MT\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\nb-NO\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\nb-NO\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ne-NP\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ne-NP\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\nl-NL\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\nl-NL\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\nn-NO\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\nn-NO\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\or-IN\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\or-IN\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\pa-IN\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\pa-IN\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\pl-PL\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\pl-PL\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\pt-BR\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\pt-BR\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\pt-PT\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\pt-PT\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\quz-PE\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\quz-PE\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ro-RO\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ro-RO\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ru-RU\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ru-RU\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\sk-SK\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\sk-SK\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\sl-SI\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\sl-SI\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\sq-AL\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\sq-AL\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\sr-Cyrl-BA\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\sr-Cyrl-BA\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\sr-Cyrl-RS\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\sr-Cyrl-RS\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\sr-Latn-RS\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\sr-Latn-RS\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\sv-SE\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\sv-SE\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ta-IN\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ta-IN\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\te-IN\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\te-IN\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\th-TH\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\th-TH\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\tr-TR\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\tr-TR\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\tt-RU\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\tt-RU\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ug-CN\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ug-CN\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\uk-UA\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\uk-UA\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ur-PK\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ur-PK\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\uz-Latn-UZ\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\uz-Latn-UZ\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\vi-VN\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\vi-VN\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\zh-CN\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\zh-CN\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\zh-TW\Microsoft.ui.xaml.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\zh-TW\Microsoft.UI.Xaml.Phone.dll.mui
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.UI.Xaml\Assets\NoiseAsset_256x256_PNG.png
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\WindowsAppRuntime.png
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Foundation.winmd
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Graphics.Imaging.winmd
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Graphics.ImagingInternal.winmd
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Graphics.Internal.Imaging.winmd
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Graphics.winmd
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Security.Authentication.OAuth.winmd
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.UI.Text.winmd
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.UI.winmd
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.UI.Xaml.winmd
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.AI.ContentModerationInternal.winmd
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.AI.ContentSafety.winmd
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.AI.Foundation.winmd
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.AI.FoundationInternal.winmd
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.AI.GenerativeInternal.winmd
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.AI.Imaging.winmd
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.AI.Text.winmd
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.AI.winmd
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.ApplicationModel.Background.UniversalBGTask.winmd
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.ApplicationModel.Background.winmd
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.ApplicationModel.DynamicDependency.winmd
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.ApplicationModel.Resources.winmd
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.ApplicationModel.WindowsAppRuntime.winmd
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.AppLifecycle.winmd
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.AppNotifications.Builder.winmd
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.AppNotifications.winmd
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.BadgeNotifications.winmd
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.Globalization.winmd
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.Internal.Vision.winmd
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.Management.Deployment.winmd
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.Media.Capture.winmd
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.Private.Workloads.SessionManager.winmd
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.PrivateCommon.winmd
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.PushNotifications.winmd
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.Security.AccessControl.winmd
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.SemanticSearch.winmd
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.Storage.winmd
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.System.Power.winmd
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.System.winmd
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.Vision.winmd
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.VisionInternal.winmd
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.Widgets.winmd
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.Workloads.winmd
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\SmartAssistant.App.exe
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\SmartAssistant.App.deps.json
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\SmartAssistant.App.runtimeconfig.json
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\SmartAssistant.App.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\SmartAssistant.App.pdb
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\resources.pri
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Web.WebView2.Core.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Azure.Core.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Azure.Identity.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.AspNetCore.Authorization.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.AspNetCore.Components.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.AspNetCore.Components.Forms.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.AspNetCore.Components.Web.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.AspNetCore.Components.WebView.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.AspNetCore.Components.WebView.Maui.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.AspNetCore.Cryptography.Internal.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.AspNetCore.Metadata.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Bcl.AsyncInterfaces.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Data.SqlClient.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.EntityFrameworkCore.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.EntityFrameworkCore.Abstractions.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.EntityFrameworkCore.Relational.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.EntityFrameworkCore.SqlServer.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Extensions.Caching.Abstractions.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Extensions.Caching.Memory.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Extensions.Configuration.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Extensions.Configuration.Abstractions.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Extensions.Configuration.Binder.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Extensions.Configuration.FileExtensions.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Extensions.Configuration.Json.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Extensions.DependencyInjection.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Extensions.FileProviders.Abstractions.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Extensions.FileProviders.Composite.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Extensions.FileProviders.Embedded.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Extensions.FileProviders.Physical.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Extensions.FileSystemGlobbing.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Extensions.Identity.Core.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Extensions.Identity.Stores.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Extensions.Logging.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Extensions.Logging.Abstractions.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Extensions.Logging.Debug.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Extensions.Options.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Extensions.Primitives.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Graphics.Canvas.Interop.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Identity.Client.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Identity.Client.Extensions.Msal.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.IdentityModel.Abstractions.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.IdentityModel.JsonWebTokens.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.IdentityModel.Logging.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.IdentityModel.Protocols.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.IdentityModel.Tokens.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.IO.RecyclableMemoryStream.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.JSInterop.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Maui.Controls.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Maui.Controls.Xaml.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Maui.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Maui.Essentials.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Maui.Graphics.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Maui.Graphics.Win2D.WinUI.Desktop.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.SqlServer.Server.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Win32.SystemEvents.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Graphics.Imaging.Projection.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.InteractiveExperiences.Projection.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Security.Authentication.OAuth.Projection.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.WinUI.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.AI.ContentSafety.Projection.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.AI.Imaging.Projection.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.AI.Projection.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.AI.Text.Projection.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.AppLifecycle.Projection.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.AppNotifications.Builder.Projection.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.AppNotifications.Projection.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.ApplicationModel.Background.Projection.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.ApplicationModel.DynamicDependency.Projection.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.ApplicationModel.Resources.Projection.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.ApplicationModel.WindowsAppRuntime.Projection.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.BadgeNotifications.Projection.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.Management.Deployment.Projection.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.Media.Capture.Projection.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.PushNotifications.Projection.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.Security.AccessControl.Projection.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.Storage.Projection.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.System.Power.Projection.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.System.Projection.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.Widgets.Projection.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.WindowsAppRuntime.Bootstrap.Net.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\System.ClientModel.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\System.Configuration.ConfigurationManager.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\System.Drawing.Common.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\System.Formats.Asn1.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\System.IdentityModel.Tokens.Jwt.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\System.Memory.Data.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\System.Runtime.Caching.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\System.Security.Cryptography.ProtectedData.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\System.Security.Permissions.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\System.Text.Json.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\System.Windows.Extensions.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ar\Microsoft.Maui.Controls.resources.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ca\Microsoft.Maui.Controls.resources.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\cs\Microsoft.Maui.Controls.resources.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\da\Microsoft.Maui.Controls.resources.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\de\Microsoft.Maui.Controls.resources.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\el\Microsoft.Maui.Controls.resources.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\es\Microsoft.Maui.Controls.resources.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\fi\Microsoft.Maui.Controls.resources.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\fr\Microsoft.Maui.Controls.resources.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\he\Microsoft.Maui.Controls.resources.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\hi\Microsoft.Maui.Controls.resources.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\hr\Microsoft.Maui.Controls.resources.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\hu\Microsoft.Maui.Controls.resources.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\id\Microsoft.Maui.Controls.resources.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\it\Microsoft.Maui.Controls.resources.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ja\Microsoft.Maui.Controls.resources.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ko\Microsoft.Maui.Controls.resources.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ms\Microsoft.Maui.Controls.resources.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\nb\Microsoft.Maui.Controls.resources.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\nl\Microsoft.Maui.Controls.resources.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\pl\Microsoft.Maui.Controls.resources.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\pt-BR\Microsoft.Maui.Controls.resources.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\pt\Microsoft.Maui.Controls.resources.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ro\Microsoft.Maui.Controls.resources.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\ru\Microsoft.Maui.Controls.resources.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\sk\Microsoft.Maui.Controls.resources.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\sv\Microsoft.Maui.Controls.resources.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\th\Microsoft.Maui.Controls.resources.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\tr\Microsoft.Maui.Controls.resources.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\uk\Microsoft.Maui.Controls.resources.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\vi\Microsoft.Maui.Controls.resources.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\zh-HK\Microsoft.Maui.Controls.resources.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\zh-Hans\Microsoft.Maui.Controls.resources.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\zh-Hant\Microsoft.Maui.Controls.resources.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Data.SqlClient.SNI.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Graphics.Canvas.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\WebView2Loader.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.ApplicationModel.Background.UniversalBGTask.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.WindowsAppRuntime.Bootstrap.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Windows.SDK.NET.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\WinRT.Runtime.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.Web.WebView2.Core.Projection.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\SmartAssistant.Core.dll
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\SmartAssistant.Core.pdb
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.UI.pri
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\Microsoft.UI.Xaml.Controls.pri
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\SmartAssistant.App.csproj.AssemblyReference.cache
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\rpswa.dswa.cache.json
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\rjimswa.dswa.cache.json
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\rjsmrazor.dswa.cache.json
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\rjsmcshtml.dswa.cache.json
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\scopedcss\Components\Layout\MainLayout.razor.rz.scp.css
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\scopedcss\Components\Layout\NavMenu.razor.rz.scp.css
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\scopedcss\bundle\SmartAssistant.App.styles.css
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\scopedcss\projectbundle\SmartAssistant.App.bundle.scp.css
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\compressed\2jzm9u7kdw-e5tk7yf482.gz
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\compressed\yd183426xq-6gzpyzhau4.gz
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\compressed\y1mfxytrjn-8inm30yfxf.gz
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\compressed\25c30jwdw2-l2e2kb02vv.gz
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\compressed\j7pv1de54w-xgwscxtq2t.gz
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\compressed\19vi8jiadu-xgwscxtq2t.gz
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\staticwebassets.build.json
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\staticwebassets.build.json.cache
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\staticwebassets.development.json
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\staticwebassets.build.endpoints.json
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\staticwebassets\msbuild.SmartAssistant.App.Microsoft.AspNetCore.StaticWebAssets.props
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\staticwebassets\msbuild.SmartAssistant.App.Microsoft.AspNetCore.StaticWebAssetEndpoints.props
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\staticwebassets\msbuild.build.SmartAssistant.App.props
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\staticwebassets\msbuild.buildMultiTargeting.SmartAssistant.App.props
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\staticwebassets\msbuild.buildTransitive.SmartAssistant.App.props
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\staticwebassets.pack.json
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\staticwebassets.upToDateCheck.txt
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\compressed\publish\j7pv1de54w-xgwscxtq2t.br
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\compressed\publish\19vi8jiadu-xgwscxtq2t.br
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\compressed\publish\2jzm9u7kdw-e5tk7yf482.br
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\compressed\publish\yd183426xq-6gzpyzhau4.br
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\compressed\publish\y1mfxytrjn-8inm30yfxf.br
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\compressed\publish\25c30jwdw2-l2e2kb02vv.br
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\staticwebassets.publish.json
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\staticwebassets.publish.endpoints.json
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\mauiimage.inputs
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\mauifont.inputs
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\mauisplash.inputs
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\mauimanifest.stamp
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\Platforms\Windows\App.g.i.cs
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\Platforms\Windows\App.g.cs
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\XamlTypeInfo.g.cs
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\Platforms\Windows\App.xaml
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\Platforms\Windows\App.xbf
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\XamlSaveStateFile.xml
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\SmartAssistant.App.GeneratedMSBuildEditorConfig.editorconfig
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\mauisplash.stamp
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\mauifont.stamp
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\dotnet_bot.scale-400.png
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\dotnet_bot.scale-200.png
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\dotnet_bot.scale-150.png
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\dotnet_bot.scale-125.png
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\dotnet_bot.scale-100.png
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLargeTile.scale-400.png
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLargeTile.scale-200.png
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLargeTile.scale-150.png
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLargeTile.scale-125.png
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLargeTile.scale-100.png
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconWideTile.scale-400.png
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconWideTile.scale-200.png
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconWideTile.scale-150.png
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconWideTile.scale-125.png
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconWideTile.scale-100.png
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconMediumTile.scale-400.png
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconMediumTile.scale-200.png
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconMediumTile.scale-150.png
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconMediumTile.scale-125.png
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconMediumTile.scale-100.png
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconSmallTile.scale-400.png
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconSmallTile.scale-200.png
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconSmallTile.scale-150.png
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconSmallTile.scale-125.png
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconSmallTile.scale-100.png
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconStoreLogo.scale-400.png
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconStoreLogo.scale-200.png
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconStoreLogo.scale-150.png
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconStoreLogo.scale-125.png
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconStoreLogo.scale-100.png
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.altform-lightunplated_targetsize-256.png
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.altform-lightunplated_targetsize-48.png
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.altform-lightunplated_targetsize-32.png
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.altform-lightunplated_targetsize-24.png
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.altform-lightunplated_targetsize-16.png
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.altform-unplated_targetsize-256.png
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.altform-unplated_targetsize-48.png
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.altform-unplated_targetsize-32.png
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.altform-unplated_targetsize-24.png
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.altform-unplated_targetsize-16.png
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.targetsize-256.png
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.targetsize-48.png
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.targetsize-32.png
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.targetsize-24.png
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.targetsize-16.png
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.scale-400.png
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.scale-200.png
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.scale-150.png
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.scale-125.png
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.scale-100.png
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\appicon.ico
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\mauiimage.stamp
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\mauiimage.outputs
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\SmartAssistant.App.AssemblyInfoInputs.cache
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\SmartAssistant.App.AssemblyInfo.cs
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\SmartAssistant.App.csproj.CoreCompileInputs.cache
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\SmartAssistant.App.sourcelink.json
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\XamlC.stamp
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\SmartAss.01F68228.Up2Date
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\SmartAssistant.App.dll
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\refint\SmartAssistant.App.dll
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\SmartAssistant.App.pdb
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\SmartAssistant.App.genruntimeconfig.cache
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\ref\SmartAssistant.App.dll
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\priconfig.xml
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\priconfig.xml.intermediate
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\unfiltered.layout.resfiles
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\unfiltered.layout.resfiles.intermediate
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\filtered.layout.resfiles
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\filtered.layout.resfiles.intermediate
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\excluded.layout.resfiles
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\excluded.layout.resfiles.intermediate
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resources.resfiles
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resources.resfiles.intermediate
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\pri.resfiles
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\pri.resfiles.intermediate
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\qualifiers.txt
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\qualifiers.txt.intermediate
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\MultipleQualifiersPerDimensionFound.txt
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\wwwroot\css\dark-theme.css.gz
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\wwwroot\css\dark-theme.css.br
+D:\Anas FYP\SmartAssistant.App\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\wwwroot\css\dark-theme.css
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\compressed\htmek2v7se-ds0onivxcn.gz
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\compressed\3kntm1eues-oa35vov9kc.gz
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\compressed\publish\htmek2v7se-ds0onivxcn.br
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\compressed\publish\3kntm1eues-oa35vov9kc.br

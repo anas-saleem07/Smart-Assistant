@@ -1,4 +1,0 @@
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\wwwroot\index.html
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\wwwroot\css\app.css
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\wwwroot\css\bootstrap\bootstrap.min.css
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.App\wwwroot\css\bootstrap\bootstrap.min.css.map

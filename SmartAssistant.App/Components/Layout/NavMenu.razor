@@ -1,27 +1,209 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">SmartAssistant.App</a>
+﻿@using Microsoft.AspNetCore.Components.Routing
+
+<button class="sa-nav-toggle" @onclick="ToggleNav" aria-label="Toggle navigation">
+    <span class="sa-nav-toggle-icon">☰</span>
+</button>
+
+<div class="sa-nav-backdrop @(isOpen ? "open" : "")" @onclick="CloseNav"></div>
+
+<aside class="sa-nav @(isOpen ? "open" : "")">
+    <div class="sa-nav-header">
+        <div class="sa-nav-brand">
+            <span class="sa-nav-logo">SA</span>
+            <div class="sa-nav-brand-text">
+                <div class="sa-nav-title">SmartAssistant</div>
+                <div class="sa-nav-subtitle">Productivity</div>
+            </div>
+        </div>
     </div>
-</div>
 
-<input type="checkbox" title="Navigation menu" class="navbar-toggler" />
+    <nav class="sa-nav-links">
+        <NavLink class="sa-nav-link" href="" Match="NavLinkMatch.All" @onclick="CloseNav">
+            <span class="sa-icon">🏠</span>
+            <span>Home</span>
+        </NavLink>
 
-<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Counter
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="weather">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Weather
-            </NavLink>
-        </div>
+        <NavLink class="sa-nav-link" href="counter" @onclick="CloseNav">
+            <span class="sa-icon">➕</span>
+            <span>Counter</span>
+        </NavLink>
+
+        <NavLink class="sa-nav-link" href="weather" @onclick="CloseNav">
+            <span class="sa-icon">⛅</span>
+            <span>Weather</span>
+        </NavLink>
+
+        <div class="sa-nav-section">Tools</div>
+
+        <NavLink class="sa-nav-link" href="reminders" Match="NavLinkMatch.All" @onclick="CloseNav">
+            <span class="sa-icon">⏰</span>
+            <span>Reminders</span>
+        </NavLink>
     </nav>
-</div>
+</aside>
+
+@code {
+    private bool isOpen = false;
+
+    private void ToggleNav() => isOpen = !isOpen;
+
+    private void CloseNav()
+    {
+        // Close drawer on navigation / click outside
+        isOpen = false;
+    }
+}
+
+<style>
+    /* ---- Dark, responsive sidebar ---- */
+
+    .sa-nav-toggle {
+        display: none;
+        position: fixed;
+        top: 14px;
+        left: 14px;
+        z-index: 2000;
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        border: 1px solid rgba(255,255,255,0.12);
+        background: rgba(15, 18, 30, 0.92);
+        color: rgba(235, 240, 255, 0.92);
+        cursor: pointer;
+        backdrop-filter: blur(10px);
+    }
+
+    .sa-nav-toggle-icon {
+        font-size: 18px;
+        line-height: 1;
+    }
+
+    .sa-nav-backdrop {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 1400;
+        background: rgba(0,0,0,0.45);
+    }
+
+        .sa-nav-backdrop.open {
+            display: block;
+        }
+
+    .sa-nav {
+        width: 280px;
+        min-height: 100vh;
+        padding: 14px;
+        background: linear-gradient(180deg, #0b1020 0%, #070a12 100%);
+        border-right: 1px solid rgba(255,255,255,0.08);
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .sa-nav-header {
+        padding: 10px 8px 4px;
+    }
+
+    .sa-nav-brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .sa-nav-logo {
+        width: 38px;
+        height: 38px;
+        border-radius: 14px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        background: rgba(124, 92, 255, 0.20);
+        border: 1px solid rgba(124, 92, 255, 0.30);
+        color: rgba(235, 240, 255, 0.95);
+        box-shadow: 0 0 18px rgba(124, 92, 255, 0.25);
+        user-select: none;
+    }
+
+    .sa-nav-title {
+        font-weight: 800;
+        color: rgba(235, 240, 255, 0.94);
+        line-height: 1.1;
+    }
+
+    .sa-nav-subtitle {
+        font-size: 12px;
+        color: rgba(235, 240, 255, 0.60);
+        margin-top: 2px;
+    }
+
+    .sa-nav-links {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        margin-top: 6px;
+    }
+
+    .sa-nav-section {
+        margin: 10px 10px 4px;
+        font-size: 12px;
+        color: rgba(235, 240, 255, 0.55);
+        letter-spacing: 0.4px;
+        text-transform: uppercase;
+    }
+
+    .sa-nav-link {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 12px;
+        border-radius: 12px;
+        color: rgba(235, 240, 255, 0.82);
+        text-decoration: none;
+        border: 1px solid transparent;
+        user-select: none;
+    }
+
+        .sa-nav-link:hover {
+            background: rgba(255,255,255,0.06);
+            border-color: rgba(255,255,255,0.08);
+        }
+
+        .sa-nav-link.active {
+            background: linear-gradient(135deg, rgba(124, 92, 255, 0.28), rgba(0, 200, 255, 0.16));
+            border-color: rgba(124, 92, 255, 0.25);
+            color: rgba(235, 240, 255, 0.95);
+        }
+
+    .sa-icon {
+        width: 22px;
+        display: inline-flex;
+        justify-content: center;
+        font-size: 16px;
+        opacity: 0.95;
+    }
+
+    /* Mobile: turn sidebar into a drawer */
+    @@media (max-width: 900px) {
+        .sa-nav-toggle {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sa-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1500;
+            transform: translateX(-110%);
+            transition: transform 180ms ease;
+            box-shadow: 0 18px 50px rgba(0,0,0,0.45);
+        }
+
+            .sa-nav.open {
+                transform: translateX(0%);
+            }
+    }
+</style>

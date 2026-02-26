@@ -1,0 +1,631 @@
+﻿@page "/reminders"
+@inject HttpClient Http
+@using System.Net.Http.Json
+
+<div class="rm-page">
+    <div class="rm-shell">
+
+        <header class="rm-header">
+            <div>
+                <h1 class="rm-title">Reminders</h1>
+                <p class="rm-subtitle">Keep track of what matters. Add, review, and delete reminders fast.</p>
+            </div>
+
+            <div class="rm-pill">
+                <span class="rm-pill-dot"></span>
+                <span>@(isProcessing ? "Working..." : "Ready")</span>
+            </div>
+        </header>
+
+        @if (!string.IsNullOrWhiteSpace(statusText))
+        {
+            <div class="rm-status @(isError ? "rm-status-error" : "rm-status-ok")">
+                <span class="rm-status-icon">@(isError ? "!" : "✓")</span>
+                <span class="rm-status-text">@statusText</span>
+                <button class="rm-status-close" @onclick="ClearStatus" aria-label="Close">×</button>
+            </div>
+        }
+
+        <section class="rm-card rm-form">
+            <div class="rm-form-grid">
+                <div class="rm-field">
+                    <label class="rm-label">Title</label>
+                    <input class="rm-input"
+                           @bind="newReminder.Title"
+                           placeholder="e.g., Pay electricity bill" />
+                </div>
+
+                <div class="rm-field">
+                    <label class="rm-label">Description</label>
+                    <input class="rm-input"
+                           @bind="newReminder.Description"
+                           placeholder="Optional details..." />
+                </div>
+
+                <div class="rm-field">
+                    <label class="rm-label">Reminder Time</label>
+                    <input class="rm-input"
+                           type="datetime-local"
+                           @bind="newReminder.ReminderTime"
+                           @bind:format="yyyy-MM-ddTHH:mm" />
+                </div>
+
+                <div class="rm-actions">
+                    <button class="rm-btn rm-btn-primary"
+                            @onclick="AddReminder"
+                            disabled="@isProcessing">
+                        @if (isProcessing)
+                        {
+                            <span class="rm-spinner" aria-hidden="true"></span>
+                            <span>Adding...</span>
+                        }
+                        else
+                        {
+                            <span>Add Reminder</span>
+                        }
+                    </button>
+
+                    <button class="rm-btn rm-btn-ghost"
+                            @onclick="LoadReminders"
+                            disabled="@isProcessing">
+                        Refresh
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section class="rm-list">
+            <div class="rm-list-header">
+                <h2 class="rm-list-title">Your Reminders</h2>
+                <span class="rm-count">@reminders.Count</span>
+            </div>
+
+            @if (reminders.Count == 0)
+            {
+                <div class="rm-empty rm-card">
+                    <div class="rm-empty-icon">⏰</div>
+                    <div class="rm-empty-text">
+                        <div class="rm-empty-title">No reminders yet</div>
+                        <div class="rm-empty-sub">Add your first reminder above.</div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="rm-grid">
+                    @foreach (var reminder in reminders.OrderByDescending(r => r.ReminderTime))
+                    {
+                        <article class="rm-item rm-card">
+                            <div class="rm-item-top">
+                                <div class="rm-item-title">@reminder.Title</div>
+                                <button class="rm-btn rm-btn-danger"
+                                        @onclick="() => DeleteReminder(reminder.Id)"
+                                        disabled="@isProcessing"
+                                        title="Delete">
+                                    Delete
+                                </button>
+                            </div>
+
+                            @if (!string.IsNullOrWhiteSpace(reminder.Description))
+                            {
+                                <div class="rm-item-desc">@reminder.Description</div>
+                            }
+
+                            <div class="rm-item-meta">
+                                <span class="rm-badge">@(reminder.Completed ? "Completed" : "Pending")</span>
+                                <span class="rm-meta-sep">•</span>
+                                <span class="rm-meta">
+                                    @reminder.ReminderTime.ToLocalTime().ToString("ddd, dd MMM yyyy  hh:mm tt")
+                                </span>
+                            </div>
+                        </article>
+                    }
+                </div>
+            }
+        </section>
+    </div>
+</div>
+
+@code {
+    private bool isProcessing = false;
+
+    private string statusText = "";
+    private bool isError = false;
+
+    private List<ReminderDto> reminders = new();
+
+    // POST model matches API ReminderViewModel
+    private CreateReminderRequest newReminder = new()
+    {
+        ReminderTime = DateTime.Now
+    };
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadReminders();
+    }
+
+    private void ClearStatus()
+    {
+        statusText = "";
+        isError = false;
+    }
+
+    private void SetStatus(string message, bool error)
+    {
+        statusText = message;
+        isError = error;
+    }
+
+    private async Task LoadReminders()
+    {
+        if (isProcessing) return;
+
+        try
+        {
+            isProcessing = true;
+            ClearStatus();
+
+            using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(8));
+
+            reminders = await Http.GetFromJsonAsync<List<ReminderDto>>("api/reminder/list", cts.Token)
+                        ?? new List<ReminderDto>();
+        }
+        catch (TaskCanceledException)
+        {
+            SetStatus("Request timed out while loading reminders.", true);
+        }
+        catch (Exception ex)
+        {
+            SetStatus($"Failed to load reminders: {ex.Message}", true);
+        }
+        finally
+        {
+            isProcessing = false;
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private async Task AddReminder()
+    {
+        if (isProcessing) return;
+
+        if (string.IsNullOrWhiteSpace(newReminder.Title))
+        {
+            SetStatus("Title is required.", true);
+            return;
+        }
+
+        try
+        {
+            isProcessing = true;
+            ClearStatus();
+
+            using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(8));
+
+            var response = await Http.PostAsJsonAsync("api/reminder/create", newReminder, cts.Token);
+            var body = await response.Content.ReadAsStringAsync(cts.Token);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                SetStatus($"Create failed ({(int)response.StatusCode}): {body}", true);
+                return;
+            }
+
+            SetStatus("Reminder added successfully.", false);
+
+            newReminder = new CreateReminderRequest
+            {
+                ReminderTime = DateTime.Now
+            };
+
+            await LoadReminders();
+        }
+        catch (TaskCanceledException)
+        {
+            SetStatus("Request timed out while adding reminder.", true);
+        }
+        catch (Exception ex)
+        {
+            SetStatus($"Failed to add reminder: {ex.Message}", true);
+        }
+        finally
+        {
+            isProcessing = false;
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private async Task DeleteReminder(Guid id)
+    {
+        if (isProcessing) return;
+
+        try
+        {
+            isProcessing = true;
+            ClearStatus();
+
+            using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(8));
+
+            var response = await Http.DeleteAsync($"api/reminder/delete/{id}", cts.Token);
+            var body = await response.Content.ReadAsStringAsync(cts.Token);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                SetStatus($"Delete failed ({(int)response.StatusCode}): {body}", true);
+                return;
+            }
+
+            SetStatus("Reminder deleted.", false);
+            await LoadReminders();
+        }
+        catch (TaskCanceledException)
+        {
+            SetStatus("Request timed out while deleting reminder.", true);
+        }
+        catch (Exception ex)
+        {
+            SetStatus($"Failed to delete reminder: {ex.Message}", true);
+        }
+        finally
+        {
+            isProcessing = false;
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    public class CreateReminderRequest
+    {
+        public string Title { get; set; } = "";
+        public string Description { get; set; } = "";
+        public DateTime ReminderTime { get; set; }
+    }
+
+    public class ReminderDto
+    {
+        public Guid Id { get; set; }
+        public string? Title { get; set; }
+        public string? Description { get; set; }
+        public DateTimeOffset ReminderTime { get; set; }
+        public bool Completed { get; set; }
+        public DateTime CreatedOn { get; set; }
+    }
+}
+
+<style>
+    .rm-page {
+        min-height: 100vh;
+        background: radial-gradient(1200px 800px at 20% 10%, rgba(120, 90, 255, 0.18), transparent 55%), radial-gradient(1000px 700px at 80% 30%, rgba(0, 200, 255, 0.10), transparent 55%), linear-gradient(180deg, #0b0f1a 0%, #070a12 100%);
+        color: #e8ecff;
+        padding: 28px;
+    }
+
+    .rm-shell {
+        max-width: 980px;
+        margin: 0 auto;
+    }
+
+    .rm-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 18px;
+    }
+
+    .rm-title {
+        font-size: 34px;
+        margin: 0;
+        letter-spacing: 0.3px;
+    }
+
+    .rm-subtitle {
+        margin: 6px 0 0;
+        color: rgba(232, 236, 255, 0.70);
+    }
+
+    .rm-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 12px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.10);
+        color: rgba(232, 236, 255, 0.85);
+        user-select: none;
+        white-space: nowrap;
+    }
+
+    .rm-pill-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #7c5cff;
+        box-shadow: 0 0 12px rgba(124, 92, 255, 0.85);
+    }
+
+    .rm-card {
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.10);
+        border-radius: 16px;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.28);
+        backdrop-filter: blur(10px);
+    }
+
+    .rm-status {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 14px;
+        margin-bottom: 14px;
+        border-radius: 14px;
+    }
+
+    .rm-status-ok {
+        border: 1px solid rgba(0, 255, 163, 0.25);
+        background: rgba(0, 255, 163, 0.08);
+    }
+
+    .rm-status-error {
+        border: 1px solid rgba(255, 77, 77, 0.30);
+        background: rgba(255, 77, 77, 0.10);
+    }
+
+    .rm-status-icon {
+        width: 22px;
+        height: 22px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        background: rgba(0,0,0,0.18);
+        font-weight: 700;
+    }
+
+    .rm-status-text {
+        flex: 1;
+        color: rgba(232, 236, 255, 0.92);
+    }
+
+    .rm-status-close {
+        border: none;
+        background: transparent;
+        color: rgba(232, 236, 255, 0.70);
+        font-size: 18px;
+        cursor: pointer;
+    }
+
+    .rm-form {
+        padding: 16px;
+        margin-bottom: 18px;
+    }
+
+    .rm-form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr 240px;
+        gap: 14px;
+        align-items: end;
+    }
+
+    .rm-field {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .rm-label {
+        font-size: 12px;
+        color: rgba(232, 236, 255, 0.70);
+        letter-spacing: 0.3px;
+    }
+
+    .rm-input {
+        width: 100%;
+        padding: 12px 12px;
+        border-radius: 12px;
+        background: rgba(0, 0, 0, 0.28);
+        border: 1px solid rgba(255, 255, 255, 0.10);
+        color: #e8ecff;
+        outline: none;
+    }
+
+        .rm-input:focus {
+            border-color: rgba(124, 92, 255, 0.60);
+            box-shadow: 0 0 0 4px rgba(124, 92, 255, 0.15);
+        }
+
+    .rm-actions {
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+    }
+
+    .rm-btn {
+        border-radius: 12px;
+        padding: 12px 14px;
+        border: 1px solid rgba(255,255,255,0.12);
+        cursor: pointer;
+        background: rgba(255,255,255,0.06);
+        color: rgba(232, 236, 255, 0.90);
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        user-select: none;
+        white-space: nowrap;
+    }
+
+        .rm-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+    .rm-btn-primary {
+        background: linear-gradient(135deg, rgba(124, 92, 255, 0.95), rgba(0, 200, 255, 0.75));
+        border: 1px solid rgba(124, 92, 255, 0.30);
+        color: #0b0f1a;
+        font-weight: 700;
+    }
+
+        .rm-btn-primary:hover:enabled {
+            filter: brightness(1.05);
+        }
+
+    .rm-btn-ghost:hover:enabled {
+        background: rgba(255,255,255,0.10);
+    }
+
+    .rm-btn-danger {
+        background: rgba(255, 77, 77, 0.12);
+        border: 1px solid rgba(255, 77, 77, 0.25);
+        color: rgba(255, 190, 190, 0.95);
+        padding: 8px 10px;
+        border-radius: 10px;
+    }
+
+        .rm-btn-danger:hover:enabled {
+            background: rgba(255, 77, 77, 0.18);
+        }
+
+    .rm-list-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: 8px 0 12px;
+    }
+
+    .rm-list-title {
+        margin: 0;
+        font-size: 18px;
+        color: rgba(232, 236, 255, 0.90);
+    }
+
+    .rm-count {
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: rgba(255,255,255,0.08);
+        border: 1px solid rgba(255,255,255,0.10);
+        color: rgba(232, 236, 255, 0.80);
+        font-size: 12px;
+    }
+
+    .rm-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+    }
+
+    .rm-item {
+        padding: 14px;
+    }
+
+    .rm-item-top {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 10px;
+    }
+
+    .rm-item-title {
+        font-size: 16px;
+        font-weight: 700;
+        color: rgba(232, 236, 255, 0.96);
+        line-height: 1.2;
+    }
+
+    .rm-item-desc {
+        color: rgba(232, 236, 255, 0.72);
+        margin-bottom: 10px;
+    }
+
+    .rm-item-meta {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: rgba(232, 236, 255, 0.68);
+        font-size: 12px;
+    }
+
+    .rm-badge {
+        padding: 5px 10px;
+        border-radius: 999px;
+        background: rgba(124, 92, 255, 0.16);
+        border: 1px solid rgba(124, 92, 255, 0.28);
+        color: rgba(232, 236, 255, 0.88);
+    }
+
+    .rm-meta-sep {
+        opacity: 0.55;
+    }
+
+    .rm-empty {
+        padding: 18px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+
+    .rm-empty-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(124, 92, 255, 0.14);
+        border: 1px solid rgba(124, 92, 255, 0.26);
+        font-size: 20px;
+    }
+
+    .rm-empty-title {
+        font-weight: 800;
+        color: rgba(232, 236, 255, 0.95);
+    }
+
+    .rm-empty-sub {
+        color: rgba(232, 236, 255, 0.68);
+        margin-top: 4px;
+        font-size: 13px;
+    }
+
+    .rm-spinner {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        border: 2px solid rgba(0,0,0,0.25);
+        border-top-color: rgba(0,0,0,0.75);
+        display: inline-block;
+        animation: rmspin 0.8s linear infinite;
+    }
+
+    @@keyframes rmspin {
+        from
+
+    {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+    SS
+    }
+
+    @@media (max-width: 860px) {
+        .rm-form-grid
+
+    {
+        grid-template-columns: 1fr;
+    }
+
+    .rm-actions {
+        justify-content: flex-start;
+    }
+
+    .rm-grid {
+        grid-template-columns: 1fr;
+    }
+
+    }
+</style>

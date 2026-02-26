@@ -1,17 +1,3 @@
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.Core\bin\Debug\net9.0\SmartAssistant.Core.deps.json
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.Core\bin\Debug\net9.0\SmartAssistant.Core.runtimeconfig.json
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.Core\bin\Debug\net9.0\SmartAssistant.Core.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.Core\bin\Debug\net9.0\SmartAssistant.Core.pdb
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.Core\obj\Debug\net9.0\SmartAssistant.Core.csproj.AssemblyReference.cache
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.Core\obj\Debug\net9.0\SmartAssistant.Core.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.Core\obj\Debug\net9.0\SmartAssistant.Core.AssemblyInfoInputs.cache
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.Core\obj\Debug\net9.0\SmartAssistant.Core.AssemblyInfo.cs
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.Core\obj\Debug\net9.0\SmartAssistant.Core.csproj.CoreCompileInputs.cache
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.Core\obj\Debug\net9.0\SmartAssistant.Core.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.Core\obj\Debug\net9.0\refint\SmartAssistant.Core.dll
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.Core\obj\Debug\net9.0\SmartAssistant.Core.pdb
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.Core\obj\Debug\net9.0\SmartAssistant.Core.genruntimeconfig.cache
-C:\Users\hp\source\repos\SmartAssistant\SmartAssistant.Core\obj\Debug\net9.0\ref\SmartAssistant.Core.dll
 D:\Anas FYP\SmartAssistant.Core\bin\Debug\net9.0\SmartAssistant.Core.deps.json
 D:\Anas FYP\SmartAssistant.Core\bin\Debug\net9.0\SmartAssistant.Core.runtimeconfig.json
 D:\Anas FYP\SmartAssistant.Core\bin\Debug\net9.0\SmartAssistant.Core.dll
