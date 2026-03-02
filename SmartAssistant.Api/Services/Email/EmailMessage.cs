@@ -12,13 +12,13 @@
     public interface IEmailClient
     {
         // “Important” can mean Gmail label IMPORTANT, or your own logic later
-        Task<IReadOnlyList<EmailMessage>> GetImportantEmailsAsync(DateTimeOffset sinceUtc, CancellationToken ct);
+        Task<IReadOnlyList<EmailMessage>> GetImportantEmailsAsync(DateTimeOffset sinceUtc, CancellationToken ct, string gmailQuery);
     }
 
     // Stub: replace with Gmail API / Graph later
     public class FakeEmailClient : IEmailClient
     {
-        public Task<IReadOnlyList<EmailMessage>> GetImportantEmailsAsync(DateTimeOffset sinceUtc, CancellationToken ct)
+        public Task<IReadOnlyList<EmailMessage>> GetImportantEmailsAsync(DateTimeOffset sinceUtc, CancellationToken ct, string gmailQuery)
         {
             IReadOnlyList<EmailMessage> list =
             [

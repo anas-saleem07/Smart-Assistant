@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SmartAssistant.Api.Data;
 
@@ -11,9 +12,11 @@ using SmartAssistant.Api.Data;
 namespace SmartAssistant.Core.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260302101853_AddGmailQueryToAutomationSettings")]
+    partial class AddGmailQueryToAutomationSettings
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -141,18 +144,6 @@ namespace SmartAssistant.Core.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("LastRunCreatedCount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("LastRunError")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTimeOffset?>("LastRunOn")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("LastRunStatus")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("ScanIntervalMinutes")
                         .HasColumnType("int");
 
@@ -168,7 +159,6 @@ namespace SmartAssistant.Core.Data.Migrations
                             Enabled = true,
                             GmailQuery = "in:inbox newer_than:7d -category:promotions -category:social",
                             KeywordsCsv = "action required,urgent,asap,deadline,meeting,invoice,follow up",
-                            LastRunCreatedCount = 0,
                             ScanIntervalMinutes = 10
                         });
                 });

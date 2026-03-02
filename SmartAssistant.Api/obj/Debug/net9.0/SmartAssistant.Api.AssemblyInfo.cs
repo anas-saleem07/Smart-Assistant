@@ -11,10 +11,11 @@
 using System;
 using System.Reflection;
 
+[assembly: Microsoft.Extensions.Configuration.UserSecrets.UserSecretsIdAttribute("2c093e04-3d1f-4791-91f1-bde6a1cd8a87")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("SmartAssistant.Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2c1952db3de6844377d7c4c4e470519e699caae2")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b439c82a3c99cbb3dde3905f6007ea48a38a765e")]
 [assembly: System.Reflection.AssemblyProductAttribute("SmartAssistant.Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SmartAssistant.Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

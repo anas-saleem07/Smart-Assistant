@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SmartAssistant.Api.Data;
 
@@ -11,9 +12,11 @@ using SmartAssistant.Api.Data;
 namespace SmartAssistant.Core.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260227082920_UpdateReminderForManualAndEmail")]
+    partial class UpdateReminderForManualAndEmail
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -133,24 +136,8 @@ namespace SmartAssistant.Core.Data.Migrations
                     b.Property<bool>("Enabled")
                         .HasColumnType("bit");
 
-                    b.Property<string>("GmailQuery")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("KeywordsCsv")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("LastRunCreatedCount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("LastRunError")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTimeOffset?>("LastRunOn")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("LastRunStatus")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ScanIntervalMinutes")
@@ -166,9 +153,7 @@ namespace SmartAssistant.Core.Data.Migrations
                             Id = 1,
                             DefaultReminderAfterMinutes = 60,
                             Enabled = true,
-                            GmailQuery = "in:inbox newer_than:7d -category:promotions -category:social",
                             KeywordsCsv = "action required,urgent,asap,deadline,meeting,invoice,follow up",
-                            LastRunCreatedCount = 0,
                             ScanIntervalMinutes = 10
                         });
                 });

@@ -4,11 +4,17 @@
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>2c093e04-3d1f-4791-91f1-bde6a1cd8a87</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
 	  <PackageReference Include="AutoMapper" Version="12.0.1" />
 	  <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+	  <PackageReference Include="Google.Apis.Auth" Version="1.73.0" />
+	  <PackageReference Include="Google.Apis.Gmail.v1" Version="1.73.0.4029" />
+	  <PackageReference Include="Hangfire" Version="1.8.23" />
+	  <PackageReference Include="Hangfire.AspNetCore" Version="1.8.23" />
+	  <PackageReference Include="Hangfire.SqlServer" Version="1.8.23" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.10" />
 	  <PackageReference Include="Microsoft.OpenApi" Version="2.5.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.10" />

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SmartAssistant.Api.Data;
 
@@ -11,9 +12,11 @@ using SmartAssistant.Api.Data;
 namespace SmartAssistant.Core.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260227064114_AddReminderAutomationTables")]
+    partial class AddReminderAutomationTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -98,23 +101,10 @@ namespace SmartAssistant.Core.Data.Migrations
                     b.Property<DateTimeOffset>("ReminderTime")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<string>("SourceId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("SourceProvider")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("Type", "SourceProvider", "SourceId")
-                        .IsUnique()
-                        .HasFilter("[SourceProvider] IS NOT NULL AND [SourceId] IS NOT NULL");
 
                     b.ToTable("Reminder");
                 });
@@ -133,24 +123,8 @@ namespace SmartAssistant.Core.Data.Migrations
                     b.Property<bool>("Enabled")
                         .HasColumnType("bit");
 
-                    b.Property<string>("GmailQuery")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("KeywordsCsv")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("LastRunCreatedCount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("LastRunError")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTimeOffset?>("LastRunOn")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("LastRunStatus")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ScanIntervalMinutes")
@@ -166,9 +140,7 @@ namespace SmartAssistant.Core.Data.Migrations
                             Id = 1,
                             DefaultReminderAfterMinutes = 60,
                             Enabled = true,
-                            GmailQuery = "in:inbox newer_than:7d -category:promotions -category:social",
                             KeywordsCsv = "action required,urgent,asap,deadline,meeting,invoice,follow up",
-                            LastRunCreatedCount = 0,
                             ScanIntervalMinutes = 10
                         });
                 });

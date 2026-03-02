@@ -30,12 +30,15 @@ namespace SmartAssistant.Api.Controllers
         [HttpPost("create")]
         public async Task<IActionResult> Create([FromBody] ReminderViewModel vm)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            var reminder = _mapper.Map<Core.Entities.Reminder>(vm);
-            await _service.AddReminderAsync(reminder);
 
-            return Ok(reminder); // or map to a DTO
+            var reminder = _mapper.Map<SmartAssistant.Core.Entities.Reminder>(vm);
+
+            //  Manual flow
+            var saved = await _service.AddManualReminderAsync(reminder);
+
+            return Ok(saved);
         }
 
         [HttpGet("list")]

@@ -13,6 +13,13 @@
 
         // simple matching (can be replaced with NLP later)
         public string KeywordsCsv { get; set; } = "action required,urgent,asap,deadline,meeting,invoice,follow up";
+
+        public string GmailQuery { get; set; } = "in:inbox newer_than:7d -category:promotions -category:social";
+
+        public DateTimeOffset? LastRunOn { get; set; }
+        public int LastRunCreatedCount { get; set; }
+        public string? LastRunStatus { get; set; }   // "Success" / "Failed" / "Running"
+        public string? LastRunError { get; set; }    // store last exception message (short)
     }
 
     public class EmailProcessed

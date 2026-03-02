@@ -37,81 +37,151 @@ namespace SmartAssistant.Api.Services.Automation
             var settings = await _db.ReminderAutomationSettings
                 .FirstAsync(x => x.Id == 1, ct);
 
-            if (!settings.Enabled)
-                return 0;
+            //  Mark job as running (monitoring)
+            settings.LastRunStatus = "Running";
+            settings.LastRunError = null;
+            await _db.SaveChangesAsync(ct);
 
-            // 2) Decide how far back to scan
-            //    Keep it simple: last 24 hours
-            var sinceUtc = DateTimeOffset.UtcNow.AddHours(-24);
-
-            // 3) Fetch important emails
-            var importantEmails = await _emailClient.GetImportantEmailsAsync(sinceUtc, ct);
-            if (importantEmails == null || importantEmails.Count == 0)
-                return 0;
-
-            // 4) Parse keywords once
-            var keywords = ParseKeywords(settings.KeywordsCsv);
-
-            var createdCount = 0;
-
-            foreach (var email in importantEmails)
+            try
             {
-                // Defensive checks
-                if (email == null)
-                    continue;
-
-                if (string.IsNullOrWhiteSpace(email.Provider) || string.IsNullOrWhiteSpace(email.Id))
-                    continue;
-
-                // 5) Skip if already processed (prevents duplicates)
-                var alreadyProcessed = await _db.EmailProcessed
-                    .AnyAsync(x => x.Provider == email.Provider && x.MessageId == email.Id, ct);
-
-                if (alreadyProcessed)
-                    continue;
-
-                // 6) Check if email matches rules
-                var matches = IsMatch(email, keywords);
-
-                // 7) Always mark as processed (so you do not re-check same email forever)
-                _db.EmailProcessed.Add(new EmailProcessed
+                if (!settings.Enabled)
                 {
-                    Provider = email.Provider,
-                    MessageId = email.Id,
-                    ProcessedOn = DateTimeOffset.UtcNow
-                });
-
-                if (!matches)
-                {
+                    //  Record outcome even when disabled
+                    settings.LastRunOn = DateTimeOffset.UtcNow;
+                    settings.LastRunCreatedCount = 0;
+                    settings.LastRunStatus = "Success";
+                    settings.LastRunError = null;
                     await _db.SaveChangesAsync(ct);
-                    continue;
+
+                    return 0;
                 }
 
-                // 8) Decide reminder time
-                //    For now: now + DefaultReminderAfterMinutes
-                var reminderTime = DateTimeOffset.UtcNow.AddMinutes(Math.Max(1, settings.DefaultReminderAfterMinutes));
+                // 2) Decide how far back to scan (last 24 hours)
+                var sinceUtc = DateTimeOffset.UtcNow.AddHours(-24);
 
-                // 9) Build reminder from email
-                var reminder = new Reminder
+                // 3) Fetch important emails
+                var importantEmails = await _emailClient.GetImportantEmailsAsync(sinceUtc, ct, settings.GmailQuery);
+                if (importantEmails == null || importantEmails.Count == 0)
                 {
-                    Id = Guid.NewGuid(),
-                    Title = email.Subject,
-                    Description = BuildDescription(email),
-                    ReminderTime = reminderTime,
-                    Completed = false,
-                    CreatedOn = DateTime.UtcNow
-                };
+                    //  Record outcome when no emails found
+                    settings.LastRunOn = DateTimeOffset.UtcNow;
+                    settings.LastRunCreatedCount = 0;
+                    settings.LastRunStatus = "Success";
+                    settings.LastRunError = null;
+                    await _db.SaveChangesAsync(ct);
 
-                // 10) Save reminder
-                await _reminderService.AddReminderAsync(reminder);
+                    return 0;
+                }
 
-                // 11) Save processed marker
+                // 4) Parse keywords once
+                var keywords = ParseKeywords(settings.KeywordsCsv);
+
+                var createdCount = 0;
+
+                foreach (var email in importantEmails)
+                {
+                    if (email == null)
+                        continue;
+
+                    if (string.IsNullOrWhiteSpace(email.Provider) || string.IsNullOrWhiteSpace(email.Id))
+                        continue;
+
+                    //  A) First: reminder-level dedupe (most important)
+                    if (await _reminderService.ExistsEmailReminderAsync(email.Provider, email.Id))
+                    {
+                        // Still mark as processed so scan remains fast
+                        await MarkProcessedIfNeededAsync(email, ct);
+                        continue;
+                    }
+
+                    //  B) Your existing "EmailProcessed" check can stay (fast skip)
+                    var alreadyProcessed = await _db.EmailProcessed
+                        .AnyAsync(x => x.Provider == email.Provider && x.MessageId == email.Id, ct);
+
+                    if (alreadyProcessed)
+                        continue;
+
+                    // 6) Check if email matches rules
+                    var matches = IsMatch(email, keywords);
+
+                    // 7) Always mark as processed (so you do not re-check same email forever)
+                    _db.EmailProcessed.Add(new EmailProcessed
+                    {
+                        Provider = email.Provider,
+                        MessageId = email.Id,
+                        ProcessedOn = DateTimeOffset.UtcNow
+                    });
+
+                    if (!matches)
+                    {
+                        await _db.SaveChangesAsync(ct);
+                        continue;
+                    }
+
+                    // 8) Decide reminder time
+                    var reminderTime = DateTimeOffset.UtcNow.AddMinutes(Math.Max(1, settings.DefaultReminderAfterMinutes));
+
+                    //  9) Build EMAIL reminder (separate flow from manual reminders)
+                    var emailReminder = new Reminder
+                    {
+                        Title = email.Subject,
+                        Description = BuildDescription(email),
+                        ReminderTime = reminderTime,
+
+                        //  MUST set Email type + source
+                        Type = ReminderType.Email,
+                        SourceProvider = email.Provider,
+                        SourceId = email.Id
+                    };
+
+                    //  10) Save using EMAIL method (NOT manual method)
+                    var saved = await _reminderService.AddEmailReminderAsync(emailReminder);
+
+                    // 11) Save processed marker (already added above)
+                    await _db.SaveChangesAsync(ct);
+
+                    if (saved != null)
+                        createdCount++;
+                }
+
+                // Record success outcome
+                settings.LastRunOn = DateTimeOffset.UtcNow;
+                settings.LastRunCreatedCount = createdCount;
+                settings.LastRunStatus = "Success";
+                settings.LastRunError = null;
                 await _db.SaveChangesAsync(ct);
 
-                createdCount++;
+                return createdCount;
             }
+            catch (Exception ex)
+            {
+                //  Record failure outcome (keep error short)
+                settings.LastRunOn = DateTimeOffset.UtcNow;
+                settings.LastRunStatus = "Failed";
+                settings.LastRunError = ex.Message;
+                await _db.SaveChangesAsync(ct);
 
-            return createdCount;
+                throw; // IMPORTANT: Hangfire must see failure for retries/dashboard
+            }
+        }
+
+        //  helper to mark processed even on dedupe skip
+        private async Task MarkProcessedIfNeededAsync(EmailMessage email, CancellationToken ct)
+        {
+            var alreadyProcessed = await _db.EmailProcessed
+                .AnyAsync(x => x.Provider == email.Provider && x.MessageId == email.Id, ct);
+
+            if (alreadyProcessed)
+                return;
+
+            _db.EmailProcessed.Add(new EmailProcessed
+            {
+                Provider = email.Provider,
+                MessageId = email.Id,
+                ProcessedOn = DateTimeOffset.UtcNow
+            });
+
+            await _db.SaveChangesAsync(ct);
         }
 
         private static string BuildDescription(EmailMessage email)
