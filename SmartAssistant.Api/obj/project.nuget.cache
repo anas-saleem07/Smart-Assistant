@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "sLj5Iex1D3Q=",
+  "dgSpecHash": "bJqYvWtFU5U=",
   "success": true,
   "projectFilePath": "D:\\Anas FYP\\SmartAssistant.Api\\SmartAssistant.Api.csproj",
   "expectedPackageFiles": [
@@ -10,6 +10,7 @@
     "C:\\Users\\Basit Ali Khan\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",
     "C:\\Users\\Basit Ali Khan\\.nuget\\packages\\google.apis\\1.73.0\\google.apis.1.73.0.nupkg.sha512",
     "C:\\Users\\Basit Ali Khan\\.nuget\\packages\\google.apis.auth\\1.73.0\\google.apis.auth.1.73.0.nupkg.sha512",
+    "C:\\Users\\Basit Ali Khan\\.nuget\\packages\\google.apis.calendar.v3\\1.73.0.4063\\google.apis.calendar.v3.1.73.0.4063.nupkg.sha512",
     "C:\\Users\\Basit Ali Khan\\.nuget\\packages\\google.apis.core\\1.73.0\\google.apis.core.1.73.0.nupkg.sha512",
     "C:\\Users\\Basit Ali Khan\\.nuget\\packages\\google.apis.gmail.v1\\1.73.0.4029\\google.apis.gmail.v1.1.73.0.4029.nupkg.sha512",
     "C:\\Users\\Basit Ali Khan\\.nuget\\packages\\hangfire\\1.8.23\\hangfire.1.8.23.nupkg.sha512",

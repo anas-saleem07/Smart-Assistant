@@ -16,9 +16,12 @@ androidx.fragment.app.FragmentContainerView;D:\Anas FYP\SmartAssistant.App\obj\D
 attr;D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-android\lp\160\jl\res\values\attr.xml
 background;obj\Debug\net9.0-android\resizetizer\r\mipmap-anydpi-v26\appicon.xml
 background;obj\Debug\net9.0-android\resizetizer\r\mipmap-anydpi-v26\appicon_round.xml
+bitmap;obj\Debug\net9.0-android\resizetizer\sp\drawable\maui_splash_image.xml
+bitmap;obj\Debug\net9.0-android\resizetizer\sp\drawable-v31\maui_splash_image.xml
 cache-path;D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-android\lp\161\jl\res\xml\microsoft_maui_essentials_fileprovider_file_paths.xml
 color;D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-android\lp\160\jl\res\values\colors.xml
 color;obj\Debug\net9.0-android\res\values\colors.xml
+color;obj\Debug\net9.0-android\resizetizer\sp\values\maui_colors.xml
 com.google.android.material.appbar.AppBarLayout;D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-android\lp\158\jl\res\layout\flyoutcontent.xml
 com.google.android.material.appbar.AppBarLayout;D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-android\lp\158\jl\res\layout\shellcontent.xml
 com.google.android.material.appbar.AppBarLayout;D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-android\lp\160\jl\res\layout\navigationlayout.xml
@@ -32,8 +35,12 @@ item;D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-android\lp\160\jl\res\drawa
 item;D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-android\lp\160\jl\res\values\styles.xml
 item;D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-android\lp\160\jl\res\values-v35\styles.xml
 item;D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-android\lp\164\jl\res\values\values.xml
+item;obj\Debug\net9.0-android\resizetizer\sp\drawable\maui_splash_image.xml
+item;obj\Debug\net9.0-android\resizetizer\sp\drawable-v31\maui_splash_image.xml
 layer-list;D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-android\lp\160\jl\res\drawable\maui_splash.xml
 layer-list;D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-android\lp\160\jl\res\drawable\maui_splash_image.xml
+layer-list;obj\Debug\net9.0-android\resizetizer\sp\drawable\maui_splash_image.xml
+layer-list;obj\Debug\net9.0-android\resizetizer\sp\drawable-v31\maui_splash_image.xml
 microsoft.maui.controls.platform.compatibility.ShellFlyoutLayout;D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-android\lp\158\jl\res\layout\flyoutcontent.xml
 monochrome;obj\Debug\net9.0-android\resizetizer\r\mipmap-anydpi-v26\appicon.xml
 monochrome;obj\Debug\net9.0-android\resizetizer\r\mipmap-anydpi-v26\appicon_round.xml
@@ -46,6 +53,7 @@ resources;D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-android\lp\160\jl\res\
 resources;D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-android\lp\160\jl\res\values-v35\styles.xml
 resources;D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-android\lp\164\jl\res\values\values.xml
 resources;obj\Debug\net9.0-android\res\values\colors.xml
+resources;obj\Debug\net9.0-android\resizetizer\sp\values\maui_colors.xml
 set;D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-android\lp\158\jl\res\anim\enterfromleft.xml
 set;D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-android\lp\158\jl\res\anim\enterfromright.xml
 set;D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-android\lp\158\jl\res\anim\exittoleft.xml

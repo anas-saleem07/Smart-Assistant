@@ -11,8 +11,13 @@
 
     public interface IEmailClient
     {
-        // “Important” can mean Gmail label IMPORTANT, or your own logic later
         Task<IReadOnlyList<EmailMessage>> GetImportantEmailsAsync(DateTimeOffset sinceUtc, CancellationToken ct, string gmailQuery);
+
+        // New: Fetch one email again later (needed for pending replies)
+        Task<EmailMessage?> GetEmailByIdAsync(string messageId, CancellationToken ct);
+
+        // New: Send a reply
+        Task ReplyAsync(string messageId, string body, CancellationToken ct);
     }
 
     // Stub: replace with Gmail API / Graph later
@@ -22,10 +27,29 @@
         {
             IReadOnlyList<EmailMessage> list =
             [
-                new EmailMessage("Gmail", "msg_123", "Action required: submit report", "Please submit by EOD", DateTimeOffset.UtcNow.AddMinutes(-5), "boss@company.com")
+                new EmailMessage("Gmail", "msg_123", "Interview schedule", "Can you confirm time?", DateTimeOffset.UtcNow.AddMinutes(-5), "boss@company.com")
             ];
 
             return Task.FromResult(list);
+        }
+
+        public Task ReplyAsync(string messageId, string body, CancellationToken ct)
+        {
+            // Fake: do nothing
+            return Task.CompletedTask;
+        }
+
+        public Task<EmailMessage?> GetEmailByIdAsync(string messageId, CancellationToken ct)
+        {
+            // Fake data for testing
+            return Task.FromResult<EmailMessage?>(new EmailMessage(
+                "Gmail",
+                messageId,
+                "Interview schedule",
+                "Please confirm your availability.",
+                DateTimeOffset.UtcNow,
+                "boss@company.com"
+            ));
         }
     }
 }

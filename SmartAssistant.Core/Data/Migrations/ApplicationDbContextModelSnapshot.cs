@@ -36,6 +36,9 @@ namespace SmartAssistant.Core.Data.Migrations
                     b.Property<DateTimeOffset>("CreatedOn")
                         .HasColumnType("datetimeoffset");
 
+                    b.Property<string>("DisplayName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -47,6 +50,9 @@ namespace SmartAssistant.Core.Data.Migrations
                     b.Property<string>("RefreshToken")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset?>("UpdatedOn")
+                        .HasColumnType("datetimeoffset");
 
                     b.HasKey("Id");
 
@@ -61,6 +67,15 @@ namespace SmartAssistant.Core.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
+                    b.Property<DateTimeOffset?>("CalendarCreatedOn")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("CalendarEventId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CalendarLastError")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("MessageId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -68,9 +83,36 @@ namespace SmartAssistant.Core.Data.Migrations
                     b.Property<DateTimeOffset>("ProcessedOn")
                         .HasColumnType("datetimeoffset");
 
+                    b.Property<DateTimeOffset?>("ProposedEndUtc")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTimeOffset?>("ProposedStartUtc")
+                        .HasColumnType("datetimeoffset");
+
                     b.Property<string>("Provider")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("Replied")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("RepliedOn")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("ReplyDraftBody")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ReplyLastError")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("ReplyNeeded")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("ReplyQueuedOn")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<bool>("ReplyRequiresApproval")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -85,6 +127,15 @@ namespace SmartAssistant.Core.Data.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CalendarEventId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CalendarSyncError")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset?>("CalendarSyncedOn")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<bool>("Completed")
                         .HasColumnType("bit");
@@ -127,6 +178,37 @@ namespace SmartAssistant.Core.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("AiCallsToday")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AiDailyLimit")
+                        .HasColumnType("int");
+
+                    b.Property<string>("AiLastError")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset?>("AiPausedUntilUtc")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTime?>("AiUsageDayUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("AllowAutoReplyAfterOfficeHours")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("AutoReplyEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("AutoReplyKeywordsCsv")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("CalendarEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("CalendarId")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("DefaultReminderAfterMinutes")
                         .HasColumnType("int");
 
@@ -153,8 +235,24 @@ namespace SmartAssistant.Core.Data.Migrations
                     b.Property<string>("LastRunStatus")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("OfficeEndHour")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OfficeStartHour")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("RequireApprovalAfterOfficeHours")
+                        .HasColumnType("bit");
+
                     b.Property<int>("ScanIntervalMinutes")
                         .HasColumnType("int");
+
+                    b.Property<int>("SlotMinutes")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TimezoneId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -164,12 +262,24 @@ namespace SmartAssistant.Core.Data.Migrations
                         new
                         {
                             Id = 1,
+                            AiCallsToday = 0,
+                            AiDailyLimit = 50,
+                            AllowAutoReplyAfterOfficeHours = false,
+                            AutoReplyEnabled = false,
+                            AutoReplyKeywordsCsv = "interview,meeting,schedule,call,appointment",
+                            CalendarEnabled = true,
+                            CalendarId = "primary",
                             DefaultReminderAfterMinutes = 60,
                             Enabled = true,
                             GmailQuery = "in:inbox newer_than:7d -category:promotions -category:social",
                             KeywordsCsv = "action required,urgent,asap,deadline,meeting,invoice,follow up",
                             LastRunCreatedCount = 0,
-                            ScanIntervalMinutes = 10
+                            OfficeEndHour = 18,
+                            OfficeStartHour = 9,
+                            RequireApprovalAfterOfficeHours = true,
+                            ScanIntervalMinutes = 10,
+                            SlotMinutes = 30,
+                            TimezoneId = "Asia/Karachi"
                         });
                 });
 #pragma warning restore 612, 618

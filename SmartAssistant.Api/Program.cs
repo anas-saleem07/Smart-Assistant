@@ -6,6 +6,7 @@ using SmartAssistant.Api.Jobs;
 using SmartAssistant.Api.Options;
 using SmartAssistant.Api.Services;
 using SmartAssistant.Api.Services.Automation;
+using SmartAssistant.Api.Services.AutoReply;
 using SmartAssistant.Api.Services.Email;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -53,7 +54,13 @@ builder.Services
         !string.IsNullOrWhiteSpace(o.RedirectUri),
         "GmailOAuth settings are missing.")
     .ValidateOnStart();
+//Gemini API options
+builder.Services.AddOptions<SmartAssistant.Api.Options.GeminiOptions>()
+    .BindConfiguration(SmartAssistant.Api.Options.GeminiOptions.SectionName)
+    .Validate(o => !string.IsNullOrWhiteSpace(o.ApiKey), "Gemini ApiKey missing")
+    .ValidateOnStart();
 
+builder.Services.AddHttpClient<SmartAssistant.Api.Services.Ai.IAiClient, SmartAssistant.Api.Services.Ai.GeminiClient>();
 // --------------------
 // App services
 // --------------------
@@ -62,7 +69,13 @@ builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddScoped<IReminderService, ReminderService>();
 builder.Services.AddScoped<IReminderAutomationService, ReminderAutomationService>();
 builder.Services.AddScoped<ReminderAutomationJob>();
+builder.Services.AddScoped<IAutoReplyService, AutoReplyService>();
 
+builder.Services.AddScoped<SmartAssistant.Api.Services.Google.IOAuthTokenHelper,
+    SmartAssistant.Api.Services.Google.OAuthTokenHelper>();
+
+builder.Services.AddScoped<SmartAssistant.Api.Services.Calendar.ICalendarService,
+    SmartAssistant.Api.Services.Calendar.GoogleCalendarService>();
 //       IMPORTANT: register ONLY ONE IEmailClient
 builder.Services.AddScoped<IEmailClient, GmailEmailClient>();
 
@@ -70,7 +83,7 @@ builder.Services.AddScoped<IEmailOAuthService, EmailOAuthService>();
 
 //  A small wrapper job class (best practice for Hangfire)
 builder.Services.AddScoped<ReminderAutomationJob>();
-
+builder.Services.AddScoped<AutoReplyPendingJob>();
 // --------------------
 // MVC + Swagger
 // --------------------
@@ -106,25 +119,11 @@ RecurringJob.AddOrUpdate<ReminderAutomationJob>(
     job => job.Run(CancellationToken.None),
     "*/10 * * * *" // every 10 minutes
 );
-
+RecurringJob.AddOrUpdate<AutoReplyPendingJob>(
+    "AutoReplyPendingJob",
+    job => job.Run(CancellationToken.None),
+    "*/10 * * * *"
+);
 app.Run();
 
 
-// --------------------
-// Job wrapper (clean)
-// --------------------
-//public sealed class ReminderAutomationJob
-//{
-//    private readonly IReminderAutomationService _automation;
-
-//    public ReminderAutomationJob(IReminderAutomationService automation)
-//    {
-//        _automation = automation;
-//    }
-
-//    public Task Run(CancellationToken ct)
-//    {
-//        // Hangfire will record success/failure + retries
-//        return _automation.ScanAndCreateRemindersAsync(ct);
-//    }
-//}

@@ -16,6 +16,7 @@ wwwroot\css\bootstrap\bootstrap.min.css.map.br
 wwwroot\css\bootstrap\bootstrap.min.css.br
 wwwroot\css\bootstrap\bootstrap.min.css.map.gz
 wwwroot\css\bootstrap\bootstrap.min.css.gz
+OpenSans-Regular.ttf
 appicon.ico
 appiconLargeTile.scale-100.png
 appiconLargeTile.scale-125.png
@@ -67,6 +68,11 @@ dotnet_bot.scale-125.png
 dotnet_bot.scale-150.png
 dotnet_bot.scale-200.png
 dotnet_bot.scale-400.png
+splashSplashScreen.scale-100.png
+splashSplashScreen.scale-125.png
+splashSplashScreen.scale-150.png
+splashSplashScreen.scale-200.png
+splashSplashScreen.scale-400.png
 wwwroot\SmartAssistant.App.styles.css
 wwwroot\SmartAssistant.App.xgwscxtq2t.bundle.scp.css
 AboutAssets.txt

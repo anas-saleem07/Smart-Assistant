@@ -21,5 +21,13 @@
         //   NEW: only used for email reminders
         public string? SourceProvider { get; set; }  // "Gmail"
         public string? SourceId { get; set; }        // Gmail MessageId
+
+        public string? CalendarEventId { get; set; }
+
+        // What: When calendar event was successfully synced.
+        public DateTimeOffset? CalendarSyncedOn { get; set; }
+
+        // What: Stores error message if calendar creation failed.
+        public string? CalendarSyncError { get; set; }
     }
 }

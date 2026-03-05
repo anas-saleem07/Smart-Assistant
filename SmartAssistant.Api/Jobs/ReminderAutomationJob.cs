@@ -1,8 +1,10 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Hangfire;
+using Microsoft.Extensions.Logging;
 using SmartAssistant.Api.Services.Automation;
 
 namespace SmartAssistant.Api.Jobs
 {
+    [DisableConcurrentExecution(600)]
     public sealed class ReminderAutomationJob
     {
         private readonly IReminderAutomationService _automation;

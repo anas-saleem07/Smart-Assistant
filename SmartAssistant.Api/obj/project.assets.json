@@ -110,6 +110,23 @@
           }
         }
       },
+      "Google.Apis.Calendar.v3/1.73.0.4063": {
+        "type": "package",
+        "dependencies": {
+          "Google.Apis": "1.73.0",
+          "Google.Apis.Auth": "1.73.0"
+        },
+        "compile": {
+          "lib/net6.0/Google.Apis.Calendar.v3.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/Google.Apis.Calendar.v3.dll": {
+            "related": ".pdb;.xml"
+          }
+        }
+      },
       "Google.Apis.Core/1.73.0": {
         "type": "package",
         "dependencies": {
@@ -2192,6 +2209,28 @@
         "lib/netstandard2.0/Google.Apis.Auth.dll",
         "lib/netstandard2.0/Google.Apis.Auth.pdb",
         "lib/netstandard2.0/Google.Apis.Auth.xml"
+      ]
+    },
+    "Google.Apis.Calendar.v3/1.73.0.4063": {
+      "sha512": "6D4oUsd0rlS5y78RVxY4vw8/4raoZ9+o97lu5qKRlVhyrJ+NkGAayPY5PiJy1YL2jKHATY7z5bId0tqq+fmypw==",
+      "type": "package",
+      "path": "google.apis.calendar.v3/1.73.0.4063",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "NuGetIcon.png",
+        "google.apis.calendar.v3.1.73.0.4063.nupkg.sha512",
+        "google.apis.calendar.v3.nuspec",
+        "lib/net462/Google.Apis.Calendar.v3.dll",
+        "lib/net462/Google.Apis.Calendar.v3.pdb",
+        "lib/net462/Google.Apis.Calendar.v3.xml",
+        "lib/net6.0/Google.Apis.Calendar.v3.dll",
+        "lib/net6.0/Google.Apis.Calendar.v3.pdb",
+        "lib/net6.0/Google.Apis.Calendar.v3.xml",
+        "lib/netstandard2.0/Google.Apis.Calendar.v3.dll",
+        "lib/netstandard2.0/Google.Apis.Calendar.v3.pdb",
+        "lib/netstandard2.0/Google.Apis.Calendar.v3.xml"
       ]
     },
     "Google.Apis.Core/1.73.0": {
@@ -6030,7 +6069,9 @@
     "net9.0": [
       "AutoMapper >= 12.0.1",
       "AutoMapper.Extensions.Microsoft.DependencyInjection >= 12.0.1",
+      "Google.Apis >= 1.73.0",
       "Google.Apis.Auth >= 1.73.0",
+      "Google.Apis.Calendar.v3 >= 1.73.0.4063",
       "Google.Apis.Gmail.v1 >= 1.73.0.4029",
       "Hangfire >= 1.8.23",
       "Hangfire.AspNetCore >= 1.8.23",
@@ -6106,9 +6147,17 @@
             "target": "Package",
             "version": "[12.0.1, )"
           },
+          "Google.Apis": {
+            "target": "Package",
+            "version": "[1.73.0, )"
+          },
           "Google.Apis.Auth": {
             "target": "Package",
             "version": "[1.73.0, )"
+          },
+          "Google.Apis.Calendar.v3": {
+            "target": "Package",
+            "version": "[1.73.0.4063, )"
           },
           "Google.Apis.Gmail.v1": {
             "target": "Package",

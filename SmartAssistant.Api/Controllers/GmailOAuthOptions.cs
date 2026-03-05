@@ -11,11 +11,13 @@ public class EmailOAuthController : ControllerBase
         _oauthService = oauthService;
     }
 
-    [HttpGet("gmail/connect")]
-    public IActionResult ConnectGmail()
+    [HttpGet("connect-google")]
+    public IActionResult ConnectGoogle()
     {
-        var url = _oauthService.GenerateGoogleAuthUrl();
-        return Ok(new { authUrl = url });
+        var state = Guid.NewGuid().ToString(); // track request
+        var url = _oauthService.GenerateGoogleAuthUrl(state);
+
+        return Ok(new { url });
     }
 
     [HttpGet("gmail/callback")]
