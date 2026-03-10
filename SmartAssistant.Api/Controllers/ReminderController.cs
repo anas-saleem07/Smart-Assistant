@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using SmartAssistant.Api.Data;
+using SmartAssistant.Api.Helpers;
 using SmartAssistant.Api.Models;
 using SmartAssistant.Api.Services;
 using SmartAssistant.Api.Services.Automation;
@@ -39,11 +40,18 @@ namespace SmartAssistant.Api.Controllers
 
             var reminder = _mapper.Map<Reminder>(vm);
 
+            // Load settings first so local reminder time can be converted to UTC correctly
+            var settings = await _db.ReminderAutomationSettings.FirstAsync(x => x.Id == 1, ct);
+
+            // Convert local UI time (e.g. Karachi time) to UTC before saving
+            reminder.ReminderTime = AppTimeHelper.ConvertLocalDateTimeToUtc(
+                vm.ReminderTime,
+                settings.TimezoneId);
+
             // Save reminder (manual reminder)
             await _service.AddManualReminderAsync(reminder);
 
             // Calendar is mandatory for manual reminders too
-            var settings = await _db.ReminderAutomationSettings.FirstAsync(x => x.Id == 1, ct);
 
             // Prevent duplicate calendar sync
             if (string.IsNullOrWhiteSpace(reminder.CalendarEventId))

@@ -630,3 +630,4 @@ D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\pr
 D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\qualifiers.txt
 D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\qualifiers.txt.intermediate
 D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\MultipleQualifiersPerDimensionFound.txt
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\staticwebassets.upToDateCheck.txt

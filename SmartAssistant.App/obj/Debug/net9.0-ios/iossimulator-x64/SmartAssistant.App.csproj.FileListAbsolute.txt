@@ -395,3 +395,4 @@ D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-ios\iossimulator-x64\refint\Smar
 D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-ios\iossimulator-x64\SmartAssistant.App.pdb
 D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-ios\iossimulator-x64\SmartAssistant.App.genruntimeconfig.cache
 D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-ios\iossimulator-x64\ref\SmartAssistant.App.dll
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-ios\iossimulator-x64\staticwebassets.upToDateCheck.txt

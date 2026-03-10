@@ -41,6 +41,9 @@ namespace SmartAssistant.Api.Services
             // Manual reminder should not be completed on create
             reminder.Completed = false;
 
+            // Keep DB storage in UTC
+            reminder.ReminderTime = reminder.ReminderTime.ToUniversalTime();
+
             _context.Reminder.Add(reminder);
             await _context.SaveChangesAsync();
 
@@ -68,6 +71,9 @@ namespace SmartAssistant.Api.Services
                 reminder.CreatedOn = DateTime.UtcNow;
 
             reminder.Completed = false;
+
+            // Keep DB storage in UTC
+            reminder.ReminderTime = reminder.ReminderTime.ToUniversalTime();
 
             _context.Reminder.Add(reminder);
 

@@ -17,17 +17,20 @@
             </div>
         </header>
 
+        <AutoReplyApprovalBar />
+
         @if (!string.IsNullOrWhiteSpace(statusText))
         {
             <div class="rm-status @(isError ? "rm-status-error" : "rm-status-ok")">
                 <span class="rm-status-icon">@(isError ? "!" : "✓")</span>
                 <span class="rm-status-text">@statusText</span>
-                <button class="rm-status-close" @onclick="ClearStatus" aria-label="Close">×</button>
+                <button class="rm-status-close" @onclick="ClearStatus">×</button>
             </div>
         }
 
         <section class="rm-card rm-form">
             <div class="rm-form-grid">
+
                 <div class="rm-field">
                     <label class="rm-label">Title</label>
                     <input class="rm-input"
@@ -51,18 +54,21 @@
                 </div>
 
                 <div class="rm-actions">
+
                     <button class="rm-btn rm-btn-primary"
                             @onclick="AddReminder"
                             disabled="@isProcessing">
+
                         @if (isProcessing)
                         {
-                            <span class="rm-spinner" aria-hidden="true"></span>
+                            <span class="rm-spinner"></span>
                             <span>Adding...</span>
                         }
                         else
                         {
                             <span>Add Reminder</span>
                         }
+
                     </button>
 
                     <button class="rm-btn rm-btn-ghost"
@@ -70,11 +76,14 @@
                             disabled="@isProcessing">
                         Refresh
                     </button>
+
                 </div>
+
             </div>
         </section>
 
         <section class="rm-list">
+
             <div class="rm-list-header">
                 <h2 class="rm-list-title">Your Reminders</h2>
                 <span class="rm-count">@reminders.Count</span>
@@ -84,7 +93,8 @@
             {
                 <div class="rm-empty rm-card">
                     <div class="rm-empty-icon">⏰</div>
-                    <div class="rm-empty-text">
+
+                    <div>
                         <div class="rm-empty-title">No reminders yet</div>
                         <div class="rm-empty-sub">Add your first reminder above.</div>
                     </div>
@@ -93,17 +103,21 @@
             else
             {
                 <div class="rm-grid">
+
                     @foreach (var reminder in reminders.OrderByDescending(r => r.ReminderTime))
                     {
                         <article class="rm-item rm-card">
+
                             <div class="rm-item-top">
+
                                 <div class="rm-item-title">@reminder.Title</div>
+
                                 <button class="rm-btn rm-btn-danger"
                                         @onclick="() => DeleteReminder(reminder.Id)"
-                                        disabled="@isProcessing"
-                                        title="Delete">
+                                        disabled="@isProcessing">
                                     Delete
                                 </button>
+
                             </div>
 
                             @if (!string.IsNullOrWhiteSpace(reminder.Description))
@@ -112,29 +126,41 @@
                             }
 
                             <div class="rm-item-meta">
-                                <span class="rm-badge">@(reminder.Completed ? "Completed" : "Pending")</span>
-                                <span class="rm-meta-sep">•</span>
-                                <span class="rm-meta">
-                                    @reminder.ReminderTime.ToLocalTime().ToString("ddd, dd MMM yyyy  hh:mm tt")
+
+                                <span class="rm-badge">
+                                    @(reminder.Completed ? "Completed" : "Pending")
                                 </span>
+
+                                <span class="rm-meta-sep">•</span>
+
+                                <span>
+                                    @reminder.ReminderTime
+                                    .ToLocalTime()
+                                    .ToString("ddd, dd MMM yyyy  hh:mm tt")
+                                </span>
+
                             </div>
+
                         </article>
                     }
+
                 </div>
             }
+
         </section>
+
     </div>
 </div>
 
 @code {
-    private bool isProcessing = false;
+
+    private bool isProcessing;
 
     private string statusText = "";
-    private bool isError = false;
+    private bool isError;
 
     private List<ReminderDto> reminders = new();
 
-    // POST model matches API ReminderViewModel
     private CreateReminderRequest newReminder = new()
     {
         ReminderTime = DateTime.Now
@@ -168,8 +194,12 @@
 
             using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(8));
 
-            reminders = await Http.GetFromJsonAsync<List<ReminderDto>>("api/reminder/list", cts.Token)
-                        ?? new List<ReminderDto>();
+            reminders =
+                await Http.GetFromJsonAsync<List<ReminderDto>>(
+                    "api/reminder/list",
+                    cts.Token
+                )
+                ?? new List<ReminderDto>();
         }
         catch (TaskCanceledException)
         {
@@ -203,7 +233,13 @@
 
             using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(8));
 
-            var response = await Http.PostAsJsonAsync("api/reminder/create", newReminder, cts.Token);
+            var response =
+                await Http.PostAsJsonAsync(
+                    "api/reminder/create",
+                    newReminder,
+                    cts.Token
+                );
+
             var body = await response.Content.ReadAsStringAsync(cts.Token);
 
             if (!response.IsSuccessStatusCode)
@@ -247,7 +283,12 @@
 
             using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(8));
 
-            var response = await Http.DeleteAsync($"api/reminder/delete/{id}", cts.Token);
+            var response =
+                await Http.DeleteAsync(
+                    $"api/reminder/delete/{id}",
+                    cts.Token
+                );
+
             var body = await response.Content.ReadAsStringAsync(cts.Token);
 
             if (!response.IsSuccessStatusCode)
@@ -257,6 +298,7 @@
             }
 
             SetStatus("Reminder deleted.", false);
+
             await LoadReminders();
         }
         catch (TaskCanceledException)
@@ -609,7 +651,6 @@
     to {
         transform: rotate(360deg);
     }
-    SS
     }
 
     @@media (max-width: 860px) {

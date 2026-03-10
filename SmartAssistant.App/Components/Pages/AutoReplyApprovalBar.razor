@@ -1,0 +1,490 @@
+﻿@using System.Net.Http.Json
+@using Microsoft.Maui.ApplicationModel
+@inject HttpClient Http
+@implements IDisposable
+
+@if (!string.IsNullOrWhiteSpace(statusText))
+{
+    <div class="ar-status @(isError ? "ar-status-error" : "ar-status-ok")">
+        <span>@statusText</span>
+        <button class="ar-status-close" @onclick="ClearStatus">X</button>
+    </div>
+}
+
+@if (pendingItems.Count > 0)
+{
+    <section class="ar-wrap">
+        <div class="ar-head">
+            <div>
+                <h2 class="ar-title">Pending auto reply approvals</h2>
+                <p class="ar-subtitle">Review after-hours meeting requests and respond instantly.</p>
+            </div>
+
+            <div class="ar-count">@pendingItems.Count</div>
+        </div>
+
+        @foreach (var pendingItem in pendingItems)
+        {
+            <article class="ar-card">
+                <div class="ar-card-top">
+                    <div class="ar-badge">Approval needed</div>
+                    <div class="ar-id">#@pendingItem.Id</div>
+                </div>
+
+                <div class="ar-line">
+                    <span class="ar-label">Reason</span>
+                    <span class="ar-value">@pendingItem.RequestSummary</span>
+                </div>
+
+                @if (!string.IsNullOrWhiteSpace(pendingItem.ProposedLocalText))
+                {
+                    <div class="ar-line">
+                        <span class="ar-label">Requested slot</span>
+                        <span class="ar-value">@pendingItem.ProposedLocalText</span>
+                    </div>
+                }
+
+                @if (!string.IsNullOrWhiteSpace(pendingItem.SuggestedLocalText))
+                {
+                    <div class="ar-line">
+                        <span class="ar-label">Suggested slot</span>
+                        <span class="ar-value">@pendingItem.SuggestedLocalText</span>
+                    </div>
+                }
+
+                <div class="ar-actions">
+                    <button class="ar-btn ar-btn-yes"
+                            @onclick="() => ApproveSameSlot(pendingItem)"
+                            disabled="@(activeActionId == pendingItem.Id)">
+                        @(activeActionId == pendingItem.Id ? "Working..." : "Yes")
+                    </button>
+
+                    <button class="ar-btn ar-btn-suggest"
+                            @onclick="() => OpenGoogleCalendarForSuggestedSlot(pendingItem)"
+                            disabled="@(activeActionId == pendingItem.Id)">
+                        Suggest time slot
+                    </button>
+
+                    <button class="ar-btn ar-btn-confirm"
+                            @onclick="() => SendSuggestedSlot(pendingItem)"
+                            disabled="@(activeActionId == pendingItem.Id || !pendingItem.SuggestedStartUtc.HasValue)">
+                        Send reschedule email
+                    </button>
+
+                    <button class="ar-btn ar-btn-no"
+                            @onclick="() => RejectRequest(pendingItem)"
+                            disabled="@(activeActionId == pendingItem.Id)">
+                        No
+                    </button>
+                </div>
+            </article>
+        }
+    </section>
+}
+
+@code {
+    private bool isError;
+    private string statusText = "";
+    private List<PendingAutoReplyViewModel> pendingItems = new();
+    private PeriodicTimer? refreshTimer;
+    private CancellationTokenSource? refreshCancellationSource;
+    private long? activeActionId;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadPendingApprovals();
+
+        refreshCancellationSource = new CancellationTokenSource();
+        refreshTimer = new PeriodicTimer(TimeSpan.FromSeconds(10));
+
+        _ = RunRefreshLoopAsync(refreshCancellationSource.Token);
+    }
+
+    private async Task RunRefreshLoopAsync(CancellationToken cancellationToken)
+    {
+        try
+        {
+            while (refreshTimer != null && await refreshTimer.WaitForNextTickAsync(cancellationToken))
+            {
+                if (!activeActionId.HasValue)
+                {
+                    await InvokeAsync(async () =>
+                    {
+                        await LoadPendingApprovals();
+                        StateHasChanged();
+                    });
+                }
+            }
+        }
+        catch
+        {
+        }
+    }
+
+    private async Task LoadPendingApprovals()
+    {
+        try
+        {
+            using var timeoutSource = new CancellationTokenSource(TimeSpan.FromSeconds(8));
+
+            pendingItems = await Http.GetFromJsonAsync<List<PendingAutoReplyViewModel>>(
+                "api/auto-reply/pending",
+                timeoutSource.Token) ?? new List<PendingAutoReplyViewModel>();
+        }
+        catch (TaskCanceledException)
+        {
+            SetStatus("Request timed out while loading pending approvals.", true);
+        }
+        catch (Exception exception)
+        {
+            SetStatus("Failed to load pending approvals: " + exception.Message, true);
+        }
+    }
+
+    private async Task ApproveSameSlot(PendingAutoReplyViewModel item)
+    {
+        await SendSimpleActionAsync(
+            item,
+            $"api/auto-reply/approve-same-slot/{item.Id}",
+            "Confirmation email sent.");
+    }
+
+    private async Task SendSuggestedSlot(PendingAutoReplyViewModel item)
+    {
+        await SendSimpleActionAsync(
+            item,
+            $"api/auto-reply/approve-suggested-slot/{item.Id}",
+            "Reschedule email sent.");
+    }
+
+    private async Task RejectRequest(PendingAutoReplyViewModel item)
+    {
+        await SendSimpleActionAsync(
+            item,
+            $"api/auto-reply/reject/{item.Id}",
+            "Request rejected.");
+    }
+
+    private async Task OpenGoogleCalendarForSuggestedSlot(PendingAutoReplyViewModel pendingItem)
+    {
+        if (activeActionId.HasValue)
+            return;
+
+        try
+        {
+            activeActionId = pendingItem.Id;
+            ClearStatus();
+
+            using var timeoutSource = new CancellationTokenSource(TimeSpan.FromSeconds(12));
+
+            var response = await Http.PostAsJsonAsync(
+                $"api/auto-reply/open-suggested-calendar/{pendingItem.Id}",
+                new { },
+                timeoutSource.Token);
+
+            var responseBody = await response.Content.ReadAsStringAsync(timeoutSource.Token);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                SetStatus($"Action failed ({(int)response.StatusCode}): {responseBody}", true);
+                return;
+            }
+
+            var result = await response.Content.ReadFromJsonAsync<ApprovalCalendarOpenResponse>(
+                cancellationToken: timeoutSource.Token);
+
+            if (result == null || !result.Success)
+            {
+                SetStatus(result?.Message ?? "Failed to create Google Calendar event.", true);
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(result.EventHtmlLink))
+            {
+                SetStatus("Calendar event was created but no open link was returned.", true);
+                return;
+            }
+
+            await Launcher.Default.OpenAsync(result.EventHtmlLink);
+
+            SetStatus("Google Calendar event created and opened successfully.", false);
+
+            await LoadPendingApprovals();
+        }
+        catch (TaskCanceledException)
+        {
+            SetStatus("Request timed out while creating Google Calendar event.", true);
+        }
+        catch (Exception exception)
+        {
+            SetStatus("Failed to open Google Calendar: " + exception.Message, true);
+        }
+        finally
+        {
+            activeActionId = null;
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private async Task SendSimpleActionAsync(PendingAutoReplyViewModel item, string url, string successMessage)
+    {
+        if (activeActionId.HasValue)
+            return;
+
+        try
+        {
+            activeActionId = item.Id;
+            ClearStatus();
+
+            using var timeoutSource = new CancellationTokenSource(TimeSpan.FromSeconds(8));
+
+            var email = new
+            {
+                Id = item.MessageId,
+                From = item.Provider,
+                Snippet = item.RequestSummary ?? "",
+                Subject = item.Subject ?? "",
+                Provider = item.Provider
+            };
+
+            var response = await Http.PostAsJsonAsync(url, email, timeoutSource.Token);
+
+            var responseBody = await response.Content.ReadAsStringAsync(timeoutSource.Token);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                SetStatus($"Action failed ({(int)response.StatusCode}): {responseBody}", true);
+                return;
+            }
+
+            SetStatus(successMessage, false);
+            await LoadPendingApprovals();
+        }
+        catch (TaskCanceledException)
+        {
+            SetStatus("Request timed out while sending the action.", true);
+        }
+        catch (Exception exception)
+        {
+            SetStatus("Action failed: " + exception.Message, true);
+        }
+        finally
+        {
+            activeActionId = null;
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private void SetStatus(string message, bool error)
+    {
+        statusText = message;
+        isError = error;
+    }
+
+    private void ClearStatus()
+    {
+        statusText = "";
+        isError = false;
+    }
+
+    public void Dispose()
+    {
+        refreshCancellationSource?.Cancel();
+        refreshTimer?.Dispose();
+        refreshCancellationSource?.Dispose();
+    }
+
+    public sealed class PendingAutoReplyViewModel
+    {
+        public long Id { get; set; }
+        public string Provider { get; set; } = "";
+        public string MessageId { get; set; } = "";
+        public string Subject { get; set; } = "";
+        public string RequestSummary { get; set; } = "";
+        public DateTimeOffset? ProposedStartUtc { get; set; }
+        public DateTimeOffset? ProposedEndUtc { get; set; }
+        public string ProposedLocalText { get; set; } = "";
+        public string SuggestedLocalText { get; set; } = "";
+        public DateTimeOffset? SuggestedStartUtc { get; set; }
+        public string? ReplyLastError { get; set; }
+    }
+    public sealed class ApprovalCalendarOpenResponse
+    {
+        public bool Success { get; set; }
+        public string Message { get; set; } = "";
+        public string EventHtmlLink { get; set; } = "";
+        public string EventId { get; set; } = "";
+        public DateTimeOffset? StartUtc { get; set; }
+        public DateTimeOffset? EndUtc { get; set; }
+    }
+}
+<style>
+    .ar-wrap {
+        margin: 0 0 18px 0;
+        padding: 18px;
+        border-radius: 18px;
+        background: linear-gradient(180deg, rgba(255, 179, 0, 0.10), rgba(255, 179, 0, 0.05));
+        border: 1px solid rgba(255, 196, 0, 0.22);
+        box-shadow: 0 14px 34px rgba(0, 0, 0, 0.26);
+        backdrop-filter: blur(12px);
+    }
+
+    .ar-head {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 14px;
+    }
+
+    .ar-title {
+        margin: 0;
+        font-size: 20px;
+        color: #fff0bf;
+    }
+
+    .ar-subtitle {
+        margin: 6px 0 0;
+        color: rgba(255, 240, 191, 0.72);
+        font-size: 13px;
+    }
+
+    .ar-count {
+        min-width: 34px;
+        height: 34px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 999px;
+        background: rgba(255,255,255,0.08);
+        border: 1px solid rgba(255,255,255,0.12);
+        color: #fff;
+        font-weight: 800;
+    }
+
+    .ar-card {
+        padding: 14px;
+        border-radius: 16px;
+        background: rgba(255,255,255,0.06);
+        border: 1px solid rgba(255,255,255,0.10);
+        margin-top: 12px;
+    }
+
+    .ar-card-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 12px;
+    }
+
+    .ar-badge {
+        display: inline-flex;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: rgba(255, 196, 0, 0.14);
+        border: 1px solid rgba(255, 196, 0, 0.26);
+        color: #ffe6a3;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .ar-id {
+        color: rgba(232, 236, 255, 0.60);
+        font-size: 12px;
+    }
+
+    .ar-line {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-bottom: 8px;
+    }
+
+    .ar-label {
+        min-width: 120px;
+        color: rgba(232, 236, 255, 0.66);
+        font-size: 13px;
+    }
+
+    .ar-value {
+        color: rgba(232, 236, 255, 0.94);
+        font-size: 13px;
+    }
+
+    .ar-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 14px;
+    }
+
+    .ar-btn {
+        border: none;
+        border-radius: 12px;
+        padding: 11px 14px;
+        cursor: pointer;
+        color: #fff;
+        font-weight: 700;
+    }
+
+    .ar-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    .ar-btn-yes {
+        background: linear-gradient(135deg, #15c37e, #00a8ff);
+        color: #081018;
+    }
+
+    .ar-btn-suggest {
+        background: linear-gradient(135deg, #7c5cff, #5b7cff);
+    }
+
+    .ar-btn-no {
+        background: rgba(255, 77, 77, 0.18);
+        border: 1px solid rgba(255, 77, 77, 0.26);
+    }
+
+    .ar-btn-confirm {
+        background: linear-gradient(135deg, #ffb300, #ff7b00);
+        color: #101010;
+    }
+
+    .ar-status {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 12px 14px;
+        margin-bottom: 14px;
+        border-radius: 14px;
+    }
+
+    .ar-status-ok {
+        border: 1px solid rgba(0, 255, 163, 0.25);
+        background: rgba(0, 255, 163, 0.08);
+        color: rgba(232, 236, 255, 0.92);
+    }
+
+    .ar-status-error {
+        border: 1px solid rgba(255, 77, 77, 0.30);
+        background: rgba(255, 77, 77, 0.10);
+        color: rgba(232, 236, 255, 0.92);
+    }
+
+    .ar-status-close {
+        background: transparent;
+        border: none;
+        color: #fff;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    @@media (max-width: 860px) {
+        .ar-actions {
+            flex-direction: column;
+        }
+    }
+</style>

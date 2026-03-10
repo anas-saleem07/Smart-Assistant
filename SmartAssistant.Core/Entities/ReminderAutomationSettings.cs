@@ -79,6 +79,11 @@
         public DateTimeOffset? ProposedStartUtc { get; set; }    // Extracted proposed start time (optional)
         public DateTimeOffset? ProposedEndUtc { get; set; }      // Extracted proposed end time (optional)
 
+        public DateTimeOffset? SuggestedStartUtc { get; set; }
+        public DateTimeOffset? SuggestedEndUtc { get; set; }
+        public string? SuggestedCalendarEventId { get; set; }
+        public string? SuggestedCalendarHtmlLink { get; set; }
+
 
     }
 }

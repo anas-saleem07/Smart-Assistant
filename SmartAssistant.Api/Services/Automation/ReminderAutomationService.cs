@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using SmartAssistant.Api.Data;
 using SmartAssistant.Api.Services.AutoReply;
 using SmartAssistant.Api.Services.Calendar;
 using SmartAssistant.Api.Services.Email;
 using SmartAssistant.Core.Entities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace SmartAssistant.Api.Services.Automation
 {
@@ -111,11 +111,20 @@ namespace SmartAssistant.Api.Services.Automation
 
                     // 6) Check if email matches rules
                     var matches = IsMatch(email, keywords);
+                    var hasCalendarInvite =
+                        email.HasCalendarInvite &&
+                        email.InviteStartUtc.HasValue &&
+                        email.InviteEndUtc.HasValue;
 
                     // 7) Always mark as processed (so you do not re-check same email forever)
                     var processedRow = await GetOrCreateProcessedRowAsync(email, ct);
 
-                    if (!matches)
+                    if (!string.IsNullOrWhiteSpace(email.CalendarEventId) && string.IsNullOrWhiteSpace(processedRow.CalendarEventId))
+                    {
+                        processedRow.CalendarEventId = email.CalendarEventId;
+                    }
+
+                    if (!matches && !hasCalendarInvite)
                     {
                         await _db.SaveChangesAsync(ct);
                         continue;
@@ -170,7 +179,6 @@ namespace SmartAssistant.Api.Services.Automation
                             }
                         }
 
-                        
                         // Auto reply flow (clean):
                         // 1) Mark reply as needed if email matches reply keywords
                         // 2) Attempt auto-reply now if quota allows
@@ -228,7 +236,8 @@ namespace SmartAssistant.Api.Services.Automation
             {
                 Provider = email.Provider,
                 MessageId = email.Id,
-                ProcessedOn = DateTimeOffset.UtcNow
+                ProcessedOn = DateTimeOffset.UtcNow,
+                CalendarEventId = email.CalendarEventId
             });
 
             try
@@ -297,7 +306,8 @@ namespace SmartAssistant.Api.Services.Automation
             {
                 Provider = email.Provider,
                 MessageId = email.Id,
-                ProcessedOn = DateTimeOffset.UtcNow
+                ProcessedOn = DateTimeOffset.UtcNow,
+                CalendarEventId = email.CalendarEventId
             };
 
             _db.EmailProcessed.Add(row);

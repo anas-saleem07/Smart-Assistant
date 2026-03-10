@@ -1,5 +1,7 @@
 ﻿using Google.Apis.Auth.OAuth2;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using SmartAssistant.Api.Data;
 using SmartAssistant.Api.Options;
 using System.Text.Json;
 
@@ -14,10 +16,12 @@ namespace SmartAssistant.Api.Services.Google
     public sealed class OAuthTokenHelper : IOAuthTokenHelper
     {
         private readonly GmailOAuthOptions _opt;
+        private readonly ApplicationDbContext _db;
 
-        public OAuthTokenHelper(IOptions<GmailOAuthOptions> opt)
+        public OAuthTokenHelper(IOptions<GmailOAuthOptions> opt, ApplicationDbContext db)
         {
             _opt = opt.Value;
+            _db = db;
         }
 
         public async Task<string> GetAccessTokenAsync(string refreshToken, CancellationToken ct)
@@ -50,16 +54,26 @@ namespace SmartAssistant.Api.Services.Google
 
         public async Task<GoogleCredential> GetGoogleCredentialAsync(CancellationToken ct)
         {
-            // TODO: Replace with your actual way to build credential:
-            // - Load stored refresh token / access token
-            // - Refresh if needed
-            // - Ensure Calendar scope exists
+            // Get latest active Gmail OAuth account
+            var account = await _db.EmailOAuthAccounts
+                .Where(x => x.Active && x.Provider == "Gmail")
+                .OrderByDescending(x => x.Id)
+                .FirstOrDefaultAsync(ct);
 
-            await Task.CompletedTask;
+            if (account == null)
+                throw new InvalidOperationException("No active Gmail OAuth account found.");
 
-            // Example placeholder to force you to wire real credentials:
-            throw new System.NotImplementedException("Implement GoogleCredential creation here (with Calendar scope).");
+            if (string.IsNullOrWhiteSpace(account.RefreshToken))
+                throw new InvalidOperationException("Active Gmail account does not have a refresh token.");
+
+            var accessToken = await GetAccessTokenAsync(account.RefreshToken, ct);
+
+            // Build Google credential from fresh access token
+            var credential = GoogleCredential.FromAccessToken(accessToken);
+
+            return credential;
         }
+
         private sealed class TokenResponse
         {
             public string? access_token { get; set; }

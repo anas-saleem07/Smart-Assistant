@@ -6,12 +6,16 @@
         string Subject,
         string Snippet,
         DateTimeOffset ReceivedOn,
-        string From
+        string From,
+        bool HasCalendarInvite = false,
+        string? CalendarEventId = null,
+        DateTimeOffset? InviteStartUtc = null,
+        DateTimeOffset? InviteEndUtc = null
     );
 
     public interface IEmailClient
     {
-        Task<IReadOnlyList<EmailMessage>> GetImportantEmailsAsync(DateTimeOffset sinceUtc, CancellationToken ct, string gmailQuery);
+        Task<IReadOnlyList<EmailMessage>> GetImportantEmailsAsync(DateTimeOffset sinceUtc, CancellationToken ct, string? gmailQuery = null);
 
         // New: Fetch one email again later (needed for pending replies)
         Task<EmailMessage?> GetEmailByIdAsync(string messageId, CancellationToken ct);
@@ -27,7 +31,18 @@
         {
             IReadOnlyList<EmailMessage> list =
             [
-                new EmailMessage("Gmail", "msg_123", "Interview schedule", "Can you confirm time?", DateTimeOffset.UtcNow.AddMinutes(-5), "boss@company.com")
+                new EmailMessage(
+                    "Gmail",
+                    "msg_123",
+                    "Interview schedule",
+                    "Can you confirm time?",
+                    DateTimeOffset.UtcNow.AddMinutes(-5),
+                    "boss@company.com",
+                    false,
+                    null,
+                    null,
+                    null
+                )
             ];
 
             return Task.FromResult(list);
@@ -48,7 +63,11 @@
                 "Interview schedule",
                 "Please confirm your availability.",
                 DateTimeOffset.UtcNow,
-                "boss@company.com"
+                "boss@company.com",
+                false,
+                null,
+                null,
+                null
             ));
         }
     }
