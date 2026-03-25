@@ -6,30 +6,22 @@
 
 <div class="ga-page">
     <div class="ga-shell">
-
         <section class="ga-card ga-hero">
-            <div class="ga-chip">Core access required</div>
+            <div class="ga-chip">Google account access</div>
 
-            <h1 class="ga-title">Connect Gmail to continue</h1>
+            <h1 class="ga-title">Connect Gmail</h1>
 
             <p class="ga-subtitle">
-                Gmail connection is required because your reminder automation,
-                email processing, auto-reply flow, and calendar checks all depend on Google.
+                Connect your Gmail account to enable reminders, email processing,
+                auto-reply flow, and calendar-based scheduling.
             </p>
 
             @if (!string.IsNullOrWhiteSpace(statusText))
             {
                 <div class="ga-status @(isError ? "ga-status-error" : "ga-status-ok")">
-                    <span class="ga-status-icon">@(isError ? "!" : "OK")</span>
+                    <span class="ga-status-icon"></span>
                     <span class="ga-status-text">@statusText</span>
                     <button class="ga-status-close" @onclick="ClearStatus">x</button>
-                </div>
-            }
-
-            @if (!string.IsNullOrWhiteSpace(debugText))
-            {
-                <div class="ga-debug">
-                    <pre>@debugText</pre>
                 </div>
             }
 
@@ -56,7 +48,7 @@
                         <div class="ga-value">
                             @(string.IsNullOrWhiteSpace(authStatus?.Email) ? "-" : authStatus?.Email)
                         </div>
-                        <div class="ga-help">This Gmail account will be used by the system.</div>
+                        <div class="ga-help">This account will be used for Gmail and Google scheduling features.</div>
                     </div>
                 </div>
 
@@ -71,7 +63,7 @@
                             @if (isBusy)
                             {
                                 <span class="ga-spinner"></span>
-                                <span>Disconnecting...</span>
+                                <span>Logging out...</span>
                             }
                             else
                             {
@@ -96,10 +88,6 @@
                         <button class="ga-btn" @onclick="LoadStatusAsync" disabled="@isBusy">
                             Refresh Status
                         </button>
-
-                        <button class="ga-btn" @onclick="TestConnectEndpointAsync" disabled="@isBusy">
-                            Test Connect Endpoint
-                        </button>
                     }
                 </div>
             }
@@ -112,7 +100,6 @@
     private bool isBusy;
     private bool isError;
     private string statusText = "";
-    private string debugText = "";
     private GoogleConnectionStatusModel? authStatus;
 
     protected override async Task OnInitializedAsync()
@@ -182,16 +169,6 @@
         isError = error;
     }
 
-    private void SetDebug(string message)
-    {
-        debugText = message;
-    }
-
-    private string BuildAbsoluteUrl(string relativePath)
-    {
-        return new Uri(Http.BaseAddress!, relativePath).ToString();
-    }
-
     private async Task LoadStatusAsync()
     {
         try
@@ -199,22 +176,10 @@
             isLoading = true;
             ClearStatus();
 
-            var requestUrl = BuildAbsoluteUrl("api/google-oauth/status");
-
-            SetDebug(
-                $"BaseAddress: {Http.BaseAddress}\n" +
-                $"Request: GET {requestUrl}");
-
             using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(8));
 
             var response = await Http.GetAsync("api/google-oauth/status", cts.Token);
             var body = await response.Content.ReadAsStringAsync(cts.Token);
-
-            SetDebug(
-                $"BaseAddress: {Http.BaseAddress}\n" +
-                $"Request: GET {requestUrl}\n" +
-                $"Status: {(int)response.StatusCode} {response.StatusCode}\n" +
-                $"Body: {body}");
 
             if (!response.IsSuccessStatusCode)
             {
@@ -230,19 +195,14 @@
                     PropertyNameCaseInsensitive = true
                 });
         }
-        catch (TaskCanceledException ex)
+        catch (TaskCanceledException)
         {
             SetStatus("Request timed out while checking Gmail status.", true);
-            SetDebug(
-                $"BaseAddress: {Http.BaseAddress}\n" +
-                $"Exception: {ex.GetType().FullName}\n" +
-                $"Message: {ex.Message}");
             authStatus = null;
         }
         catch (Exception ex)
         {
             SetStatus("Failed to check Gmail status: " + ex.Message, true);
-            SetDebug(BuildExceptionDebugText("api/google-oauth/status", ex));
             authStatus = null;
         }
         finally
@@ -296,43 +256,6 @@
         }
     }
 
-    private async Task TestConnectEndpointAsync()
-    {
-        if (isBusy)
-            return;
-
-        try
-        {
-            isBusy = true;
-            ClearStatus();
-
-            var requestUrl = BuildAbsoluteUrl("api/google-oauth/connect");
-
-            using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(8));
-
-            var response = await Http.GetAsync("api/google-oauth/connect", cts.Token);
-            var body = await response.Content.ReadAsStringAsync(cts.Token);
-
-            SetDebug(
-                $"BaseAddress: {Http.BaseAddress}\n" +
-                $"Request: GET {requestUrl}\n" +
-                $"Status: {(int)response.StatusCode} {response.StatusCode}\n" +
-                $"Body: {body}");
-
-            SetStatus($"Connect endpoint returned {(int)response.StatusCode}.", !response.IsSuccessStatusCode);
-        }
-        catch (Exception ex)
-        {
-            SetStatus($"Connect endpoint test failed: {ex.Message}", true);
-            SetDebug(BuildExceptionDebugText("api/google-oauth/connect", ex));
-        }
-        finally
-        {
-            isBusy = false;
-            await InvokeAsync(StateHasChanged);
-        }
-    }
-
     private async Task DisconnectAsync()
     {
         if (isBusy)
@@ -343,18 +266,10 @@
             isBusy = true;
             ClearStatus();
 
-            var requestUrl = BuildAbsoluteUrl("api/google-oauth/disconnect");
-
             using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(8));
 
             var response = await Http.PostAsync("api/google-oauth/disconnect", null, cts.Token);
             var body = await response.Content.ReadAsStringAsync(cts.Token);
-
-            SetDebug(
-                $"BaseAddress: {Http.BaseAddress}\n" +
-                $"Request: POST {requestUrl}\n" +
-                $"Status: {(int)response.StatusCode} {response.StatusCode}\n" +
-                $"Body: {body}");
 
             if (!response.IsSuccessStatusCode)
             {
@@ -365,40 +280,19 @@
             SetStatus("Gmail disconnected successfully.", false);
             await LoadStatusAsync();
         }
-        catch (TaskCanceledException ex)
+        catch (TaskCanceledException)
         {
             SetStatus("Request timed out while disconnecting Gmail.", true);
-            SetDebug(
-                $"BaseAddress: {Http.BaseAddress}\n" +
-                $"Exception: {ex.GetType().FullName}\n" +
-                $"Message: {ex.Message}");
         }
         catch (Exception ex)
         {
             SetStatus("Failed to disconnect Gmail: " + ex.Message, true);
-            SetDebug(BuildExceptionDebugText("api/google-oauth/disconnect", ex));
         }
         finally
         {
             isBusy = false;
             await InvokeAsync(StateHasChanged);
         }
-    }
-
-    private string BuildExceptionDebugText(string relativePath, Exception ex)
-    {
-        var requestUrl = BuildAbsoluteUrl(relativePath);
-
-        var inner = ex.InnerException != null
-            ? $"\nInner Type: {ex.InnerException.GetType().FullName}\nInner Message: {ex.InnerException.Message}"
-            : "";
-
-        return
-            $"BaseAddress: {Http.BaseAddress}\n" +
-            $"Request: {requestUrl}\n" +
-            $"Exception Type: {ex.GetType().FullName}\n" +
-            $"Message: {ex.Message}" +
-            inner;
     }
 
     private void GoToReminders()
@@ -481,23 +375,20 @@
 
 <style>
     .ga-page {
-        min-height: 100vh;
-        background: radial-gradient(1200px 800px at 20% 10%, rgba(120, 90, 255, 0.18), transparent 55%), radial-gradient(1000px 700px at 80% 30%, rgba(0, 200, 255, 0.10), transparent 55%), linear-gradient(180deg, #0b0f1a 0%, #070a12 100%);
         color: #e8ecff;
-        padding: 28px;
     }
 
     .ga-shell {
-        max-width: 980px;
+        max-width: 1040px;
         margin: 0 auto;
     }
 
     .ga-card {
-        background: rgba(255, 255, 255, 0.06);
-        border: 1px solid rgba(255, 255, 255, 0.10);
-        border-radius: 16px;
-        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.28);
-        backdrop-filter: blur(10px);
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.09);
+        border-radius: 22px;
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.24);
+        backdrop-filter: blur(12px);
     }
 
     .ga-hero {
@@ -509,7 +400,7 @@
         padding: 8px 12px;
         border-radius: 999px;
         background: rgba(124, 92, 255, 0.14);
-        border: 1px solid rgba(124, 92, 255, 0.28);
+        border: 1px solid rgba(124, 92, 255, 0.24);
         color: rgba(232, 236, 255, 0.92);
         font-size: 12px;
         margin-bottom: 16px;
@@ -517,13 +408,15 @@
 
     .ga-title {
         font-size: 34px;
+        font-weight: 800;
         margin: 0;
+        color: rgba(245, 247, 255, 0.98);
     }
 
     .ga-subtitle {
-        margin: 8px 0 0;
+        margin: 10px 0 0;
         color: rgba(232, 236, 255, 0.72);
-        line-height: 1.6;
+        line-height: 1.7;
         max-width: 760px;
     }
 
@@ -537,110 +430,92 @@
     }
 
     .ga-status-ok {
-        border: 1px solid rgba(0, 255, 163, 0.25);
+        border: 1px solid rgba(0, 255, 163, 0.22);
         background: rgba(0, 255, 163, 0.08);
     }
 
     .ga-status-error {
-        border: 1px solid rgba(255, 77, 77, 0.30);
+        border: 1px solid rgba(255, 77, 77, 0.25);
         background: rgba(255, 77, 77, 0.10);
     }
 
     .ga-status-icon {
-        width: 22px;
-        height: 22px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 8px;
-        background: rgba(0,0,0,0.18);
-        font-weight: 700;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: currentColor;
+        flex-shrink: 0;
     }
 
     .ga-status-text {
         flex: 1;
-        color: rgba(232, 236, 255, 0.92);
     }
 
     .ga-status-close {
         border: none;
         background: transparent;
-        color: rgba(232, 236, 255, 0.70);
-        font-size: 18px;
+        color: rgba(232, 236, 255, 0.72);
         cursor: pointer;
+        font-size: 18px;
     }
-
-    .ga-debug {
-        margin-top: 18px;
-        padding: 12px 14px;
-        border-radius: 14px;
-        border: 1px solid rgba(0, 200, 255, 0.25);
-        background: rgba(0, 200, 255, 0.08);
-        color: rgba(232, 236, 255, 0.92);
-        overflow-x: auto;
-    }
-
-        .ga-debug pre {
-            margin: 0;
-            white-space: pre-wrap;
-            word-break: break-word;
-            font-family: Consolas, monospace;
-            font-size: 12px;
-        }
 
     .ga-loading {
         margin-top: 20px;
         display: inline-flex;
         align-items: center;
         gap: 10px;
+        color: rgba(232, 236, 255, 0.88);
     }
 
     .ga-grid {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 14px;
-        margin-top: 20px;
+        margin-top: 22px;
     }
 
     .ga-panel {
         padding: 18px;
-        border-radius: 14px;
+        border-radius: 16px;
         background: rgba(0, 0, 0, 0.22);
-        border: 1px solid rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.07);
     }
 
     .ga-label {
         font-size: 12px;
-        color: rgba(232, 236, 255, 0.66);
+        color: rgba(232, 236, 255, 0.62);
         margin-bottom: 8px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
     }
 
     .ga-value {
         font-size: 22px;
         font-weight: 700;
-        color: rgba(232, 236, 255, 0.96);
+        color: rgba(245, 247, 255, 0.98);
         margin-bottom: 8px;
     }
 
     .ga-help {
         color: rgba(232, 236, 255, 0.72);
-        line-height: 1.5;
+        line-height: 1.55;
     }
 
     .ga-actions {
         display: flex;
         gap: 12px;
-        margin-top: 20px;
+        margin-top: 22px;
         flex-wrap: wrap;
     }
 
     .ga-btn {
-        border-radius: 12px;
+        min-height: 44px;
         padding: 12px 16px;
-        border: 1px solid rgba(255,255,255,0.12);
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.10);
         cursor: pointer;
-        background: rgba(255,255,255,0.06);
-        color: rgba(232, 236, 255, 0.90);
+        background: rgba(255, 255, 255, 0.05);
+        color: rgba(232, 236, 255, 0.92);
         display: inline-flex;
         align-items: center;
         gap: 10px;
@@ -648,34 +523,34 @@
     }
 
         .ga-btn:disabled {
+            opacity: 0.65;
             cursor: not-allowed;
-            opacity: 0.6;
         }
 
     .ga-btn-primary {
-        background: linear-gradient(135deg, rgba(124, 92, 255, 0.95), rgba(0, 200, 255, 0.75));
-        border: 1px solid rgba(124, 92, 255, 0.30);
+        background: linear-gradient(135deg, rgba(124, 92, 255, 0.92), rgba(0, 200, 255, 0.74));
+        border-color: rgba(124, 92, 255, 0.24);
         color: #0b0f1a;
-        font-weight: 700;
+        font-weight: 800;
     }
 
     .ga-btn-danger {
         background: rgba(255, 77, 77, 0.12);
-        border: 1px solid rgba(255, 77, 77, 0.25);
-        color: rgba(255, 190, 190, 0.95);
+        border-color: rgba(255, 77, 77, 0.24);
+        color: rgba(255, 205, 205, 0.96);
     }
 
     .ga-spinner {
         width: 14px;
         height: 14px;
         border-radius: 50%;
-        border: 2px solid rgba(0,0,0,0.25);
-        border-top-color: rgba(0,0,0,0.75);
+        border: 2px solid rgba(255, 255, 255, 0.25);
+        border-top-color: rgba(255, 255, 255, 0.90);
         display: inline-block;
-        animation: gaspin 0.8s linear infinite;
+        animation: gaSpin 0.8s linear infinite;
     }
 
-    @@keyframes gaspin {
+    @@keyframes gaSpin {
         from {
             transform: rotate(0deg);
         }

@@ -1,37 +1,31 @@
 ﻿@page "/gmail-reconnect"
 @inject HttpClient Http
 @inject NavigationManager Nav
-@using System.Net.Http.Json
 @using Microsoft.Maui.ApplicationModel
 
 <div class="gr-page">
     <div class="gr-shell">
-
         <header class="gr-header">
             <div>
                 <h1 class="gr-title">Reconnect Gmail</h1>
-                <p class="gr-subtitle">Your Gmail connection expired or was revoked. Reconnect to continue reminders, approvals, and replies.</p>
+                <p class="gr-subtitle">
+                    Your Gmail connection is no longer active. Reconnect to continue reminders,
+                    approvals, replies, and scheduling features.
+                </p>
             </div>
 
             <div class="gr-pill">
                 <span class="gr-pill-dot"></span>
-                <span>@(isProcessing ? "Opening..." : "Action Needed")</span>
+                <span>@(isProcessing ? "Opening..." : "Action Required")</span>
             </div>
         </header>
 
         @if (!string.IsNullOrWhiteSpace(statusText))
         {
             <div class="gr-status @(isError ? "gr-status-error" : "gr-status-ok")">
-                <span class="gr-status-icon">@(isError ? "!" : "OK")</span>
+                <span class="gr-status-indicator"></span>
                 <span class="gr-status-text">@statusText</span>
                 <button class="gr-status-close" @onclick="ClearStatus">x</button>
-            </div>
-        }
-
-        @if (!string.IsNullOrWhiteSpace(debugText))
-        {
-            <div class="gr-debug">
-                <pre>@debugText</pre>
             </div>
         }
 
@@ -41,9 +35,10 @@
             </div>
 
             <div class="gr-content">
-                <h2 class="gr-card-title">Gmail needs attention</h2>
+                <h2 class="gr-card-title">Gmail needs your attention</h2>
                 <p class="gr-card-text">
-                    Your saved Gmail access is no longer valid. Please reconnect your Gmail account to continue email sync and auto-reply features.
+                    Please reconnect your Gmail account so SmartAssistant can continue
+                    working with email and Google scheduling features.
                 </p>
 
                 <div class="gr-actions">
@@ -68,12 +63,6 @@
                     </button>
 
                     <button class="gr-btn gr-btn-ghost"
-                            @onclick="TestConnectEndpointAsync"
-                            disabled="@isProcessing">
-                        Test Connect Endpoint
-                    </button>
-
-                    <button class="gr-btn gr-btn-ghost"
                             @onclick="GoBack"
                             disabled="@isProcessing">
                         Back
@@ -81,7 +70,6 @@
                 </div>
             </div>
         </section>
-
     </div>
 </div>
 
@@ -89,7 +77,6 @@
     private bool isProcessing;
     private string statusText = "";
     private bool isError;
-    private string debugText = "";
 
     private void ClearStatus()
     {
@@ -103,16 +90,6 @@
         isError = error;
     }
 
-    private void SetDebug(string message)
-    {
-        debugText = message;
-    }
-
-    private string BuildAbsoluteUrl(string relativePath)
-    {
-        return new Uri(Http.BaseAddress!, relativePath).ToString();
-    }
-
     private async Task ReconnectGmail()
     {
         if (isProcessing)
@@ -123,22 +100,10 @@
             isProcessing = true;
             ClearStatus();
 
-            var requestUrl = BuildAbsoluteUrl("api/google-oauth/connect");
-
-            SetDebug(
-                $"BaseAddress: {Http.BaseAddress}\n" +
-                $"Request: GET {requestUrl}");
-
             using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(8));
 
             var response = await Http.GetAsync("api/google-oauth/connect", cts.Token);
             var body = await response.Content.ReadAsStringAsync(cts.Token);
-
-            SetDebug(
-                $"BaseAddress: {Http.BaseAddress}\n" +
-                $"Request: GET {requestUrl}\n" +
-                $"Status: {(int)response.StatusCode} {response.StatusCode}\n" +
-                $"Body: {body}");
 
             if (!response.IsSuccessStatusCode)
             {
@@ -162,18 +127,13 @@
             await Launcher.Default.OpenAsync(result.Url);
             SetStatus("Google login opened in browser. Complete login and return to the app.", false);
         }
-        catch (TaskCanceledException ex)
+        catch (TaskCanceledException)
         {
             SetStatus("Request timed out while opening reconnect flow.", true);
-            SetDebug(
-                $"BaseAddress: {Http.BaseAddress}\n" +
-                $"Exception: {ex.GetType().FullName}\n" +
-                $"Message: {ex.Message}");
         }
         catch (Exception ex)
         {
             SetStatus($"Failed to start Gmail login: {ex.Message}", true);
-            SetDebug(BuildExceptionDebugText("api/google-oauth/connect", ex));
         }
         finally
         {
@@ -192,22 +152,10 @@
             isProcessing = true;
             ClearStatus();
 
-            var requestUrl = BuildAbsoluteUrl("api/google-oauth/status");
-
-            SetDebug(
-                $"BaseAddress: {Http.BaseAddress}\n" +
-                $"Request: GET {requestUrl}");
-
             using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(8));
 
             var response = await Http.GetAsync("api/google-oauth/status", cts.Token);
             var body = await response.Content.ReadAsStringAsync(cts.Token);
-
-            SetDebug(
-                $"BaseAddress: {Http.BaseAddress}\n" +
-                $"Request: GET {requestUrl}\n" +
-                $"Status: {(int)response.StatusCode} {response.StatusCode}\n" +
-                $"Body: {body}");
 
             if (!response.IsSuccessStatusCode)
             {
@@ -231,77 +179,19 @@
 
             SetStatus(status?.Message ?? "Gmail is still not connected.", true);
         }
-        catch (TaskCanceledException ex)
+        catch (TaskCanceledException)
         {
             SetStatus("Request timed out while checking Gmail status.", true);
-            SetDebug(
-                $"BaseAddress: {Http.BaseAddress}\n" +
-                $"Exception: {ex.GetType().FullName}\n" +
-                $"Message: {ex.Message}");
         }
         catch (Exception ex)
         {
             SetStatus($"Failed to check Gmail status: {ex.Message}", true);
-            SetDebug(BuildExceptionDebugText("api/google-oauth/status", ex));
         }
         finally
         {
             isProcessing = false;
             await InvokeAsync(StateHasChanged);
         }
-    }
-
-    private async Task TestConnectEndpointAsync()
-    {
-        if (isProcessing)
-            return;
-
-        try
-        {
-            isProcessing = true;
-            ClearStatus();
-
-            var requestUrl = BuildAbsoluteUrl("api/google-oauth/connect");
-
-            using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(8));
-
-            var response = await Http.GetAsync("api/google-oauth/connect", cts.Token);
-            var body = await response.Content.ReadAsStringAsync(cts.Token);
-
-            SetDebug(
-                $"BaseAddress: {Http.BaseAddress}\n" +
-                $"Request: GET {requestUrl}\n" +
-                $"Status: {(int)response.StatusCode} {response.StatusCode}\n" +
-                $"Body: {body}");
-
-            SetStatus($"Connect endpoint returned {(int)response.StatusCode}.", !response.IsSuccessStatusCode);
-        }
-        catch (Exception ex)
-        {
-            SetStatus($"Connect endpoint test failed: {ex.Message}", true);
-            SetDebug(BuildExceptionDebugText("api/google-oauth/connect", ex));
-        }
-        finally
-        {
-            isProcessing = false;
-            await InvokeAsync(StateHasChanged);
-        }
-    }
-
-    private string BuildExceptionDebugText(string relativePath, Exception ex)
-    {
-        var requestUrl = BuildAbsoluteUrl(relativePath);
-
-        var inner = ex.InnerException != null
-            ? $"\nInner Type: {ex.InnerException.GetType().FullName}\nInner Message: {ex.InnerException.Message}"
-            : "";
-
-        return
-            $"BaseAddress: {Http.BaseAddress}\n" +
-            $"Request: GET {requestUrl}\n" +
-            $"Exception Type: {ex.GetType().FullName}\n" +
-            $"Message: {ex.Message}" +
-            inner;
     }
 
     private void GoBack()
@@ -386,14 +276,11 @@
 
 <style>
     .gr-page {
-        min-height: 100vh;
-        background: radial-gradient(1200px 800px at 20% 10%, rgba(120, 90, 255, 0.18), transparent 55%), radial-gradient(1000px 700px at 80% 30%, rgba(0, 200, 255, 0.10), transparent 55%), linear-gradient(180deg, #0b0f1a 0%, #070a12 100%);
         color: #e8ecff;
-        padding: 28px;
     }
 
     .gr-shell {
-        max-width: 980px;
+        max-width: 1040px;
         margin: 0 auto;
     }
 
@@ -407,13 +294,16 @@
 
     .gr-title {
         font-size: 34px;
+        font-weight: 800;
         margin: 0;
-        letter-spacing: 0.3px;
+        color: rgba(245, 247, 255, 0.98);
     }
 
     .gr-subtitle {
-        margin: 6px 0 0;
-        color: rgba(232, 236, 255, 0.70);
+        margin: 10px 0 0;
+        color: rgba(232, 236, 255, 0.72);
+        line-height: 1.7;
+        max-width: 760px;
     }
 
     .gr-pill {
@@ -425,7 +315,6 @@
         background: rgba(255, 255, 255, 0.06);
         border: 1px solid rgba(255, 255, 255, 0.10);
         color: rgba(232, 236, 255, 0.85);
-        user-select: none;
         white-space: nowrap;
     }
 
@@ -438,15 +327,15 @@
     }
 
     .gr-card {
-        background: rgba(255, 255, 255, 0.06);
-        border: 1px solid rgba(255, 255, 255, 0.10);
-        border-radius: 16px;
-        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.28);
-        backdrop-filter: blur(10px);
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.09);
+        border-radius: 22px;
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.24);
+        backdrop-filter: blur(12px);
     }
 
     .gr-main-card {
-        padding: 24px;
+        padding: 26px;
         display: flex;
         gap: 18px;
         align-items: flex-start;
@@ -457,16 +346,17 @@
     }
 
     .gr-icon {
-        width: 64px;
-        height: 64px;
-        border-radius: 18px;
+        width: 68px;
+        height: 68px;
+        border-radius: 20px;
         display: flex;
         align-items: center;
         justify-content: center;
-        background: rgba(124, 92, 255, 0.14);
-        border: 1px solid rgba(124, 92, 255, 0.26);
+        background: linear-gradient(135deg, rgba(124, 92, 255, 0.22), rgba(0, 200, 255, 0.16));
+        border: 1px solid rgba(255, 255, 255, 0.10);
         font-size: 28px;
         font-weight: 800;
+        color: #f6f8ff;
     }
 
     .gr-content {
@@ -474,15 +364,16 @@
     }
 
     .gr-card-title {
-        margin: 0 0 10px 0;
+        margin: 0 0 10px;
         font-size: 24px;
-        color: rgba(232, 236, 255, 0.96);
+        font-weight: 800;
+        color: rgba(245, 247, 255, 0.98);
     }
 
     .gr-card-text {
-        margin: 0 0 18px 0;
-        color: rgba(232, 236, 255, 0.76);
-        line-height: 1.6;
+        margin: 0 0 18px;
+        color: rgba(232, 236, 255, 0.74);
+        line-height: 1.7;
     }
 
     .gr-actions {
@@ -492,37 +383,33 @@
     }
 
     .gr-btn {
-        border-radius: 12px;
+        min-height: 44px;
         padding: 12px 14px;
-        border: 1px solid rgba(255,255,255,0.12);
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.10);
         cursor: pointer;
-        background: rgba(255,255,255,0.06);
-        color: rgba(232, 236, 255, 0.90);
+        background: rgba(255, 255, 255, 0.05);
+        color: rgba(232, 236, 255, 0.92);
         display: inline-flex;
         align-items: center;
         gap: 10px;
-        user-select: none;
         white-space: nowrap;
     }
 
         .gr-btn:disabled {
+            opacity: 0.65;
             cursor: not-allowed;
-            opacity: 0.6;
         }
 
     .gr-btn-primary {
-        background: linear-gradient(135deg, rgba(124, 92, 255, 0.95), rgba(0, 200, 255, 0.75));
-        border: 1px solid rgba(124, 92, 255, 0.30);
+        background: linear-gradient(135deg, rgba(124, 92, 255, 0.92), rgba(0, 200, 255, 0.74));
+        border-color: rgba(124, 92, 255, 0.24);
         color: #0b0f1a;
-        font-weight: 700;
+        font-weight: 800;
     }
 
-        .gr-btn-primary:hover:enabled {
-            filter: brightness(1.05);
-        }
-
-    .gr-btn-ghost:hover:enabled {
-        background: rgba(255,255,255,0.10);
+    .gr-btn-ghost {
+        background: rgba(255, 255, 255, 0.04);
     }
 
     .gr-status {
@@ -535,68 +422,46 @@
     }
 
     .gr-status-ok {
-        border: 1px solid rgba(0, 255, 163, 0.25);
+        border: 1px solid rgba(0, 255, 163, 0.22);
         background: rgba(0, 255, 163, 0.08);
     }
 
     .gr-status-error {
-        border: 1px solid rgba(255, 77, 77, 0.30);
+        border: 1px solid rgba(255, 77, 77, 0.25);
         background: rgba(255, 77, 77, 0.10);
     }
 
-    .gr-status-icon {
-        width: 22px;
-        height: 22px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 8px;
-        background: rgba(0,0,0,0.18);
-        font-weight: 700;
+    .gr-status-indicator {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: currentColor;
+        flex-shrink: 0;
     }
 
     .gr-status-text {
         flex: 1;
-        color: rgba(232, 236, 255, 0.92);
     }
 
     .gr-status-close {
         border: none;
         background: transparent;
-        color: rgba(232, 236, 255, 0.70);
-        font-size: 18px;
+        color: rgba(232, 236, 255, 0.72);
         cursor: pointer;
+        font-size: 18px;
     }
-
-    .gr-debug {
-        margin-bottom: 14px;
-        padding: 12px 14px;
-        border-radius: 14px;
-        border: 1px solid rgba(0, 200, 255, 0.25);
-        background: rgba(0, 200, 255, 0.08);
-        color: rgba(232, 236, 255, 0.92);
-        overflow-x: auto;
-    }
-
-        .gr-debug pre {
-            margin: 0;
-            white-space: pre-wrap;
-            word-break: break-word;
-            font-family: Consolas, monospace;
-            font-size: 12px;
-        }
 
     .gr-spinner {
         width: 14px;
         height: 14px;
         border-radius: 50%;
-        border: 2px solid rgba(0,0,0,0.25);
-        border-top-color: rgba(0,0,0,0.75);
+        border: 2px solid rgba(255, 255, 255, 0.25);
+        border-top-color: rgba(255, 255, 255, 0.90);
         display: inline-block;
-        animation: grspin 0.8s linear infinite;
+        animation: grSpin 0.8s linear infinite;
     }
 
-    @@keyframes grspin {
+    @@keyframes grSpin {
         from {
             transform: rotate(0deg);
         }
@@ -607,6 +472,10 @@
     }
 
     @@media (max-width: 860px) {
+        .gr-header {
+            flex-direction: column;
+        }
+
         .gr-main-card {
             flex-direction: column;
         }

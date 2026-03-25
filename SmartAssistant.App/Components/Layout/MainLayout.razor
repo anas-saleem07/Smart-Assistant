@@ -1,17 +1,55 @@
 ﻿@inherits LayoutComponentBase
 
-<div class="page">
-    <div class="sidebar">
+<div class="sa-layout-shell">
+    <div class="sa-layout-sidebar">
         <NavMenu />
     </div>
 
-    <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
+    <main class="sa-layout-main">
+        <div class="sa-layout-top-actions">
+            <TopBar />
         </div>
 
-        <article class="content px-4">
+        <article class="sa-layout-content">
             @Body
         </article>
     </main>
 </div>
+
+<style>
+    .sa-layout-shell {
+        min-height: 100vh;
+        display: flex;
+        background: radial-gradient(900px 500px at top right, rgba(124, 92, 255, 0.08), transparent 45%), linear-gradient(180deg, #070a12 0%, #0b1020 100%);
+    }
+
+    .sa-layout-sidebar {
+        flex-shrink: 0;
+    }
+
+    .sa-layout-main {
+        flex: 1;
+        min-width: 0;
+        padding: 18px;
+    }
+
+    .sa-layout-top-actions {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 14px;
+    }
+
+    .sa-layout-content {
+        min-width: 0;
+    }
+
+    @@media (max-width: 900px) {
+        .sa-layout-main {
+            padding: 72px 14px 14px;
+        }
+
+        .sa-layout-top-actions {
+            margin-bottom: 12px;
+        }
+    }
+</style>

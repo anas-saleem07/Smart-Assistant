@@ -1,0 +1,203 @@
+﻿@inject HttpClient Http
+@inject NavigationManager Navigation
+
+<div class="sa-top-actions">
+    <button class="sa-top-actions-trigger" @onclick="ToggleMenu" type="button">
+        <span class="sa-top-actions-dot"></span>
+        <span>Account</span>
+        <span class="sa-top-actions-caret"></span>
+    </button>
+
+    @if (isMenuOpen)
+    {
+        <div class="sa-top-actions-menu">
+            <button class="sa-top-actions-item" type="button" disabled>
+                <span class="sa-top-actions-item-icon sa-top-actions-settings-icon"></span>
+                <span>Settings</span>
+            </button>
+
+            <button class="sa-top-actions-item sa-top-actions-item-danger"
+                    type="button"
+                    @onclick="LogoutAsync"
+                    disabled="@isBusy">
+                <span class="sa-top-actions-item-icon sa-top-actions-logout-icon"></span>
+
+                @if (isBusy)
+                {
+                    <span>Logging out...</span>
+                }
+                else
+                {
+                    <span>Logout</span>
+                }
+            </button>
+        </div>
+    }
+</div>
+
+@code {
+    private bool isMenuOpen;
+    private bool isBusy;
+
+    private void ToggleMenu()
+    {
+        isMenuOpen = !isMenuOpen;
+    }
+
+    private async Task LogoutAsync()
+    {
+        if (isBusy)
+            return;
+
+        try
+        {
+            isBusy = true;
+
+            using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(8));
+            await Http.PostAsync("api/google-oauth/disconnect", null, cts.Token);
+        }
+        catch
+        {
+            // Intentionally quiet for now.
+        }
+        finally
+        {
+            isBusy = false;
+            isMenuOpen = false;
+            Navigation.NavigateTo("/google-auth", true);
+        }
+    }
+}
+
+<style>
+    .sa-top-actions {
+        position: relative;
+        display: inline-block;
+    }
+
+    .sa-top-actions-trigger {
+        min-height: 42px;
+        padding: 10px 14px;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.10);
+        background: rgba(255, 255, 255, 0.05);
+        color: rgba(235, 240, 255, 0.92);
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+    }
+
+        .sa-top-actions-trigger:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.14);
+            transform: translateY(-1px);
+        }
+
+    .sa-top-actions-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #7c5cff, #00c8ff);
+        box-shadow: 0 0 12px rgba(124, 92, 255, 0.55);
+        flex-shrink: 0;
+    }
+
+    .sa-top-actions-caret {
+        width: 8px;
+        height: 8px;
+        border-right: 2px solid currentColor;
+        border-bottom: 2px solid currentColor;
+        transform: rotate(45deg) translateY(-1px);
+        margin-left: 2px;
+        opacity: 0.8;
+        flex-shrink: 0;
+    }
+
+    .sa-top-actions-menu {
+        position: absolute;
+        top: calc(100% + 10px);
+        right: 0;
+        min-width: 200px;
+        padding: 8px;
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.10);
+        background: rgba(10, 14, 24, 0.96);
+        backdrop-filter: blur(12px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.32);
+        z-index: 1200;
+    }
+
+    .sa-top-actions-item {
+        width: 100%;
+        min-height: 42px;
+        padding: 10px 12px;
+        border: none;
+        border-radius: 12px;
+        background: transparent;
+        color: rgba(235, 240, 255, 0.92);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-align: left;
+    }
+
+        .sa-top-actions-item:hover {
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .sa-top-actions-item:disabled {
+            opacity: 0.65;
+            cursor: not-allowed;
+        }
+
+    .sa-top-actions-item-danger {
+        color: rgba(255, 206, 206, 0.96);
+    }
+
+        .sa-top-actions-item-danger:hover {
+            background: rgba(255, 77, 77, 0.10);
+        }
+
+    .sa-top-actions-item-icon {
+        width: 16px;
+        height: 16px;
+        position: relative;
+        flex-shrink: 0;
+    }
+
+    .sa-top-actions-settings-icon::before,
+    .sa-top-actions-logout-icon::before {
+        content: "";
+        position: absolute;
+        inset: 2px;
+        border: 2px solid currentColor;
+        border-radius: 50%;
+    }
+
+    .sa-top-actions-settings-icon::after {
+        content: "";
+        position: absolute;
+        left: 6px;
+        top: -1px;
+        width: 2px;
+        height: 18px;
+        background: currentColor;
+        opacity: 0.8;
+    }
+
+    .sa-top-actions-logout-icon::after {
+        content: "";
+        position: absolute;
+        right: -1px;
+        top: 6px;
+        width: 8px;
+        height: 2px;
+        background: currentColor;
+        box-shadow: 2px -2px 0 0 currentColor;
+        transform: rotate(-45deg);
+        transform-origin: right center;
+    }
+</style>
