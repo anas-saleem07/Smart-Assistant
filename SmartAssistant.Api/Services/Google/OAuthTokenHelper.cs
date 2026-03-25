@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using SmartAssistant.Api.Data;
 using SmartAssistant.Api.Options;
+using SmartAssistant.Core.Entities;
 using System.Text.Json;
 
 namespace SmartAssistant.Api.Services.Google
@@ -11,6 +12,7 @@ namespace SmartAssistant.Api.Services.Google
     {
         Task<string> GetAccessTokenAsync(string refreshToken, CancellationToken ct);
         Task<GoogleCredential> GetGoogleCredentialAsync(CancellationToken ct);
+        Task<EmailOAuthAccount?> GetLatestActiveGmailAccountAsync(CancellationToken ct);
     }
 
     public sealed class OAuthTokenHelper : IOAuthTokenHelper
@@ -22,6 +24,16 @@ namespace SmartAssistant.Api.Services.Google
         {
             _opt = opt.Value;
             _db = db;
+        }
+
+        public async Task<EmailOAuthAccount?> GetLatestActiveGmailAccountAsync(CancellationToken ct)
+        {
+            return await _db.EmailOAuthAccounts
+                .Where(account =>
+                    account.Active &&
+                    account.Provider == "Gmail")
+                .OrderByDescending(account => account.Id)
+                .FirstOrDefaultAsync(ct);
         }
 
         public async Task<string> GetAccessTokenAsync(string refreshToken, CancellationToken ct)
@@ -41,9 +53,23 @@ namespace SmartAssistant.Api.Services.Google
                 new FormUrlEncodedContent(values),
                 ct);
 
-            response.EnsureSuccessStatusCode();
-
             var json = await response.Content.ReadAsStringAsync(ct);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var tokenError = TryDeserializeTokenError(json);
+
+                if (tokenError != null &&
+                    string.Equals(tokenError.error, "invalid_grant", StringComparison.OrdinalIgnoreCase))
+                {
+                    throw new GoogleOAuthReconnectRequiredException(
+                        "Google refresh token is expired or revoked. User must reconnect Gmail account.");
+                }
+
+                throw new InvalidOperationException(
+                    "Google token refresh failed. Status: " + (int)response.StatusCode + ". Response: " + json);
+            }
+
             var token = JsonSerializer.Deserialize<TokenResponse>(json);
 
             if (token == null || string.IsNullOrWhiteSpace(token.access_token))
@@ -54,29 +80,82 @@ namespace SmartAssistant.Api.Services.Google
 
         public async Task<GoogleCredential> GetGoogleCredentialAsync(CancellationToken ct)
         {
-            // Get latest active Gmail OAuth account
-            var account = await _db.EmailOAuthAccounts
-                .Where(x => x.Active && x.Provider == "Gmail")
-                .OrderByDescending(x => x.Id)
-                .FirstOrDefaultAsync(ct);
+            var account = await GetLatestActiveGmailAccountAsync(ct);
 
             if (account == null)
-                throw new InvalidOperationException("No active Gmail OAuth account found.");
+            {
+                throw new GoogleOAuthReconnectRequiredException(
+                    "No active Gmail OAuth account found. User must connect Gmail account.");
+            }
+
+            if (account.NeedsReconnect)
+            {
+                throw new GoogleOAuthReconnectRequiredException("Gmail account needs reconnect.");
+            }
 
             if (string.IsNullOrWhiteSpace(account.RefreshToken))
+            {
                 throw new InvalidOperationException("Active Gmail account does not have a refresh token.");
+            }
 
-            var accessToken = await GetAccessTokenAsync(account.RefreshToken, ct);
+            try
+            {
+                var accessToken = await GetAccessTokenAsync(account.RefreshToken, ct);
 
-            // Build Google credential from fresh access token
-            var credential = GoogleCredential.FromAccessToken(accessToken);
+                if (!string.IsNullOrWhiteSpace(account.LastError) || account.ReconnectRequiredOn.HasValue)
+                {
+                    account.LastError = null;
+                    account.ReconnectRequiredOn = null;
+                    account.UpdatedOn = DateTimeOffset.UtcNow;
 
-            return credential;
+                    await _db.SaveChangesAsync(ct);
+                }
+
+                return GoogleCredential.FromAccessToken(accessToken);
+            }
+            catch (GoogleOAuthReconnectRequiredException ex)
+            {
+                account.NeedsReconnect = true;
+                account.LastError = ex.Message;
+                account.ReconnectRequiredOn = DateTimeOffset.UtcNow;
+                account.UpdatedOn = DateTimeOffset.UtcNow;
+
+                await _db.SaveChangesAsync(ct);
+
+                throw;
+            }
+            catch (Exception ex)
+            {
+                account.LastError = ex.Message;
+                account.UpdatedOn = DateTimeOffset.UtcNow;
+
+                await _db.SaveChangesAsync(ct);
+
+                throw;
+            }
+        }
+
+        private static TokenErrorResponse? TryDeserializeTokenError(string json)
+        {
+            try
+            {
+                return JsonSerializer.Deserialize<TokenErrorResponse>(json);
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         private sealed class TokenResponse
         {
             public string? access_token { get; set; }
+        }
+
+        private sealed class TokenErrorResponse
+        {
+            public string? error { get; set; }
+            public string? error_description { get; set; }
         }
     }
 }

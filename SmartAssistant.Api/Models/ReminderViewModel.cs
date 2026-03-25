@@ -1,9 +1,10 @@
-﻿namespace SmartAssistant.Api.Models
+﻿public sealed class ReminderViewModel
 {
-    public class ReminderViewModel
-    {
-        public string Title { get; set; }
-        public string Description { get; set; }
-        public DateTime ReminderTime { get; set; }
-    }
+    public Guid Id { get; set; }
+    public string? Title { get; set; }
+    public string? Description { get; set; }
+    public DateTimeOffset ReminderTime { get; set; }
+    public string ReminderTimeLocalText { get; set; } = "";
+    public bool Completed { get; set; }
+    public DateTime CreatedOn { get; set; }
 }

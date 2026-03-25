@@ -45,8 +45,8 @@ namespace SmartAssistant.Api.Controllers
 
             // Convert local UI time (e.g. Karachi time) to UTC before saving
             reminder.ReminderTime = AppTimeHelper.ConvertLocalDateTimeToUtc(
-                vm.ReminderTime,
-                settings.TimezoneId);
+            DateTime.SpecifyKind(vm.ReminderTime.DateTime, DateTimeKind.Unspecified),
+            settings.TimezoneId);
 
             // Save reminder (manual reminder)
             await _service.AddManualReminderAsync(reminder);
@@ -63,7 +63,8 @@ namespace SmartAssistant.Api.Controllers
                     reminder.CalendarEventId = eventId;
                     reminder.CalendarSyncedOn = DateTimeOffset.UtcNow;
                     reminder.CalendarSyncError = null;
-
+                    var localCheck = AppTimeHelper.ConvertUtcToLocal(reminder.ReminderTime, settings.TimezoneId);
+                    // Put breakpoint here and verify localCheck is 4:30 PM when reminder.ReminderTime is saved
                     await _db.SaveChangesAsync(ct);
                 }
                 catch (OperationCanceledException)
@@ -81,9 +82,29 @@ namespace SmartAssistant.Api.Controllers
         }
 
         [HttpGet("list")]
-        public async Task<IActionResult> GetAll() =>
-            Ok(await _service.GetAllAsync());
+        public async Task<ActionResult<List<ReminderViewModel>>> GetReminders()
+        {
+            var reminders = await _service.GetAllAsync();
 
+            var settings = await _db.ReminderAutomationSettings
+                .FirstAsync(x => x.Id == 1);
+
+            var items = reminders.Select(reminder => new ReminderViewModel
+            {
+                Id = reminder.Id,
+                Title = reminder.Title,
+                Description = reminder.Description,
+                ReminderTime = reminder.ReminderTime,
+                ReminderTimeLocalText = AppTimeHelper.FormatUtcAsLocal(
+                    reminder.ReminderTime,
+                    settings.TimezoneId,
+                    "ddd, dd MMM yyyy hh:mm tt"),
+                Completed = reminder.Completed,
+                CreatedOn = reminder.CreatedOn
+            }).ToList();
+
+            return items;
+        }
         [HttpDelete("delete/{id:guid}")]
         public async Task<IActionResult> Delete(Guid id)
         {

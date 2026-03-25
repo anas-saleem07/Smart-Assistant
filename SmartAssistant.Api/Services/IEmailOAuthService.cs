@@ -7,8 +7,8 @@ using SmartAssistant.Core.Entities;
 
 public interface IEmailOAuthService
 {
-    string GenerateGoogleAuthUrl(string state);
-    Task HandleGoogleCallbackAsync(string code, CancellationToken ct);
+    string GenerateGoogleAuthUrl(string state, string platform);
+    Task HandleGoogleCallbackAsync(string code, string platform, CancellationToken ct);
 }
 
 public class EmailOAuthService : IEmailOAuthService
@@ -22,12 +22,9 @@ public class EmailOAuthService : IEmailOAuthService
         _db = db;
     }
 
-    public string GenerateGoogleAuthUrl(string state)
+    public string GenerateGoogleAuthUrl(string state, string platform)
     {
-        // What:
-        // Request Gmail read + send + Calendar permissions.
-        // Why:
-        // We need to read emails, reply to them, and create calendar events.
+        var redirectUri = GetRedirectUri(platform);
 
         var scope =
             "openid email profile " +
@@ -37,7 +34,7 @@ public class EmailOAuthService : IEmailOAuthService
 
         return "https://accounts.google.com/o/oauth2/v2/auth" +
                $"?client_id={Uri.EscapeDataString(_options.ClientId)}" +
-               $"&redirect_uri={Uri.EscapeDataString(_options.RedirectUri)}" +
+               $"&redirect_uri={Uri.EscapeDataString(redirectUri)}" +
                "&response_type=code" +
                $"&scope={Uri.EscapeDataString(scope)}" +
                $"&state={Uri.EscapeDataString(state)}" +
@@ -45,45 +42,69 @@ public class EmailOAuthService : IEmailOAuthService
                "&prompt=consent";
     }
 
-    // ... your GenerateGoogleAuthUrl stays same ...
-
-    public async Task HandleGoogleCallbackAsync(string code, CancellationToken ct)
+    public async Task HandleGoogleCallbackAsync(string code, string platform, CancellationToken ct)
     {
-        // 1) Exchange code -> access + refresh token
-        var tokens = await ExchangeCodeForTokensAsync(code, ct);
+        var redirectUri = GetRedirectUri(platform);
 
-        // 2) Fetch user info (name + email) using access token
+        var tokens = await ExchangeCodeForTokensAsync(code, redirectUri, ct);
         var user = await FetchGoogleUserInfoAsync(tokens.AccessToken, ct);
 
-        // 3) Save account
-        var account = new EmailOAuthAccount
-        {
-            Provider = "Gmail",
-            Email = user.Email ?? "unknown",
-            DisplayName = user.Name,
-            RefreshToken = tokens.RefreshToken,   // IMPORTANT: refresh token for future scans/replies
-            Active = true,
-            UpdatedOn = DateTimeOffset.UtcNow
-        };
+        var email = user.Email ?? "unknown";
 
-        _db.EmailOAuthAccounts.Add(account);
+        var existingAccount = await _db.EmailOAuthAccounts
+            .Where(account => account.Provider == "Gmail" && account.Email == email)
+            .OrderByDescending(account => account.Id)
+            .FirstOrDefaultAsync(ct);
+
+        if (existingAccount != null)
+        {
+            existingAccount.DisplayName = user.Name;
+            existingAccount.RefreshToken = tokens.RefreshToken;
+            existingAccount.Active = true;
+            existingAccount.NeedsReconnect = false;
+            existingAccount.LastError = null;
+            existingAccount.ReconnectRequiredOn = null;
+            existingAccount.UpdatedOn = DateTimeOffset.UtcNow;
+        }
+        else
+        {
+            var account = new EmailOAuthAccount
+            {
+                Provider = "Gmail",
+                Email = email,
+                DisplayName = user.Name,
+                RefreshToken = tokens.RefreshToken,
+                Active = true,
+                NeedsReconnect = false,
+                LastError = null,
+                ReconnectRequiredOn = null,
+                UpdatedOn = DateTimeOffset.UtcNow
+            };
+
+            _db.EmailOAuthAccounts.Add(account);
+        }
+
         await _db.SaveChangesAsync(ct);
     }
 
-    // -------------------------
-    // Token exchange (FIX)
-    // -------------------------
-    private async Task<TokenResult> ExchangeCodeForTokensAsync(string code, CancellationToken ct)
+    private string GetRedirectUri(string platform)
+    {
+        if (string.Equals(platform, "android", StringComparison.OrdinalIgnoreCase))
+            return _options.AndroidRedirectUri;
+
+        return _options.WindowsRedirectUri;
+    }
+
+    private async Task<TokenResult> ExchangeCodeForTokensAsync(string code, string redirectUri, CancellationToken ct)
     {
         using var http = new HttpClient();
 
-        // Google token endpoint expects x-www-form-urlencoded
         var values = new Dictionary<string, string>
         {
             { "client_id", _options.ClientId },
             { "client_secret", _options.ClientSecret },
             { "code", code },
-            { "redirect_uri", _options.RedirectUri },
+            { "redirect_uri", redirectUri },
             { "grant_type", "authorization_code" }
         };
 
@@ -96,7 +117,6 @@ public class EmailOAuthService : IEmailOAuthService
 
         if (!resp.IsSuccessStatusCode)
         {
-            // This message is useful for debugging redirect_uri_mismatch etc.
             throw new InvalidOperationException(
                 "Google token exchange failed. Status=" + (int)resp.StatusCode + ". Body=" + body);
         }
@@ -106,8 +126,6 @@ public class EmailOAuthService : IEmailOAuthService
         if (token == null || string.IsNullOrWhiteSpace(token.access_token))
             throw new InvalidOperationException("Google token exchange returned empty access_token.");
 
-        // Refresh token might be null if user already consented and Google doesn't return it again.
-        // For FYP, we require refresh token to run background jobs.
         if (string.IsNullOrWhiteSpace(token.refresh_token))
         {
             throw new InvalidOperationException(
@@ -138,9 +156,6 @@ public class EmailOAuthService : IEmailOAuthService
         public string RefreshToken { get; set; } = "";
     }
 
-    // -------------------------
-    // Userinfo (name/email)
-    // -------------------------
     private async Task<GoogleUserInfo> FetchGoogleUserInfoAsync(string accessToken, CancellationToken ct)
     {
         using var http = new HttpClient();
@@ -167,7 +182,6 @@ public class EmailOAuthService : IEmailOAuthService
         public string? email { get; set; }
         public string? name { get; set; }
 
-        // Easy mapping
         public string? Email => email;
         public string? Name => name;
     }

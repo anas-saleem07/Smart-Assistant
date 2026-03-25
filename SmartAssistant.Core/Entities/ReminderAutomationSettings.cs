@@ -25,7 +25,7 @@
         public bool AutoReplyEnabled { get; set; } = false;
 
         // Separate keywords for replying (do not mix with reminder keywords)
-        public string AutoReplyKeywordsCsv { get; set; } = "interview,meeting,schedule,call,appointment";
+        public string AutoReplyKeywordsCsv { get; set; } = "interview,meeting,schedule,call,appointment,reschedule,rescheduled,cancel,cancelled,canceled";
 
         // AI quota gate (daily)
         public int AiDailyLimit { get; set; } = 50;
@@ -70,6 +70,7 @@
         public bool ReplyNeeded { get; set; }              // Email qualifies for reply but not yet replied
         public DateTimeOffset? ReplyQueuedOn { get; set; } // When we queued it
         public bool Replied { get; set; }                  // Reply actually sent
+        public bool WaitingForExternalConfirmation { get; set; }
         public DateTimeOffset? RepliedOn { get; set; }     // When we replied
         public string? ReplyLastError { get; set; }        // Last failure reason (quota, api error, etc.)
 

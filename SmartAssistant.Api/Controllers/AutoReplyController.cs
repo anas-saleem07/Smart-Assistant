@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using SmartAssistant.Api.Models;
 using SmartAssistant.Api.Services.AutoReply;
-using SmartAssistant.Api.Services.Email;
+using SmartAssistant.Api.Services.Google;
 
 namespace SmartAssistant.Api.Controllers
 {
@@ -22,36 +23,95 @@ namespace SmartAssistant.Api.Controllers
         [HttpGet("pending")]
         public async Task<ActionResult<List<PendingAutoReplyDto>>> GetPending(CancellationToken ct)
         {
-            var items = await _autoReply.GetPendingApprovalsAsync(ct);
-            return Ok(items);
+            try
+            {
+                var items = await _autoReply.GetPendingApprovalsAsync(ct);
+                return Ok(items);
+            }
+            catch (GoogleOAuthReconnectRequiredException)
+            {
+                return Unauthorized(new
+                {
+                    code = "gmail_reconnect_required",
+                    message = "Gmail account needs reconnect."
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("GET /api/auto-reply/pending failed: " + ex.Message);
+            }
         }
 
-        [HttpPost("approve-same-slot/{emailProcessedId:long}")]
-        public async Task<IActionResult> ApproveSameSlot(long emailProcessedId, CancellationToken ct, EmailMessage email)
+        [HttpPost("approve-same-slot/{id:long}")]
+        public async Task<IActionResult> ApproveSameSlot(long id, CancellationToken ct)
         {
-            var ok = await _autoReply.ApprovePendingReplyAsync(emailProcessedId, false, ct, email);
-            return Ok(new { success = ok });
+            var success = await _autoReply.ApprovePendingReplyAsync(id, false, ct);
+            if (!success)
+                return BadRequest("Unable to approve original slot.");
+
+            return Ok(new { success = true, message = "Original slot approved." });
         }
 
-        [HttpPost("approve-suggested-slot/{emailProcessedId:long}")]
-        public async Task<IActionResult> ApproveSuggestedSlot(long emailProcessedId, CancellationToken ct, EmailMessage email)
+        [HttpPost("approve-suggested-slot/{id:long}")]
+        public async Task<IActionResult> ApproveSuggestedSlot(long id, CancellationToken ct)
         {
-            var ok = await _autoReply.ApprovePendingReplyAsync(emailProcessedId, true, ct,email);
-            return Ok(new { success = ok });
+            var success = await _autoReply.ApprovePendingReplyAsync(id, true, ct);
+            if (!success)
+                return BadRequest("Unable to approve suggested slot.");
+
+            return Ok(new { success = true, message = "Suggested slot sent." });
         }
 
         [HttpPost("reject/{emailProcessedId:long}")]
-        public async Task<IActionResult> Reject(long emailProcessedId, CancellationToken ct, EmailMessage email)
+        public async Task<IActionResult> Reject(long emailProcessedId, CancellationToken ct)
         {
-            var ok = await _autoReply.RejectPendingReplyAsync(emailProcessedId, ct, email);
-            return Ok(new { success = ok });
+            try
+            {
+                var ok = await _autoReply.RejectPendingReplyAsync(emailProcessedId, ct);
+                return Ok(new { success = ok });
+            }
+            catch (GoogleOAuthReconnectRequiredException ex)
+            {
+                return Unauthorized(new ApiErrorResponse
+                {
+                    Code = "gmail_reconnect_required",
+                    Message = ex.Message
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ApiErrorResponse
+                {
+                    Code = "reject_failed",
+                    Message = "POST /api/auto-reply/reject failed: " + ex.Message
+                });
+            }
         }
-        
+
         [HttpPost("open-suggested-calendar/{emailProcessedId:long}")]
         public async Task<ActionResult<ApprovalCalendarOpenDto>> OpenSuggestedCalendar(long emailProcessedId, CancellationToken ct)
         {
-            var result = await _autoReply.CreateSuggestedCalendarEventAsync(emailProcessedId, ct);
-            return Ok(result);
+            try
+            {
+                var result = await _autoReply.CreateSuggestedCalendarEventAsync(emailProcessedId, ct);
+                return Ok(result);
+            }
+            catch (GoogleOAuthReconnectRequiredException ex)
+            {
+                return Unauthorized(new ApiErrorResponse
+                {
+                    Code = "gmail_reconnect_required",
+                    Message = ex.Message
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ApiErrorResponse
+                {
+                    Code = "open_suggested_calendar_failed",
+                    Message = "POST /api/auto-reply/open-suggested-calendar failed: " + ex.Message
+                });
+            }
         }
     }
 }

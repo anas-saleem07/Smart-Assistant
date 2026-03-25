@@ -2,14 +2,27 @@
 {
     public partial class App : Application
     {
+        private static string? _pendingDeepLink;
+
         public App()
         {
             InitializeComponent();
+            MainPage = new MainPage();
+            MainPage = new MainPage();
         }
 
-        protected override Window CreateWindow(IActivationState? activationState)
+        protected override void OnAppLinkRequestReceived(Uri uri)
         {
-            return new Window(new MainPage()) { Title = "SmartAssistant.App" };
+            base.OnAppLinkRequestReceived(uri);
+
+            _pendingDeepLink = uri?.ToString();
+        }
+
+        public static string? ConsumePendingDeepLink()
+        {
+            var value = _pendingDeepLink;
+            _pendingDeepLink = null;
+            return value;
         }
     }
 }

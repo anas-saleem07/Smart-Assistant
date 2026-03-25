@@ -4,8 +4,13 @@
     {
         public const string SectionName = "GmailOAuth";
 
-        public string ClientId { get; init; } = string.Empty;
-        public string ClientSecret { get; init; } = string.Empty;
-        public string RedirectUri { get; init; } = string.Empty;
+        public string ClientId { get; set; } = "";
+        public string ClientSecret { get; set; } = "";
+
+        // Windows desktop callback
+        public string WindowsRedirectUri { get; set; } = "";
+
+        // Android callback must be reachable from emulator/device browser
+        public string AndroidRedirectUri { get; set; } = "";
     }
 }

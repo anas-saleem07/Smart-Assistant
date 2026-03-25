@@ -26,7 +26,37 @@ namespace SmartAssistant.Api.Services.Calendar
         // Keep your existing CreateEventAsync implementation here.
         public async Task<string> CreateEventAsync(Reminder reminder, ReminderAutomationSettings settings, CancellationToken ct)
         {
-            throw new NotImplementedException("CreateEventAsync is already implemented in your project. Keep your existing code.");
+            var calendarId = string.IsNullOrWhiteSpace(settings.CalendarId) ? "primary" : settings.CalendarId;
+
+            var service = await CreateCalendarClientAsync(ct);
+
+            var startUtc = reminder.ReminderTime.ToUniversalTime();
+
+            var durationMinutes = settings.SlotMinutes > 0 ? settings.SlotMinutes : 60;
+
+            var endUtc = startUtc.AddMinutes(durationMinutes);
+
+            var googleEvent = new GoogleCalendarEvent
+            {
+                Summary = reminder.Title ?? "Reminder",
+                Description = reminder.Description ?? "",
+
+                Start = new global::Google.Apis.Calendar.v3.Data.EventDateTime
+                {
+                    DateTime = startUtc.UtcDateTime,
+                    TimeZone = "UTC"
+                },
+
+                End = new global::Google.Apis.Calendar.v3.Data.EventDateTime
+                {
+                    DateTime = endUtc.UtcDateTime,
+                    TimeZone = "UTC"
+                }
+            };
+
+            var created = await service.Events.Insert(googleEvent, calendarId).ExecuteAsync(ct);
+
+            return created.Id;
         }
 
         public async Task<bool> IsFreeAsync(DateTimeOffset startUtc, DateTimeOffset endUtc, ReminderAutomationSettings settings, CancellationToken ct)
@@ -35,7 +65,6 @@ namespace SmartAssistant.Api.Services.Calendar
                 return true;
 
             var calendarId = string.IsNullOrWhiteSpace(settings.CalendarId) ? "primary" : settings.CalendarId;
-
             var service = await CreateCalendarClientAsync(ct);
 
             var request = service.Events.List(calendarId);
@@ -43,30 +72,38 @@ namespace SmartAssistant.Api.Services.Calendar
             request.TimeMax = endUtc.UtcDateTime;
             request.SingleEvents = true;
             request.ShowDeleted = false;
-            request.MaxResults = 5;
+            request.MaxResults = 50;
 
             var events = await request.ExecuteAsync(ct);
 
-            // If any event overlaps, not free
-            return events.Items == null || events.Items.Count == 0;
+            if (events?.Items == null || events.Items.Count == 0)
+                return true;
+
+            foreach (var calendarEvent in events.Items)
+            {
+                if (!DoesEventOverlap(calendarEvent, startUtc, endUtc))
+                    continue;
+
+                if (!IsBlockingCalendarEvent(calendarEvent))
+                    continue;
+
+                return false;
+            }
+
+            return true;
         }
 
         public async Task<DateTimeOffset?> FindNextFreeSlotAsync(DateTimeOffset fromUtc, ReminderAutomationSettings settings, CancellationToken ct)
         {
             var targetTimeZone = AppTimeHelper.ResolveTimeZone(settings.TimezoneId);
 
-            // Convert to local time in selected timezone
-            var fromLocal = TimeZoneInfo.ConvertTime(fromUtc, targetTimeZone);
+            var fromLocal = AppTimeHelper.ConvertUtcToLocal(fromUtc, settings.TimezoneId);
 
-            // Search up to next 7 days
             for (int dayOffset = 0; dayOffset < 7; dayOffset++)
             {
-                // fromLocal.Date is DateTime (local date)
                 var dayLocalDate = fromLocal.Date.AddDays(dayOffset);
 
-                // Important: TimeZoneInfo offsets should be calculated using a DateTime with Kind=Unspecified
-                // because "dayLocalDate" represents local wall-clock time in that timezone.
-                var dayLocalUnspecified = DateTime.SpecifyKind(dayLocalDate, DateTimeKind.Unspecified);
+                var dayLocalUnspecified = DateTime.SpecifyKind(dayLocalDate.Date, DateTimeKind.Unspecified);
 
                 var officeStartLocalDateTime = dayLocalUnspecified.AddHours(settings.OfficeStartHour);
                 var officeEndLocalDateTime = dayLocalUnspecified.AddHours(settings.OfficeEndHour);
@@ -77,12 +114,11 @@ namespace SmartAssistant.Api.Services.Calendar
                 var officeStartLocal = new DateTimeOffset(officeStartLocalDateTime, officeStartOffset);
                 var officeEndLocal = new DateTimeOffset(officeEndLocalDateTime, officeEndOffset);
 
-                // If dayOffset == 0, start at max(current time, office start)
                 var cursorLocal = officeStartLocal;
+
                 if (dayOffset == 0 && fromLocal > officeStartLocal)
                     cursorLocal = fromLocal;
 
-                // Round cursor to next slot boundary
                 cursorLocal = RoundUpToSlot(cursorLocal, settings.SlotMinutes);
 
                 while (cursorLocal.AddMinutes(settings.SlotMinutes) <= officeEndLocal)
@@ -104,11 +140,10 @@ namespace SmartAssistant.Api.Services.Calendar
         public async Task<DateTimeOffset?> FindNextFreeSlotOnSameDayAsync(DateTimeOffset preferredStartUtc, ReminderAutomationSettings settings, CancellationToken ct)
         {
             var targetTimeZone = AppTimeHelper.ResolveTimeZone(settings.TimezoneId);
-            var preferredLocal = TimeZoneInfo.ConvertTime(preferredStartUtc, targetTimeZone);
+            var preferredLocal = AppTimeHelper.ConvertUtcToLocal(preferredStartUtc, settings.TimezoneId);
 
             var dayLocalDate = preferredLocal.Date;
-
-            var dayLocalUnspecified = DateTime.SpecifyKind(dayLocalDate, DateTimeKind.Unspecified);
+            var dayLocalUnspecified = DateTime.SpecifyKind(dayLocalDate.Date, DateTimeKind.Unspecified);
 
             var officeStartLocalDateTime = dayLocalUnspecified.AddHours(settings.OfficeStartHour);
             var officeEndLocalDateTime = dayLocalUnspecified.AddHours(settings.OfficeEndHour);
@@ -120,6 +155,7 @@ namespace SmartAssistant.Api.Services.Calendar
             var officeEndLocal = new DateTimeOffset(officeEndLocalDateTime, officeEndOffset);
 
             var cursorLocal = officeStartLocal;
+
             if (preferredLocal > officeStartLocal)
                 cursorLocal = preferredLocal;
 
@@ -190,12 +226,12 @@ namespace SmartAssistant.Api.Services.Calendar
         }
 
         public async Task<CalendarApprovalEventResult?> CreateApprovalSuggestionEventAsync(
-     DateTimeOffset startUtc,
-     DateTimeOffset endUtc,
-     string title,
-     string description,
-     ReminderAutomationSettings settings,
-     CancellationToken ct)
+    DateTimeOffset startUtc,
+    DateTimeOffset endUtc,
+    string title,
+    string description,
+    ReminderAutomationSettings settings,
+    CancellationToken ct)
         {
             if (endUtc <= startUtc)
                 return null;
@@ -203,30 +239,16 @@ namespace SmartAssistant.Api.Services.Calendar
             var calendarId = string.IsNullOrWhiteSpace(settings.CalendarId) ? "primary" : settings.CalendarId;
             var service = await CreateCalendarClientAsync(ct);
 
-            var configuredTimeZoneId = string.IsNullOrWhiteSpace(settings.TimezoneId)
-                ? "Asia/Karachi"
-                : settings.TimezoneId;
-
-            var targetTimeZone = AppTimeHelper.ResolveTimeZone(configuredTimeZoneId);
-
-            // Convert UTC to local time for calendar event creation
-            var localStart = TimeZoneInfo.ConvertTime(startUtc, targetTimeZone);
-            var localEnd = TimeZoneInfo.ConvertTime(endUtc, targetTimeZone);
-
+            // IMPORTANT:
+            // Always send UTC to Google Calendar.
+            // This avoids double timezone interpretation.
             var eventToCreate = new GoogleCalendarEvent
             {
-                Summary = string.IsNullOrWhiteSpace(title) ? "Suggested meeting" : title,
+                Summary = string.IsNullOrWhiteSpace(title) ? "Suggested meeting slot" : title,
                 Description = description ?? "",
-                Start = new global::Google.Apis.Calendar.v3.Data.EventDateTime
-                {
-                    DateTimeDateTimeOffset = localStart,
-                    TimeZone = configuredTimeZoneId
-                },
-                End = new global::Google.Apis.Calendar.v3.Data.EventDateTime
-                {
-                    DateTimeDateTimeOffset = localEnd,
-                    TimeZone = configuredTimeZoneId
-                }
+                Start = BuildGoogleUtcEventDateTime(startUtc),
+                End = BuildGoogleUtcEventDateTime(endUtc),
+                Transparency = "transparent"
             };
 
             var createdEvent = await service.Events.Insert(eventToCreate, calendarId).ExecuteAsync(ct);
@@ -281,6 +303,32 @@ namespace SmartAssistant.Api.Services.Calendar
                 EndUtc = endUtc
             };
         }
+        public async Task<bool> DeleteEventAsync(string calendarEventId, ReminderAutomationSettings settings, CancellationToken ct)
+         {
+            if (string.IsNullOrWhiteSpace(calendarEventId))
+                return false;
+
+            var calendarId = string.IsNullOrWhiteSpace(settings.CalendarId) ? "primary" : settings.CalendarId;
+            var service = await CreateCalendarClientAsync(ct);
+
+            try
+            {
+                await service.Events.Delete(calendarId, calendarEventId).ExecuteAsync(ct);
+                return true;
+            }
+            catch (global::Google.GoogleApiException ex)
+            {
+                // If event is already gone, treat it as success so the flow remains idempotent.
+                if (ex.HttpStatusCode == System.Net.HttpStatusCode.NotFound)
+                    return true;
+
+                return false;
+            }
+            catch
+            {
+                return false;
+            }
+        }
 
         private static DateTimeOffset RoundUpToSlot(DateTimeOffset time, int slotMinutes)
         {
@@ -306,5 +354,100 @@ namespace SmartAssistant.Api.Services.Calendar
                 ApplicationName = "SmartAssistant"
             });
         }
-    }
-}
+        private static global::Google.Apis.Calendar.v3.Data.EventDateTime BuildGoogleUtcEventDateTime(DateTimeOffset utcDateTime)
+        {
+            var normalizedUtc = utcDateTime.ToUniversalTime();
+
+            return new global::Google.Apis.Calendar.v3.Data.EventDateTime
+            {
+                // Send clean UTC time to Google Calendar
+                DateTime = normalizedUtc.UtcDateTime,
+                TimeZone = "UTC"
+            };
+        }
+        private static bool DoesEventOverlap(GoogleCalendarEvent calendarEvent, DateTimeOffset startUtc, DateTimeOffset endUtc)
+        {
+            var eventStartUtc = GetEventStartUtc(calendarEvent);
+            var eventEndUtc = GetEventEndUtc(calendarEvent);
+
+            if (!eventStartUtc.HasValue || !eventEndUtc.HasValue)
+                return false;
+
+            return eventStartUtc.Value < endUtc && eventEndUtc.Value > startUtc;
+        }
+
+        private static DateTimeOffset? GetEventStartUtc(GoogleCalendarEvent calendarEvent)
+        {
+            if (calendarEvent.Start == null)
+                return null;
+
+            if (calendarEvent.Start.DateTimeDateTimeOffset.HasValue)
+                return calendarEvent.Start.DateTimeDateTimeOffset.Value.ToUniversalTime();
+
+            if (!string.IsNullOrWhiteSpace(calendarEvent.Start.Date) &&
+                DateTimeOffset.TryParse(calendarEvent.Start.Date, out var allDayDate))
+            {
+                return allDayDate.ToUniversalTime();
+            }
+
+            return null;
+        }
+
+        private static DateTimeOffset? GetEventEndUtc(GoogleCalendarEvent calendarEvent)
+        {
+            if (calendarEvent.End == null)
+                return null;
+
+            if (calendarEvent.End.DateTimeDateTimeOffset.HasValue)
+                return calendarEvent.End.DateTimeDateTimeOffset.Value.ToUniversalTime();
+
+            if (!string.IsNullOrWhiteSpace(calendarEvent.End.Date) &&
+                DateTimeOffset.TryParse(calendarEvent.End.Date, out var allDayDate))
+            {
+                return allDayDate.ToUniversalTime();
+            }
+
+            return null;
+        }
+
+        private static bool IsBlockingCalendarEvent(GoogleCalendarEvent calendarEvent)
+        {
+            if (calendarEvent == null)
+                return false;
+
+            if (string.Equals(calendarEvent.Status, "cancelled", StringComparison.OrdinalIgnoreCase))
+                return false;
+
+            if (string.Equals(calendarEvent.Transparency, "transparent", StringComparison.OrdinalIgnoreCase))
+                return false;
+
+            var summary = calendarEvent.Summary ?? "";
+
+            if (summary.Contains("Suggested meeting slot", StringComparison.OrdinalIgnoreCase))
+                return false;
+
+            if (calendarEvent.Attendees != null && calendarEvent.Attendees.Count > 0)
+            {
+                var selfAttendee = calendarEvent.Attendees.FirstOrDefault(attendee => attendee.Self == true);
+
+                if (selfAttendee != null)
+                {
+                    var responseStatus = (selfAttendee.ResponseStatus ?? "").Trim().ToLowerInvariant();
+
+                    if (responseStatus == "accepted")
+                        return true;
+
+                    if (responseStatus == "needsaction")
+                        return false;
+
+                    if (responseStatus == "tentative")
+                        return false;
+
+                    if (responseStatus == "declined")
+                        return false;
+                }
+            }
+
+            return true;
+        }
+    } }

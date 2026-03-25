@@ -43,9 +43,18 @@ namespace SmartAssistant.Core.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("LastError")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("NeedsReconnect")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Provider")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset?>("ReconnectRequiredOn")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("RefreshToken")
                         .IsRequired()
@@ -125,6 +134,9 @@ namespace SmartAssistant.Core.Data.Migrations
 
                     b.Property<DateTimeOffset?>("SuggestedStartUtc")
                         .HasColumnType("datetimeoffset");
+
+                    b.Property<bool>("WaitingForExternalConfirmation")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -278,7 +290,7 @@ namespace SmartAssistant.Core.Data.Migrations
                             AiDailyLimit = 50,
                             AllowAutoReplyAfterOfficeHours = false,
                             AutoReplyEnabled = false,
-                            AutoReplyKeywordsCsv = "interview,meeting,schedule,call,appointment",
+                            AutoReplyKeywordsCsv = "interview,meeting,schedule,call,appointment,reschedule,rescheduled,cancel,cancelled,canceled",
                             CalendarEnabled = true,
                             CalendarId = "primary",
                             DefaultReminderAfterMinutes = 60,

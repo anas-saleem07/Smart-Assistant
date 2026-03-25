@@ -28,5 +28,17 @@
     </array>
     <key>XSAppIconAssets</key>
     <string>Assets.xcassets/appicon.appiconset</string>
+	//Ios Setup
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>smartassistant</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>smartassistant</string>
+			</array>
+		</dict>
+	</array>
 </dict>
 </plist>

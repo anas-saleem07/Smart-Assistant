@@ -7,13 +7,20 @@
     -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" package="com.companyname.smartassistant.app" android:versionName="1.0">
   <uses-sdk android:minSdkVersion="24" android:targetSdkVersion="35" />
-  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
   <uses-permission android:name="android.permission.INTERNET" />
-  <application android:allowBackup="true" android:icon="@mipmap/appicon" android:roundIcon="@mipmap/appicon_round" android:supportsRtl="true" android:name="crc649438420151c2ff14.MainApplication" android:label="SmartAssistant.App" android:debuggable="true" android:extractNativeLibs="true">
-    <activity android:configChanges="density|orientation|smallestScreenSize|screenLayout|screenSize|uiMode" android:theme="@style/Maui.SplashTheme" android:name="crc649438420151c2ff14.MainActivity" android:exported="true">
+  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+  <application android:allowBackup="true" android:supportsRtl="true" android:name="crc649438420151c2ff14.MainApplication" android:usesCleartextTraffic="true" android:label="SmartAssistant.App" android:debuggable="true" android:extractNativeLibs="true">
+    <activity android:configChanges="density|orientation|smallestScreenSize|screenLayout|screenSize|uiMode" android:launchMode="singleTask" android:theme="@style/Maui.SplashTheme" android:name="crc649438420151c2ff14.MainActivity" android:exported="true">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
         <category android:name="android.intent.category.LAUNCHER" />
+      </intent-filter>
+      <intent-filter>
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+        <data android:host="google-auth-complete" />
+        <data android:scheme="smartassistant" />
       </intent-filter>
     </activity>
     <activity android:exported="true" android:name="crc648316b0a9aa8cfd61.BrowserTabActivity" />

@@ -1,6 +1,8 @@
 ﻿@page "/reminders"
 @inject HttpClient Http
 @using System.Net.Http.Json
+@using SmartAssistant.Api.Models
+@inject NavigationManager Navigation
 
 <div class="rm-page">
     <div class="rm-shell">
@@ -22,9 +24,9 @@
         @if (!string.IsNullOrWhiteSpace(statusText))
         {
             <div class="rm-status @(isError ? "rm-status-error" : "rm-status-ok")">
-                <span class="rm-status-icon">@(isError ? "!" : "✓")</span>
+                <span class="rm-status-icon">@(isError ? "!" : "OK")</span>
                 <span class="rm-status-text">@statusText</span>
-                <button class="rm-status-close" @onclick="ClearStatus">×</button>
+                <button class="rm-status-close" @onclick="ClearStatus">x</button>
             </div>
         }
 
@@ -92,7 +94,7 @@
             @if (reminders.Count == 0)
             {
                 <div class="rm-empty rm-card">
-                    <div class="rm-empty-icon">⏰</div>
+                    <div class="rm-empty-icon">Time</div>
 
                     <div>
                         <div class="rm-empty-title">No reminders yet</div>
@@ -104,7 +106,7 @@
             {
                 <div class="rm-grid">
 
-                    @foreach (var reminder in reminders.OrderByDescending(r => r.ReminderTime))
+                    @foreach (var reminder in reminders.OrderByDescending(reminderItem => reminderItem.ReminderTime))
                     {
                         <article class="rm-item rm-card">
 
@@ -133,11 +135,7 @@
 
                                 <span class="rm-meta-sep">•</span>
 
-                                <span>
-                                    @reminder.ReminderTime
-                                    .ToLocalTime()
-                                    .ToString("ddd, dd MMM yyyy  hh:mm tt")
-                                </span>
+                                <span>@reminder.ReminderTimeLocalText</span>
 
                             </div>
 
@@ -155,7 +153,6 @@
 @code {
 
     private bool isProcessing;
-
     private string statusText = "";
     private bool isError;
 
@@ -168,7 +165,26 @@
 
     protected override async Task OnInitializedAsync()
     {
-        await LoadReminders();
+        try
+        {
+            using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(8));
+
+            var gmailStatus = await Http.GetFromJsonAsync<GoogleConnectionStatusModel>(
+                "api/google-oauth/status",
+                cts.Token);
+
+            if (gmailStatus?.IsConnected != true)
+            {
+                Navigation.NavigateTo("/google-auth");
+                return;
+            }
+
+            await LoadReminders();
+        }
+        catch
+        {
+            Navigation.NavigateTo("/google-auth");
+        }
     }
 
     private void ClearStatus()
@@ -185,7 +201,8 @@
 
     private async Task LoadReminders()
     {
-        if (isProcessing) return;
+        if (isProcessing)
+            return;
 
         try
         {
@@ -197,8 +214,7 @@
             reminders =
                 await Http.GetFromJsonAsync<List<ReminderDto>>(
                     "api/reminder/list",
-                    cts.Token
-                )
+                    cts.Token)
                 ?? new List<ReminderDto>();
         }
         catch (TaskCanceledException)
@@ -218,7 +234,8 @@
 
     private async Task AddReminder()
     {
-        if (isProcessing) return;
+        if (isProcessing)
+            return;
 
         if (string.IsNullOrWhiteSpace(newReminder.Title))
         {
@@ -237,8 +254,7 @@
                 await Http.PostAsJsonAsync(
                     "api/reminder/create",
                     newReminder,
-                    cts.Token
-                );
+                    cts.Token);
 
             var body = await response.Content.ReadAsStringAsync(cts.Token);
 
@@ -274,7 +290,8 @@
 
     private async Task DeleteReminder(Guid id)
     {
-        if (isProcessing) return;
+        if (isProcessing)
+            return;
 
         try
         {
@@ -286,8 +303,7 @@
             var response =
                 await Http.DeleteAsync(
                     $"api/reminder/delete/{id}",
-                    cts.Token
-                );
+                    cts.Token);
 
             var body = await response.Content.ReadAsStringAsync(cts.Token);
 
@@ -316,21 +332,31 @@
         }
     }
 
-    public class CreateReminderRequest
+
+    public sealed class CreateReminderRequest
     {
         public string Title { get; set; } = "";
         public string Description { get; set; } = "";
         public DateTime ReminderTime { get; set; }
     }
 
-    public class ReminderDto
+    public sealed class ReminderDto
     {
         public Guid Id { get; set; }
         public string? Title { get; set; }
         public string? Description { get; set; }
         public DateTimeOffset ReminderTime { get; set; }
+        public string ReminderTimeLocalText { get; set; } = "";
         public bool Completed { get; set; }
         public DateTime CreatedOn { get; set; }
+    }
+    public sealed class GoogleConnectionStatusModel
+    {
+        public bool IsConnected { get; set; }
+        public bool NeedsReconnect { get; set; }
+        public string Provider { get; set; } = "Gmail";
+        public string Email { get; set; } = "";
+        public string Message { get; set; } = "";
     }
 }
 
@@ -472,10 +498,10 @@
         outline: none;
     }
 
-        .rm-input:focus {
-            border-color: rgba(124, 92, 255, 0.60);
-            box-shadow: 0 0 0 4px rgba(124, 92, 255, 0.15);
-        }
+    .rm-input:focus {
+        border-color: rgba(124, 92, 255, 0.60);
+        box-shadow: 0 0 0 4px rgba(124, 92, 255, 0.15);
+    }
 
     .rm-actions {
         display: flex;
@@ -497,10 +523,10 @@
         white-space: nowrap;
     }
 
-        .rm-btn:disabled {
-            cursor: not-allowed;
-            opacity: 0.6;
-        }
+    .rm-btn:disabled {
+        cursor: not-allowed;
+        opacity: 0.6;
+    }
 
     .rm-btn-primary {
         background: linear-gradient(135deg, rgba(124, 92, 255, 0.95), rgba(0, 200, 255, 0.75));
@@ -509,9 +535,9 @@
         font-weight: 700;
     }
 
-        .rm-btn-primary:hover:enabled {
-            filter: brightness(1.05);
-        }
+    .rm-btn-primary:hover:enabled {
+        filter: brightness(1.05);
+    }
 
     .rm-btn-ghost:hover:enabled {
         background: rgba(255,255,255,0.10);
@@ -525,9 +551,9 @@
         border-radius: 10px;
     }
 
-        .rm-btn-danger:hover:enabled {
-            background: rgba(255, 77, 77, 0.18);
-        }
+    .rm-btn-danger:hover:enabled {
+        background: rgba(255, 77, 77, 0.18);
+    }
 
     .rm-list-header {
         display: flex;
@@ -642,31 +668,26 @@
     }
 
     @@keyframes rmspin {
-        from
+        from {
+            transform: rotate(0deg);
+        }
 
-    {
-        transform: rotate(0deg);
-    }
-
-    to {
-        transform: rotate(360deg);
-    }
+        to {
+            transform: rotate(360deg);
+        }
     }
 
     @@media (max-width: 860px) {
-        .rm-form-grid
+        .rm-form-grid {
+            grid-template-columns: 1fr;
+        }
 
-    {
-        grid-template-columns: 1fr;
-    }
+        .rm-actions {
+            justify-content: flex-start;
+        }
 
-    .rm-actions {
-        justify-content: flex-start;
-    }
-
-    .rm-grid {
-        grid-template-columns: 1fr;
-    }
-
+        .rm-grid {
+            grid-template-columns: 1fr;
+        }
     }
 </style>

@@ -41,11 +41,9 @@ namespace SmartAssistant.Api.Services.Automation
 
         public async Task<int> ScanAndCreateRemindersAsync(CancellationToken ct)
         {
-            // 1) Load settings
             var settings = await _db.ReminderAutomationSettings
-                .FirstAsync(x => x.Id == 1, ct);
+                .FirstAsync(item => item.Id == 1, ct);
 
-            // Mark job as running (monitoring)
             settings.LastRunStatus = "Running";
             settings.LastRunError = null;
             await _db.SaveChangesAsync(ct);
@@ -54,7 +52,6 @@ namespace SmartAssistant.Api.Services.Automation
             {
                 if (!settings.Enabled)
                 {
-                    // Record outcome even when disabled
                     settings.LastRunOn = DateTimeOffset.UtcNow;
                     settings.LastRunCreatedCount = 0;
                     settings.LastRunStatus = "Success";
@@ -64,14 +61,11 @@ namespace SmartAssistant.Api.Services.Automation
                     return 0;
                 }
 
-                // 2) Decide how far back to scan (last 24 hours)
                 var sinceUtc = DateTimeOffset.UtcNow.AddHours(-24);
 
-                // 3) Fetch important emails
                 var importantEmails = await _emailClient.GetImportantEmailsAsync(sinceUtc, ct, settings.GmailQuery);
                 if (importantEmails == null || importantEmails.Count == 0)
                 {
-                    // Record outcome when no emails found
                     settings.LastRunOn = DateTimeOffset.UtcNow;
                     settings.LastRunCreatedCount = 0;
                     settings.LastRunStatus = "Success";
@@ -81,8 +75,8 @@ namespace SmartAssistant.Api.Services.Automation
                     return 0;
                 }
 
-                // 4) Parse keywords once
-                var keywords = ParseKeywords(settings.KeywordsCsv);
+                var reminderKeywords = ParseKeywords(settings.KeywordsCsv);
+                var replyKeywords = ParseKeywords(settings.AutoReplyKeywordsCsv);
 
                 var createdCount = 0;
 
@@ -94,29 +88,48 @@ namespace SmartAssistant.Api.Services.Automation
                     if (string.IsNullOrWhiteSpace(email.Provider) || string.IsNullOrWhiteSpace(email.Id))
                         continue;
 
-                    // A) First: reminder-level dedupe (most important)
-                    if (await _reminderService.ExistsEmailReminderAsync(email.Provider, email.Id))
+                    try
                     {
-                        // Still mark as processed so scan remains fast
+                        var cancellationHandled = await _autoReply.TryHandleCancellationAsync(email, settings, ct);
+                        if (cancellationHandled)
+                            continue;
+                    }
+                    catch
+                    {
+                    }
+
+                    if (IsCancellationEmail(email))
+                    {
                         await MarkProcessedIfNeededAsync(email, ct);
                         continue;
                     }
 
-                    // B) Your existing "EmailProcessed" check can stay (fast skip)
+                    try
+                    {
+                        var confirmationHandled = await _autoReply.TryCreateConfirmedReminderAsync(email, settings, ct);
+                        if (confirmationHandled)
+                        {
+                            createdCount++;
+                            continue;
+                        }
+                    }
+                    catch
+                    {
+                    }
+
                     var alreadyProcessed = await _db.EmailProcessed
-                        .AnyAsync(x => x.Provider == email.Provider && x.MessageId == email.Id, ct);
+                        .AnyAsync(item => item.Provider == email.Provider && item.MessageId == email.Id, ct);
 
                     if (alreadyProcessed)
                         continue;
 
-                    // 6) Check if email matches rules
-                    var matches = IsMatch(email, keywords);
                     var hasCalendarInvite =
                         email.HasCalendarInvite &&
                         email.InviteStartUtc.HasValue &&
                         email.InviteEndUtc.HasValue;
 
-                    // 7) Always mark as processed (so you do not re-check same email forever)
+                    var isReplyCandidate = hasCalendarInvite || IsMatch(email, replyKeywords);
+
                     var processedRow = await GetOrCreateProcessedRowAsync(email, ct);
 
                     if (!string.IsNullOrWhiteSpace(email.CalendarEventId) && string.IsNullOrWhiteSpace(processedRow.CalendarEventId))
@@ -124,82 +137,58 @@ namespace SmartAssistant.Api.Services.Automation
                         processedRow.CalendarEventId = email.CalendarEventId;
                     }
 
-                    if (!matches && !hasCalendarInvite)
+                    if (isReplyCandidate)
+                    {
+                        await _db.SaveChangesAsync(ct);
+
+                        if (settings.AutoReplyEnabled)
+                        {
+                            try
+                            {
+                                await _autoReply.TryAutoReplyAsync(email, settings, ct);
+                            }
+                            catch
+                            {
+                            }
+                        }
+
+                        continue;
+                    }
+
+                    var isReminderCandidate = IsMatch(email, reminderKeywords);
+                    if (!isReminderCandidate)
                     {
                         await _db.SaveChangesAsync(ct);
                         continue;
                     }
 
-                    // 8) Decide reminder time
+                    if (await _reminderService.ExistsEmailReminderAsync(email.Provider, email.Id, email.CalendarEventId))
+                    {
+                        await MarkProcessedIfNeededAsync(email, ct);
+                        continue;
+                    }
+
                     var reminderTime = DateTimeOffset.UtcNow.AddMinutes(Math.Max(1, settings.DefaultReminderAfterMinutes));
 
-                    // 9) Build EMAIL reminder
                     var emailReminder = new Reminder
                     {
                         Title = email.Subject,
                         Description = BuildDescription(email),
                         ReminderTime = reminderTime,
-
                         Type = ReminderType.Email,
                         SourceProvider = email.Provider,
                         SourceId = email.Id
                     };
 
-                    // 10) Save reminder
-                    var saved = await _reminderService.AddEmailReminderAsync(emailReminder);
-
-                    // Save reminder + EmailProcessed row first
+                    var savedReminder = await _reminderService.AddEmailReminderAsync(emailReminder);
                     await _db.SaveChangesAsync(ct);
 
-                    // Calendar is mandatory for every NEW reminder.
-                    // If Calendar fails, we do NOT fail reminder creation.
-                    if (saved != null)
+                    if (savedReminder != null)
                     {
-                        // Prevent duplicates: only create calendar event if not already synced
-                        if (string.IsNullOrWhiteSpace(saved.CalendarEventId))
-                        {
-                            try
-                            {
-                                var eventId = await _calendarService.CreateEventAsync(saved, settings, ct);
-
-                                saved.CalendarEventId = eventId;
-                                saved.CalendarSyncedOn = DateTimeOffset.UtcNow;
-                                saved.CalendarSyncError = null;
-
-                                await _db.SaveChangesAsync(ct);
-                            }
-                            catch (OperationCanceledException)
-                            {
-                                throw;
-                            }
-                            catch (Exception ex)
-                            {
-                                saved.CalendarSyncError = ex.Message;
-                                await _db.SaveChangesAsync(ct);
-                            }
-                        }
-
-                        // Auto reply flow (clean):
-                        // 1) Mark reply as needed if email matches reply keywords
-                        // 2) Attempt auto-reply now if quota allows
-                        if (saved != null && settings.AutoReplyEnabled)
-                        {
-                            try
-                            {
-                                // TryAutoReplyAsync should set ReplyNeeded/QueuedOn when needed
-                                await _autoReply.TryAutoReplyAsync(email, settings, ct);
-                            }
-                            catch
-                            {
-                                // Do not break reminder automation if auto reply fails
-                            }
-                        }
-
                         createdCount++;
                     }
                 }
 
-                // Record success outcome
                 settings.LastRunOn = DateTimeOffset.UtcNow;
                 settings.LastRunCreatedCount = createdCount;
                 settings.LastRunStatus = "Success";
@@ -210,7 +199,6 @@ namespace SmartAssistant.Api.Services.Automation
             }
             catch (Exception ex)
             {
-                // Record failure outcome (keep error short)
                 settings.LastRunOn = DateTimeOffset.UtcNow;
                 settings.LastRunStatus = "Failed";
                 settings.LastRunError = ex.Message;
@@ -222,12 +210,8 @@ namespace SmartAssistant.Api.Services.Automation
 
         private async Task MarkProcessedIfNeededAsync(EmailMessage email, CancellationToken ct)
         {
-            // What: Ensure EmailProcessed row exists for this email.
-            // Why: Your table has a UNIQUE index on (Provider, MessageId). Two jobs/paths can insert at the same time.
-            // This version prevents "Cannot insert duplicate key row" by handling the race condition.
-
             var existing = await _db.EmailProcessed
-                .FirstOrDefaultAsync(x => x.Provider == email.Provider && x.MessageId == email.Id, ct);
+                .FirstOrDefaultAsync(item => item.Provider == email.Provider && item.MessageId == email.Id, ct);
 
             if (existing != null)
                 return;
@@ -246,8 +230,6 @@ namespace SmartAssistant.Api.Services.Automation
             }
             catch (DbUpdateException)
             {
-                // Another thread/job inserted the same row first.
-                // Safe to ignore because we only needed it to exist.
             }
         }
 
@@ -266,9 +248,9 @@ namespace SmartAssistant.Api.Services.Automation
 
             return csv
                 .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
-                .Select(k => k.Trim())
-                .Where(k => k.Length > 0)
-                .Select(k => k.ToLowerInvariant())
+                .Select(item => item.Trim())
+                .Where(item => item.Length > 0)
+                .Select(item => item.ToLowerInvariant())
                 .ToList();
         }
 
@@ -291,13 +273,32 @@ namespace SmartAssistant.Api.Services.Automation
             return false;
         }
 
+        private static bool IsCancellationEmail(EmailMessage email)
+        {
+            var text = ((email.Subject ?? "") + " " + (email.Snippet ?? "")).ToLowerInvariant();
+
+            if (string.IsNullOrWhiteSpace(text))
+                return false;
+
+            return
+                text.Contains("cancelled") ||
+                text.Contains("canceled") ||
+                text.Contains("cancellation") ||
+                text.Contains("cancelation") ||
+                text.Contains("cancellation notice") ||
+                text.Contains("cancelled event") ||
+                text.Contains("canceled event") ||
+                text.Contains("meeting cancellation") ||
+                text.Contains("interview cancellation") ||
+                text.Contains("removed from google calendar") ||
+                text.Contains("this event has been cancelled") ||
+                text.Contains("this event has been canceled");
+        }
+
         private async Task<EmailProcessed> GetOrCreateProcessedRowAsync(EmailMessage email, CancellationToken ct)
         {
-            // What: Get existing EmailProcessed row, or create if missing.
-            // Why: Prevent duplicate key crash when same email is scanned twice or jobs run concurrently.
-
             var existing = await _db.EmailProcessed
-                .FirstOrDefaultAsync(x => x.Provider == email.Provider && x.MessageId == email.Id, ct);
+                .FirstOrDefaultAsync(item => item.Provider == email.Provider && item.MessageId == email.Id, ct);
 
             if (existing != null)
                 return existing;
@@ -319,10 +320,8 @@ namespace SmartAssistant.Api.Services.Automation
             }
             catch (DbUpdateException)
             {
-                // Race condition: another worker inserted the same row first.
-                // Re-load it and continue.
                 var again = await _db.EmailProcessed
-                    .FirstAsync(x => x.Provider == email.Provider && x.MessageId == email.Id, ct);
+                    .FirstAsync(item => item.Provider == email.Provider && item.MessageId == email.Id, ct);
 
                 return again;
             }

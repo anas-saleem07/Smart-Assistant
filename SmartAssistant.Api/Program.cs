@@ -8,6 +8,7 @@ using SmartAssistant.Api.Services;
 using SmartAssistant.Api.Services.Automation;
 using SmartAssistant.Api.Services.AutoReply;
 using SmartAssistant.Api.Services.Email;
+using SmartAssistant.Api.Services.Google;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -51,9 +52,10 @@ builder.Services
     .Validate(o =>
         !string.IsNullOrWhiteSpace(o.ClientId) &&
         !string.IsNullOrWhiteSpace(o.ClientSecret) &&
-        !string.IsNullOrWhiteSpace(o.RedirectUri),
+        !string.IsNullOrWhiteSpace(o.WindowsRedirectUri) &&
+        !string.IsNullOrWhiteSpace(o.AndroidRedirectUri),
         "GmailOAuth settings are missing.")
-    .ValidateOnStart();
+    .ValidateOnStart(); 
 //Gemini API options
 builder.Services.AddOptions<SmartAssistant.Api.Options.GeminiOptions>()
     .BindConfiguration(SmartAssistant.Api.Options.GeminiOptions.SectionName)
@@ -70,6 +72,8 @@ builder.Services.AddScoped<IReminderService, ReminderService>();
 builder.Services.AddScoped<IReminderAutomationService, ReminderAutomationService>();
 builder.Services.AddScoped<ReminderAutomationJob>();
 builder.Services.AddScoped<IAutoReplyService, AutoReplyService>();
+builder.Services.AddScoped<IOAuthTokenHelper, OAuthTokenHelper>();
+builder.Services.AddScoped<IGoogleConnectionService, GoogleConnectionService>();
 
 builder.Services.AddScoped<SmartAssistant.Api.Services.Google.IOAuthTokenHelper,
     SmartAssistant.Api.Services.Google.OAuthTokenHelper>();
@@ -104,8 +108,14 @@ if (app.Environment.IsDevelopment())
     //  Dashboard only in Development (simple + safe for FYP)
     app.UseHangfireDashboard("/hangfire");
 }
-
-app.UseHttpsRedirection();
+// NOTE:
+// HTTPS redirection is disabled in Development to allow Android emulator
+// (10.0.2.2) to call the API over HTTP without SSL certificate issues.
+// In Production, HTTPS MUST remain enabled.
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
 
 app.UseAuthorization();
 

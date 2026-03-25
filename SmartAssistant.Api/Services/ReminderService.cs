@@ -1,19 +1,24 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SmartAssistant.Api.Data;
+using SmartAssistant.Api.Helpers;
 using SmartAssistant.Core.Entities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SmartAssistant.Api.Services
 {
-    public interface IReminderService
+    public interface  IReminderService
     {
-        //  two different flows
-        Task<Reminder> AddManualReminderAsync(Reminder reminder);
+
+        Task<Reminder> AddManualReminderAsync(Reminder reminder);   
         Task<Reminder?> AddEmailReminderAsync(Reminder reminder);
 
         Task<IEnumerable<Reminder>> GetAllAsync();
         Task<bool> DeleteAsync(Guid id);
 
-        Task<bool> ExistsEmailReminderAsync(string sourceProvider, string sourceId);
+        Task<bool> ExistsEmailReminderAsync(string sourceProvider, string sourceId, string? calendarEventId = null);
     }
 
     public class ReminderService : IReminderService
@@ -27,7 +32,6 @@ namespace SmartAssistant.Api.Services
 
         public async Task<Reminder> AddManualReminderAsync(Reminder reminder)
         {
-            //  Force MANUAL behavior (this is what you asked)
             reminder.Type = ReminderType.Manual;
             reminder.SourceProvider = null;
             reminder.SourceId = null;
@@ -38,10 +42,12 @@ namespace SmartAssistant.Api.Services
             if (reminder.CreatedOn == default)
                 reminder.CreatedOn = DateTime.UtcNow;
 
-            // Manual reminder should not be completed on create
             reminder.Completed = false;
 
-            // Keep DB storage in UTC
+            // IMPORTANT:
+            // ReminderController already converts UI local time to UTC before calling this method.
+            // So do NOT convert again here.
+            // Just normalize to UTC safely.
             reminder.ReminderTime = reminder.ReminderTime.ToUniversalTime();
 
             _context.Reminder.Add(reminder);
@@ -49,18 +55,19 @@ namespace SmartAssistant.Api.Services
 
             return reminder;
         }
-
         public async Task<Reminder?> AddEmailReminderAsync(Reminder reminder)
         {
-            //  Force EMAIL behavior (this is what you asked)
             reminder.Type = ReminderType.Email;
             reminder.SourceProvider ??= "Gmail";
 
-            if (string.IsNullOrWhiteSpace(reminder.SourceId))
-                throw new ArgumentException("Email reminder requires SourceId (Gmail MessageId).");
+            if (string.IsNullOrWhiteSpace(reminder.SourceId) && string.IsNullOrWhiteSpace(reminder.CalendarEventId))
+                throw new ArgumentException("Email reminder requires SourceId or CalendarEventId.");
 
-            //  Dedupe: do not create if already exists
-            var alreadyExists = await ExistsEmailReminderAsync(reminder.SourceProvider, reminder.SourceId);
+            var alreadyExists = await ExistsEmailReminderAsync(
+                reminder.SourceProvider,
+                reminder.SourceId ?? "",
+                reminder.CalendarEventId);
+
             if (alreadyExists)
                 return null;
 
@@ -72,32 +79,34 @@ namespace SmartAssistant.Api.Services
 
             reminder.Completed = false;
 
-            // Keep DB storage in UTC
+            // Email automation time is already expected in UTC or offset-aware time.
+            // Normalize safely to UTC.
             reminder.ReminderTime = reminder.ReminderTime.ToUniversalTime();
 
             _context.Reminder.Add(reminder);
-
-            // In rare race condition, DB unique index may still throw; you can catch if you want.
             await _context.SaveChangesAsync();
 
             return reminder;
         }
 
-        public async Task<bool> ExistsEmailReminderAsync(string sourceProvider, string sourceId)
+        public async Task<bool> ExistsEmailReminderAsync(string sourceProvider, string sourceId, string? calendarEventId = null)
         {
-            if (string.IsNullOrWhiteSpace(sourceProvider) || string.IsNullOrWhiteSpace(sourceId))
+            if (string.IsNullOrWhiteSpace(sourceProvider))
                 return false;
 
-            return await _context.Reminder.AnyAsync(r =>
-                r.Type == ReminderType.Email &&
-                r.SourceProvider == sourceProvider &&
-                r.SourceId == sourceId);
+            return await _context.Reminder.AnyAsync(reminderItem =>
+                reminderItem.Type == ReminderType.Email &&
+                reminderItem.SourceProvider == sourceProvider &&
+                (
+                    (!string.IsNullOrWhiteSpace(sourceId) && reminderItem.SourceId == sourceId) ||
+                    (!string.IsNullOrWhiteSpace(calendarEventId) && reminderItem.CalendarEventId == calendarEventId)
+                ));
         }
 
         public async Task<IEnumerable<Reminder>> GetAllAsync()
         {
             return await _context.Reminder
-                .OrderByDescending(r => r.CreatedOn)
+                .OrderByDescending(reminderItem => reminderItem.CreatedOn)
                 .ToListAsync();
         }
 

@@ -194,10 +194,10 @@ D:\Anas FYP\SmartAssistant.Api\obj\Debug\net9.0\staticwebassets.build.json
 D:\Anas FYP\SmartAssistant.Api\obj\Debug\net9.0\staticwebassets.build.json.cache
 D:\Anas FYP\SmartAssistant.Api\obj\Debug\net9.0\staticwebassets.development.json
 D:\Anas FYP\SmartAssistant.Api\obj\Debug\net9.0\staticwebassets.build.endpoints.json
+D:\Anas FYP\SmartAssistant.Api\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
 D:\Anas FYP\SmartAssistant.Api\obj\Debug\net9.0\SmartAss.E80D8228.Up2Date
 D:\Anas FYP\SmartAssistant.Api\obj\Debug\net9.0\SmartAssistant.Api.dll
 D:\Anas FYP\SmartAssistant.Api\obj\Debug\net9.0\refint\SmartAssistant.Api.dll
 D:\Anas FYP\SmartAssistant.Api\obj\Debug\net9.0\SmartAssistant.Api.pdb
 D:\Anas FYP\SmartAssistant.Api\obj\Debug\net9.0\SmartAssistant.Api.genruntimeconfig.cache
 D:\Anas FYP\SmartAssistant.Api\obj\Debug\net9.0\ref\SmartAssistant.Api.dll
-D:\Anas FYP\SmartAssistant.Api\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt

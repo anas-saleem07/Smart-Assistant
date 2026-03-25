@@ -1,0 +1,47 @@
+﻿@* @page "/"
+@inject HttpClient Http
+@inject NavigationManager Navigation
+@using System.Net.Http.Json
+
+<div class="startup-wrap">
+    <div class="startup-card">
+        <div class="startup-title">Starting SmartAssistant</div>
+        <div class="startup-subtitle">Checking Gmail connection...</div>
+    </div>
+</div>
+
+@code {
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(8));
+
+            var status = await Http.GetFromJsonAsync<GoogleConnectionStatusModel>(
+                "api/google-oauth/status",
+                cts.Token);
+
+            if (status?.IsConnected == true)
+            {
+                Navigation.NavigateTo("/reminders", true);
+                return;
+            }
+
+            Navigation.NavigateTo("/google-auth", true);
+        }
+        catch
+        {
+            Navigation.NavigateTo("/google-auth", true);
+        }
+    }
+
+    public sealed class GoogleConnectionStatusModel
+    {
+        public bool IsConnected { get; set; }
+        public bool NeedsReconnect { get; set; }
+        public string Provider { get; set; } = "Gmail";
+        public string Email { get; set; } = "";
+        public string Message { get; set; } = "";
+    }
+} *@

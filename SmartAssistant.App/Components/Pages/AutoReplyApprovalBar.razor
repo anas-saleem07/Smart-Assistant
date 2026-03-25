@@ -1,6 +1,9 @@
-﻿@using System.Net.Http.Json
+﻿@using System.Net
+@using System.Net.Http.Json
+@using System.Text.Json
 @using Microsoft.Maui.ApplicationModel
 @inject HttpClient Http
+@inject NavigationManager Nav
 @implements IDisposable
 
 @if (!string.IsNullOrWhiteSpace(statusText))
@@ -52,10 +55,18 @@
                     </div>
                 }
 
+                @if (string.IsNullOrWhiteSpace(pendingItem.ProposedLocalText))
+                {
+                    <div class="ar-line">
+                        <span class="ar-label">Requested slot</span>
+                        <span class="ar-value">Could not parse requested time. Suggested slot will be based on the next available office-hour slot.</span>
+                    </div>
+                }
+
                 <div class="ar-actions">
                     <button class="ar-btn ar-btn-yes"
                             @onclick="() => ApproveSameSlot(pendingItem)"
-                            disabled="@(activeActionId == pendingItem.Id)">
+                            disabled="@(activeActionId == pendingItem.Id || !pendingItem.ProposedStartUtc.HasValue)">
                         @(activeActionId == pendingItem.Id ? "Working..." : "Yes")
                     </button>
 
@@ -127,9 +138,27 @@
         {
             using var timeoutSource = new CancellationTokenSource(TimeSpan.FromSeconds(8));
 
-            pendingItems = await Http.GetFromJsonAsync<List<PendingAutoReplyViewModel>>(
+            var response = await Http.GetAsync(
                 "api/auto-reply/pending",
-                timeoutSource.Token) ?? new List<PendingAutoReplyViewModel>();
+                timeoutSource.Token);
+
+            if (await RedirectIfReconnectRequiredAsync(response, timeoutSource.Token))
+                return;
+
+            var responseBody = await response.Content.ReadAsStringAsync(timeoutSource.Token);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                SetStatus($"Failed to load pending approvals ({(int)response.StatusCode}): {responseBody}", true);
+                return;
+            }
+
+            pendingItems = JsonSerializer.Deserialize<List<PendingAutoReplyViewModel>>(
+                responseBody,
+                new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                }) ?? new List<PendingAutoReplyViewModel>();
         }
         catch (TaskCanceledException)
         {
@@ -146,7 +175,7 @@
         await SendSimpleActionAsync(
             item,
             $"api/auto-reply/approve-same-slot/{item.Id}",
-            "Confirmation email sent.");
+           "Original slot approved. Reminder created and acceptance email sent.");
     }
 
     private async Task SendSuggestedSlot(PendingAutoReplyViewModel item)
@@ -182,6 +211,9 @@
                 new { },
                 timeoutSource.Token);
 
+            if (await RedirectIfReconnectRequiredAsync(response, timeoutSource.Token))
+                return;
+
             var responseBody = await response.Content.ReadAsStringAsync(timeoutSource.Token);
 
             if (!response.IsSuccessStatusCode)
@@ -190,8 +222,12 @@
                 return;
             }
 
-            var result = await response.Content.ReadFromJsonAsync<ApprovalCalendarOpenResponse>(
-                cancellationToken: timeoutSource.Token);
+            var result = JsonSerializer.Deserialize<ApprovalCalendarOpenResponse>(
+                responseBody,
+                new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
 
             if (result == null || !result.Success)
             {
@@ -207,9 +243,9 @@
 
             await Launcher.Default.OpenAsync(result.EventHtmlLink);
 
-            SetStatus("Google Calendar event created and opened successfully.", false);
-
             await LoadPendingApprovals();
+            SetStatus("Google Calendar event created and opened successfully.", false);
+            await InvokeAsync(StateHasChanged);
         }
         catch (TaskCanceledException)
         {
@@ -238,16 +274,10 @@
 
             using var timeoutSource = new CancellationTokenSource(TimeSpan.FromSeconds(8));
 
-            var email = new
-            {
-                Id = item.MessageId,
-                From = item.Provider,
-                Snippet = item.RequestSummary ?? "",
-                Subject = item.Subject ?? "",
-                Provider = item.Provider
-            };
+            var response = await Http.PostAsJsonAsync(url, new { }, timeoutSource.Token);
 
-            var response = await Http.PostAsJsonAsync(url, email, timeoutSource.Token);
+            if (await RedirectIfReconnectRequiredAsync(response, timeoutSource.Token))
+                return;
 
             var responseBody = await response.Content.ReadAsStringAsync(timeoutSource.Token);
 
@@ -275,6 +305,37 @@
         }
     }
 
+    private async Task<bool> RedirectIfReconnectRequiredAsync(HttpResponseMessage response, CancellationToken cancellationToken)
+    {
+        if (response.StatusCode != HttpStatusCode.Unauthorized)
+            return false;
+
+        var raw = await response.Content.ReadAsStringAsync(cancellationToken);
+
+        ApiErrorResponse? error = null;
+
+        try
+        {
+            error = JsonSerializer.Deserialize<ApiErrorResponse>(
+                raw,
+                new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+        }
+        catch
+        {
+        }
+
+        if (error?.Code == "gmail_reconnect_required")
+        {
+            Nav.NavigateTo("/gmail-reconnect");
+            return true;
+        }
+
+        return false;
+    }
+
     private void SetStatus(string message, bool error)
     {
         statusText = message;
@@ -294,6 +355,12 @@
         refreshCancellationSource?.Dispose();
     }
 
+    public sealed class ApiErrorResponse
+    {
+        public string Code { get; set; } = "";
+        public string Message { get; set; } = "";
+    }
+
     public sealed class PendingAutoReplyViewModel
     {
         public long Id { get; set; }
@@ -308,6 +375,7 @@
         public DateTimeOffset? SuggestedStartUtc { get; set; }
         public string? ReplyLastError { get; set; }
     }
+
     public sealed class ApprovalCalendarOpenResponse
     {
         public bool Success { get; set; }
@@ -318,6 +386,7 @@
         public DateTimeOffset? EndUtc { get; set; }
     }
 }
+
 <style>
     .ar-wrap {
         margin: 0 0 18px 0;

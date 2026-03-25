@@ -1,0 +1,614 @@
+﻿@page "/gmail-reconnect"
+@inject HttpClient Http
+@inject NavigationManager Nav
+@using System.Net.Http.Json
+@using Microsoft.Maui.ApplicationModel
+
+<div class="gr-page">
+    <div class="gr-shell">
+
+        <header class="gr-header">
+            <div>
+                <h1 class="gr-title">Reconnect Gmail</h1>
+                <p class="gr-subtitle">Your Gmail connection expired or was revoked. Reconnect to continue reminders, approvals, and replies.</p>
+            </div>
+
+            <div class="gr-pill">
+                <span class="gr-pill-dot"></span>
+                <span>@(isProcessing ? "Opening..." : "Action Needed")</span>
+            </div>
+        </header>
+
+        @if (!string.IsNullOrWhiteSpace(statusText))
+        {
+            <div class="gr-status @(isError ? "gr-status-error" : "gr-status-ok")">
+                <span class="gr-status-icon">@(isError ? "!" : "OK")</span>
+                <span class="gr-status-text">@statusText</span>
+                <button class="gr-status-close" @onclick="ClearStatus">x</button>
+            </div>
+        }
+
+        @if (!string.IsNullOrWhiteSpace(debugText))
+        {
+            <div class="gr-debug">
+                <pre>@debugText</pre>
+            </div>
+        }
+
+        <section class="gr-card gr-main-card">
+            <div class="gr-icon-wrap">
+                <div class="gr-icon">G</div>
+            </div>
+
+            <div class="gr-content">
+                <h2 class="gr-card-title">Gmail needs attention</h2>
+                <p class="gr-card-text">
+                    Your saved Gmail access is no longer valid. Please reconnect your Gmail account to continue email sync and auto-reply features.
+                </p>
+
+                <div class="gr-actions">
+                    <button class="gr-btn gr-btn-primary"
+                            @onclick="ReconnectGmail"
+                            disabled="@isProcessing">
+                        @if (isProcessing)
+                        {
+                            <span class="gr-spinner"></span>
+                            <span>Opening Google...</span>
+                        }
+                        else
+                        {
+                            <span>Reconnect Gmail</span>
+                        }
+                    </button>
+
+                    <button class="gr-btn gr-btn-ghost"
+                            @onclick="RefreshStatusAsync"
+                            disabled="@isProcessing">
+                        Refresh Status
+                    </button>
+
+                    <button class="gr-btn gr-btn-ghost"
+                            @onclick="TestConnectEndpointAsync"
+                            disabled="@isProcessing">
+                        Test Connect Endpoint
+                    </button>
+
+                    <button class="gr-btn gr-btn-ghost"
+                            @onclick="GoBack"
+                            disabled="@isProcessing">
+                        Back
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </div>
+</div>
+
+@code {
+    private bool isProcessing;
+    private string statusText = "";
+    private bool isError;
+    private string debugText = "";
+
+    private void ClearStatus()
+    {
+        statusText = "";
+        isError = false;
+    }
+
+    private void SetStatus(string message, bool error)
+    {
+        statusText = message;
+        isError = error;
+    }
+
+    private void SetDebug(string message)
+    {
+        debugText = message;
+    }
+
+    private string BuildAbsoluteUrl(string relativePath)
+    {
+        return new Uri(Http.BaseAddress!, relativePath).ToString();
+    }
+
+    private async Task ReconnectGmail()
+    {
+        if (isProcessing)
+            return;
+
+        try
+        {
+            isProcessing = true;
+            ClearStatus();
+
+            var requestUrl = BuildAbsoluteUrl("api/google-oauth/connect");
+
+            SetDebug(
+                $"BaseAddress: {Http.BaseAddress}\n" +
+                $"Request: GET {requestUrl}");
+
+            using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(8));
+
+            var response = await Http.GetAsync("api/google-oauth/connect", cts.Token);
+            var body = await response.Content.ReadAsStringAsync(cts.Token);
+
+            SetDebug(
+                $"BaseAddress: {Http.BaseAddress}\n" +
+                $"Request: GET {requestUrl}\n" +
+                $"Status: {(int)response.StatusCode} {response.StatusCode}\n" +
+                $"Body: {body}");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                SetStatus($"Failed to load Google auth URL. Status={(int)response.StatusCode}.", true);
+                return;
+            }
+
+            var result = System.Text.Json.JsonSerializer.Deserialize<ConnectUrlResponse>(
+                body,
+                new System.Text.Json.JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+
+            if (result == null || string.IsNullOrWhiteSpace(result.Url))
+            {
+                SetStatus("Google auth URL was not returned by server.", true);
+                return;
+            }
+
+            await Launcher.Default.OpenAsync(result.Url);
+            SetStatus("Google login opened in browser. Complete login and return to the app.", false);
+        }
+        catch (TaskCanceledException ex)
+        {
+            SetStatus("Request timed out while opening reconnect flow.", true);
+            SetDebug(
+                $"BaseAddress: {Http.BaseAddress}\n" +
+                $"Exception: {ex.GetType().FullName}\n" +
+                $"Message: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            SetStatus($"Failed to start Gmail login: {ex.Message}", true);
+            SetDebug(BuildExceptionDebugText("api/google-oauth/connect", ex));
+        }
+        finally
+        {
+            isProcessing = false;
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private async Task RefreshStatusAsync()
+    {
+        if (isProcessing)
+            return;
+
+        try
+        {
+            isProcessing = true;
+            ClearStatus();
+
+            var requestUrl = BuildAbsoluteUrl("api/google-oauth/status");
+
+            SetDebug(
+                $"BaseAddress: {Http.BaseAddress}\n" +
+                $"Request: GET {requestUrl}");
+
+            using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(8));
+
+            var response = await Http.GetAsync("api/google-oauth/status", cts.Token);
+            var body = await response.Content.ReadAsStringAsync(cts.Token);
+
+            SetDebug(
+                $"BaseAddress: {Http.BaseAddress}\n" +
+                $"Request: GET {requestUrl}\n" +
+                $"Status: {(int)response.StatusCode} {response.StatusCode}\n" +
+                $"Body: {body}");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                SetStatus($"Failed to check Gmail status. Status={(int)response.StatusCode}.", true);
+                return;
+            }
+
+            var status = System.Text.Json.JsonSerializer.Deserialize<GoogleConnectionStatusModel>(
+                body,
+                new System.Text.Json.JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+
+            if (status?.IsConnected == true)
+            {
+                SetStatus("Gmail is connected now.", false);
+                Nav.NavigateTo("/reminders");
+                return;
+            }
+
+            SetStatus(status?.Message ?? "Gmail is still not connected.", true);
+        }
+        catch (TaskCanceledException ex)
+        {
+            SetStatus("Request timed out while checking Gmail status.", true);
+            SetDebug(
+                $"BaseAddress: {Http.BaseAddress}\n" +
+                $"Exception: {ex.GetType().FullName}\n" +
+                $"Message: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            SetStatus($"Failed to check Gmail status: {ex.Message}", true);
+            SetDebug(BuildExceptionDebugText("api/google-oauth/status", ex));
+        }
+        finally
+        {
+            isProcessing = false;
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private async Task TestConnectEndpointAsync()
+    {
+        if (isProcessing)
+            return;
+
+        try
+        {
+            isProcessing = true;
+            ClearStatus();
+
+            var requestUrl = BuildAbsoluteUrl("api/google-oauth/connect");
+
+            using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(8));
+
+            var response = await Http.GetAsync("api/google-oauth/connect", cts.Token);
+            var body = await response.Content.ReadAsStringAsync(cts.Token);
+
+            SetDebug(
+                $"BaseAddress: {Http.BaseAddress}\n" +
+                $"Request: GET {requestUrl}\n" +
+                $"Status: {(int)response.StatusCode} {response.StatusCode}\n" +
+                $"Body: {body}");
+
+            SetStatus($"Connect endpoint returned {(int)response.StatusCode}.", !response.IsSuccessStatusCode);
+        }
+        catch (Exception ex)
+        {
+            SetStatus($"Connect endpoint test failed: {ex.Message}", true);
+            SetDebug(BuildExceptionDebugText("api/google-oauth/connect", ex));
+        }
+        finally
+        {
+            isProcessing = false;
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private string BuildExceptionDebugText(string relativePath, Exception ex)
+    {
+        var requestUrl = BuildAbsoluteUrl(relativePath);
+
+        var inner = ex.InnerException != null
+            ? $"\nInner Type: {ex.InnerException.GetType().FullName}\nInner Message: {ex.InnerException.Message}"
+            : "";
+
+        return
+            $"BaseAddress: {Http.BaseAddress}\n" +
+            $"Request: GET {requestUrl}\n" +
+            $"Exception Type: {ex.GetType().FullName}\n" +
+            $"Message: {ex.Message}" +
+            inner;
+    }
+
+    private void GoBack()
+    {
+        Nav.NavigateTo("/reminders");
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+            return;
+
+        var pendingDeepLink = App.ConsumePendingDeepLink();
+
+        if (string.IsNullOrWhiteSpace(pendingDeepLink))
+            return;
+
+        if (pendingDeepLink.Contains("status=success", StringComparison.OrdinalIgnoreCase))
+        {
+            SetStatus("Gmail connected successfully.", false);
+            await RefreshStatusAsync();
+            return;
+        }
+
+        if (pendingDeepLink.Contains("status=error", StringComparison.OrdinalIgnoreCase))
+        {
+            var message = ExtractQueryValue(pendingDeepLink, "message");
+
+            SetStatus(
+                string.IsNullOrWhiteSpace(message)
+                    ? "Google sign-in failed or was cancelled."
+                    : $"Google sign-in failed: {message}",
+                true);
+
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private static string ExtractQueryValue(string url, string key)
+    {
+        var questionMarkIndex = url.IndexOf('?');
+        if (questionMarkIndex < 0)
+            return "";
+
+        var query = url.Substring(questionMarkIndex + 1);
+        var parts = query.Split('&', StringSplitOptions.RemoveEmptyEntries);
+
+        foreach (var part in parts)
+        {
+            var pair = part.Split('=', 2);
+
+            if (pair.Length == 0)
+                continue;
+
+            var currentKey = Uri.UnescapeDataString(pair[0]);
+
+            if (!currentKey.Equals(key, StringComparison.OrdinalIgnoreCase))
+                continue;
+
+            return pair.Length > 1
+                ? Uri.UnescapeDataString(pair[1])
+                : "";
+        }
+
+        return "";
+    }
+
+    private sealed class ConnectUrlResponse
+    {
+        public string Url { get; set; } = "";
+    }
+
+    private sealed class GoogleConnectionStatusModel
+    {
+        public bool IsConnected { get; set; }
+        public bool NeedsReconnect { get; set; }
+        public string Provider { get; set; } = "Gmail";
+        public string Email { get; set; } = "";
+        public string Message { get; set; } = "";
+    }
+}
+
+<style>
+    .gr-page {
+        min-height: 100vh;
+        background: radial-gradient(1200px 800px at 20% 10%, rgba(120, 90, 255, 0.18), transparent 55%), radial-gradient(1000px 700px at 80% 30%, rgba(0, 200, 255, 0.10), transparent 55%), linear-gradient(180deg, #0b0f1a 0%, #070a12 100%);
+        color: #e8ecff;
+        padding: 28px;
+    }
+
+    .gr-shell {
+        max-width: 980px;
+        margin: 0 auto;
+    }
+
+    .gr-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 18px;
+    }
+
+    .gr-title {
+        font-size: 34px;
+        margin: 0;
+        letter-spacing: 0.3px;
+    }
+
+    .gr-subtitle {
+        margin: 6px 0 0;
+        color: rgba(232, 236, 255, 0.70);
+    }
+
+    .gr-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 12px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.10);
+        color: rgba(232, 236, 255, 0.85);
+        user-select: none;
+        white-space: nowrap;
+    }
+
+    .gr-pill-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #7c5cff;
+        box-shadow: 0 0 12px rgba(124, 92, 255, 0.85);
+    }
+
+    .gr-card {
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.10);
+        border-radius: 16px;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.28);
+        backdrop-filter: blur(10px);
+    }
+
+    .gr-main-card {
+        padding: 24px;
+        display: flex;
+        gap: 18px;
+        align-items: flex-start;
+    }
+
+    .gr-icon-wrap {
+        flex-shrink: 0;
+    }
+
+    .gr-icon {
+        width: 64px;
+        height: 64px;
+        border-radius: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(124, 92, 255, 0.14);
+        border: 1px solid rgba(124, 92, 255, 0.26);
+        font-size: 28px;
+        font-weight: 800;
+    }
+
+    .gr-content {
+        flex: 1;
+    }
+
+    .gr-card-title {
+        margin: 0 0 10px 0;
+        font-size: 24px;
+        color: rgba(232, 236, 255, 0.96);
+    }
+
+    .gr-card-text {
+        margin: 0 0 18px 0;
+        color: rgba(232, 236, 255, 0.76);
+        line-height: 1.6;
+    }
+
+    .gr-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .gr-btn {
+        border-radius: 12px;
+        padding: 12px 14px;
+        border: 1px solid rgba(255,255,255,0.12);
+        cursor: pointer;
+        background: rgba(255,255,255,0.06);
+        color: rgba(232, 236, 255, 0.90);
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        user-select: none;
+        white-space: nowrap;
+    }
+
+        .gr-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+    .gr-btn-primary {
+        background: linear-gradient(135deg, rgba(124, 92, 255, 0.95), rgba(0, 200, 255, 0.75));
+        border: 1px solid rgba(124, 92, 255, 0.30);
+        color: #0b0f1a;
+        font-weight: 700;
+    }
+
+        .gr-btn-primary:hover:enabled {
+            filter: brightness(1.05);
+        }
+
+    .gr-btn-ghost:hover:enabled {
+        background: rgba(255,255,255,0.10);
+    }
+
+    .gr-status {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 14px;
+        margin-bottom: 14px;
+        border-radius: 14px;
+    }
+
+    .gr-status-ok {
+        border: 1px solid rgba(0, 255, 163, 0.25);
+        background: rgba(0, 255, 163, 0.08);
+    }
+
+    .gr-status-error {
+        border: 1px solid rgba(255, 77, 77, 0.30);
+        background: rgba(255, 77, 77, 0.10);
+    }
+
+    .gr-status-icon {
+        width: 22px;
+        height: 22px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        background: rgba(0,0,0,0.18);
+        font-weight: 700;
+    }
+
+    .gr-status-text {
+        flex: 1;
+        color: rgba(232, 236, 255, 0.92);
+    }
+
+    .gr-status-close {
+        border: none;
+        background: transparent;
+        color: rgba(232, 236, 255, 0.70);
+        font-size: 18px;
+        cursor: pointer;
+    }
+
+    .gr-debug {
+        margin-bottom: 14px;
+        padding: 12px 14px;
+        border-radius: 14px;
+        border: 1px solid rgba(0, 200, 255, 0.25);
+        background: rgba(0, 200, 255, 0.08);
+        color: rgba(232, 236, 255, 0.92);
+        overflow-x: auto;
+    }
+
+        .gr-debug pre {
+            margin: 0;
+            white-space: pre-wrap;
+            word-break: break-word;
+            font-family: Consolas, monospace;
+            font-size: 12px;
+        }
+
+    .gr-spinner {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        border: 2px solid rgba(0,0,0,0.25);
+        border-top-color: rgba(0,0,0,0.75);
+        display: inline-block;
+        animation: grspin 0.8s linear infinite;
+    }
+
+    @@keyframes grspin {
+        from {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    @@media (max-width: 860px) {
+        .gr-main-card {
+            flex-direction: column;
+        }
+    }
+</style>
