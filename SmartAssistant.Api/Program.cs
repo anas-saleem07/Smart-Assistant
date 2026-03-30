@@ -9,6 +9,7 @@ using SmartAssistant.Api.Services.Automation;
 using SmartAssistant.Api.Services.AutoReply;
 using SmartAssistant.Api.Services.Email;
 using SmartAssistant.Api.Services.Google;
+using SmartAssistant.Api.Services.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -74,6 +75,7 @@ builder.Services.AddScoped<ReminderAutomationJob>();
 builder.Services.AddScoped<IAutoReplyService, AutoReplyService>();
 builder.Services.AddScoped<IOAuthTokenHelper, OAuthTokenHelper>();
 builder.Services.AddScoped<IGoogleConnectionService, GoogleConnectionService>();
+builder.Services.AddScoped<IReminderSettingService, ReminderSettingsService>();
 
 builder.Services.AddScoped<SmartAssistant.Api.Services.Google.IOAuthTokenHelper,
     SmartAssistant.Api.Services.Google.OAuthTokenHelper>();

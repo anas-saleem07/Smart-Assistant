@@ -1,0 +1,663 @@
+﻿@page "/"
+@page "/gmail"
+@layout SmartAssistant.App.Components.Layout.AuthLayout
+@inject HttpClient Http
+@inject NavigationManager Navigation
+@using System.Net.Http.Json
+@using Microsoft.Maui.ApplicationModel
+
+<div class="gm-page">
+    <div class="gm-shell">
+        @if (isLoading)
+        {
+            <section class="gm-card gm-loading-card">
+                <div class="gm-spinner"></div>
+                <h2 class="gm-loading-title">Checking Gmail connection</h2>
+                <p class="gm-loading-text">Please wait while we verify your saved Google access.</p>
+            </section>
+        }
+        else
+        {
+            <section class="gm-card gm-hero">
+                <div class="gm-badge">Google workspace access</div>
+
+                <div class="gm-hero-grid">
+                    <div class="gm-hero-left">
+                        <div class="gm-logo-wrap">
+                            <div class="gm-logo">G</div>
+                        </div>
+
+                        <h1 class="gm-title">Connect Gmail to continue</h1>
+
+                        <p class="gm-subtitle">
+                            Sign in with Gmail to enable reminder automation, email processing,
+                            Google Calendar scheduling, and future account-based features.
+                        </p>
+
+                        @if (!string.IsNullOrWhiteSpace(statusText))
+                        {
+                            <div class="gm-status @(isError ? "gm-status-error" : "gm-status-ok")">
+                                <span class="gm-status-dot"></span>
+                                <span class="gm-status-message">@statusText</span>
+                                <button class="gm-status-close" @onclick="ClearStatus" type="button">x</button>
+                            </div>
+                        }
+
+                        <div class="gm-actions">
+                            <button class="gm-btn gm-btn-primary"
+                                    @onclick="ConnectGoogleAsync"
+                                    disabled="@isBusy">
+                                @if (isBusy)
+                                {
+                                    <span class="gm-spinner gm-btn-spinner"></span>
+                                    <span>Opening...</span>
+                                }
+                                else
+                                {
+                                    <span>Sign in with Gmail</span>
+                                }
+                            </button>
+
+                            <button class="gm-btn gm-btn-secondary"
+                                    @onclick="LoadStatusAsync"
+                                    disabled="@isBusy">
+                                Refresh Status
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="gm-hero-right">
+                        <div class="gm-info-card">
+                            <div class="gm-info-title">What gets saved</div>
+                            <div class="gm-info-text">
+                                Your app stores the connected Gmail account details needed to maintain access,
+                                including the saved email account record and connection state.
+                            </div>
+                        </div>
+
+                        <div class="gm-info-card">
+                            <div class="gm-info-title">Current status</div>
+                            <div class="gm-info-list">
+                                <div class="gm-info-row">
+                                    <span>Provider</span>
+                                    <strong>@(authStatus?.Provider ?? "Gmail")</strong>
+                                </div>
+                                <div class="gm-info-row">
+                                    <span>Connection</span>
+                                    <strong>@GetConnectionLabel()</strong>
+                                </div>
+                                <div class="gm-info-row">
+                                    <span>Email</span>
+                                    <strong>@(string.IsNullOrWhiteSpace(authStatus?.Email) ? "-" : authStatus!.Email)</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="gm-feature-list">
+                            <div class="gm-feature-item">
+                                <span class="gm-feature-dot"></span>
+                                <span>Gmail reading and sending</span>
+                            </div>
+                            <div class="gm-feature-item">
+                                <span class="gm-feature-dot"></span>
+                                <span>Google Calendar event support</span>
+                            </div>
+                            <div class="gm-feature-item">
+                                <span class="gm-feature-dot"></span>
+                                <span>Reminder and auto-reply flows</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        }
+    </div>
+</div>
+
+@code {
+    private const string DashboardRoute = "/reminders";
+
+    private bool isLoading = true;
+    private bool isBusy;
+    private bool isError;
+    private string statusText = "";
+    private GoogleConnectionStatusModel? authStatus;
+
+    protected override async Task OnInitializedAsync()
+    {
+        ReadQueryState();
+        await LoadStatusAsync();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+            return;
+
+        var pendingDeepLink = App.ConsumePendingDeepLink();
+
+        if (string.IsNullOrWhiteSpace(pendingDeepLink))
+            return;
+
+        if (pendingDeepLink.Contains("status=success", StringComparison.OrdinalIgnoreCase))
+        {
+            SetStatus("Gmail connected successfully.", false);
+            await LoadStatusAsync();
+            return;
+        }
+
+        if (pendingDeepLink.Contains("status=error", StringComparison.OrdinalIgnoreCase))
+        {
+            var message = ExtractQueryValue(pendingDeepLink, "message");
+
+            SetStatus(
+                string.IsNullOrWhiteSpace(message)
+                    ? "Google sign-in failed or was cancelled."
+                    : "Google sign-in failed: " + message,
+                true);
+
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private async Task LoadStatusAsync()
+    {
+        try
+        {
+            isLoading = true;
+
+            using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(8));
+
+            var response = await Http.GetAsync("api/google-oauth/status", cts.Token);
+            var body = await response.Content.ReadAsStringAsync(cts.Token);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                SetStatus("Failed to check Gmail status. Status=" + (int)response.StatusCode + ".", true);
+                authStatus = null;
+                return;
+            }
+
+            authStatus = System.Text.Json.JsonSerializer.Deserialize<GoogleConnectionStatusModel>(
+                body,
+                new System.Text.Json.JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+
+            if (authStatus?.IsConnected == true && authStatus.NeedsReconnect == false)
+            {
+                Navigation.NavigateTo(DashboardRoute, true);
+                return;
+            }
+
+            if (authStatus?.NeedsReconnect == true)
+            {
+                SetStatus(
+                    string.IsNullOrWhiteSpace(authStatus.Message)
+                        ? "Gmail needs reconnect. Please login again."
+                        : authStatus.Message,
+                    true);
+            }
+        }
+        catch (TaskCanceledException)
+        {
+            SetStatus("Request timed out while checking Gmail status.", true);
+            authStatus = null;
+        }
+        catch (Exception ex)
+        {
+            SetStatus("Failed to check Gmail status: " + ex.Message, true);
+            authStatus = null;
+        }
+        finally
+        {
+            isLoading = false;
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private async Task ConnectGoogleAsync()
+    {
+        if (isBusy)
+            return;
+
+        try
+        {
+            isBusy = true;
+            ClearStatus();
+
+            using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(8));
+
+            var platform = DeviceInfo.Platform == DevicePlatform.Android
+                ? "android"
+                : "windows";
+
+            var result = await Http.GetFromJsonAsync<GoogleConnectResponse>(
+                "api/google-oauth/connect?platform=" + platform,
+                cts.Token);
+
+            if (result == null || string.IsNullOrWhiteSpace(result.Url))
+            {
+                SetStatus("Google auth URL was not returned.", true);
+                return;
+            }
+
+            await Launcher.Default.OpenAsync(result.Url);
+            SetStatus("Google login opened in browser. Complete login and return to the app.", false);
+        }
+        catch (TaskCanceledException)
+        {
+            SetStatus("Request timed out while starting Gmail login.", true);
+        }
+        catch (Exception ex)
+        {
+            SetStatus("Failed to start Gmail login: " + ex.Message, true);
+        }
+        finally
+        {
+            isBusy = false;
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private string GetConnectionLabel()
+    {
+        if (authStatus == null)
+            return "Unknown";
+
+        if (authStatus.IsConnected && !authStatus.NeedsReconnect)
+            return "Connected";
+
+        if (authStatus.NeedsReconnect)
+            return "Reconnect Required";
+
+        return "Not Connected";
+    }
+
+    private void ReadQueryState()
+    {
+        var absoluteUri = Navigation.ToAbsoluteUri(Navigation.Uri);
+        var queryValues = ParseQueryString(absoluteUri.Query);
+
+        if (queryValues.TryGetValue("connected", out var connectedValue) &&
+            connectedValue == "1")
+        {
+            SetStatus("Gmail connected successfully.", false);
+        }
+
+        if (queryValues.TryGetValue("error", out var errorValue) &&
+            !string.IsNullOrWhiteSpace(errorValue))
+        {
+            SetStatus(errorValue, true);
+        }
+    }
+
+    private void ClearStatus()
+    {
+        statusText = "";
+        isError = false;
+    }
+
+    private void SetStatus(string message, bool error)
+    {
+        statusText = message;
+        isError = error;
+    }
+
+    private static Dictionary<string, string> ParseQueryString(string query)
+    {
+        var result = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
+        if (string.IsNullOrWhiteSpace(query))
+            return result;
+
+        var trimmedQuery = query.StartsWith("?")
+            ? query.Substring(1)
+            : query;
+
+        var pairs = trimmedQuery.Split('&', StringSplitOptions.RemoveEmptyEntries);
+
+        foreach (var pair in pairs)
+        {
+            var parts = pair.Split('=', 2);
+
+            var key = Uri.UnescapeDataString(parts[0]);
+            var value = parts.Length > 1
+                ? Uri.UnescapeDataString(parts[1])
+                : "";
+
+            if (!string.IsNullOrWhiteSpace(key))
+                result[key] = value;
+        }
+
+        return result;
+    }
+
+    private static string ExtractQueryValue(string url, string key)
+    {
+        var questionMarkIndex = url.IndexOf('?');
+        if (questionMarkIndex < 0)
+            return "";
+
+        var query = url.Substring(questionMarkIndex + 1);
+        var parts = query.Split('&', StringSplitOptions.RemoveEmptyEntries);
+
+        foreach (var part in parts)
+        {
+            var pair = part.Split('=', 2);
+
+            if (pair.Length == 0)
+                continue;
+
+            var currentKey = Uri.UnescapeDataString(pair[0]);
+
+            if (!currentKey.Equals(key, StringComparison.OrdinalIgnoreCase))
+                continue;
+
+            return pair.Length > 1
+                ? Uri.UnescapeDataString(pair[1])
+                : "";
+        }
+
+        return "";
+    }
+
+    private sealed class GoogleConnectionStatusModel
+    {
+        public bool IsConnected { get; set; }
+        public bool NeedsReconnect { get; set; }
+        public string Provider { get; set; } = "Gmail";
+        public string Email { get; set; } = "";
+        public string Message { get; set; } = "";
+    }
+
+    private sealed class GoogleConnectResponse
+    {
+        public string Url { get; set; } = "";
+    }
+}
+
+<style>
+    .gm-page {
+        color: #e8ecff;
+    }
+
+    .gm-shell {
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+
+    .gm-card {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.09);
+        border-radius: 24px;
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.24);
+        backdrop-filter: blur(12px);
+    }
+
+    .gm-loading-card {
+        min-height: 320px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        text-align: center;
+        padding: 32px;
+    }
+
+    .gm-loading-title {
+        margin: 0;
+        font-size: 24px;
+        font-weight: 800;
+        color: rgba(245, 247, 255, 0.98);
+    }
+
+    .gm-loading-text {
+        margin: 0;
+        color: rgba(232, 236, 255, 0.70);
+    }
+
+    .gm-hero {
+        padding: 30px;
+    }
+
+    .gm-badge {
+        display: inline-flex;
+        padding: 8px 12px;
+        border-radius: 999px;
+        background: rgba(124, 92, 255, 0.14);
+        border: 1px solid rgba(124, 92, 255, 0.24);
+        color: rgba(232, 236, 255, 0.92);
+        font-size: 12px;
+        margin-bottom: 18px;
+    }
+
+    .gm-hero-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.95fr);
+        gap: 22px;
+        align-items: stretch;
+    }
+
+    .gm-hero-left {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .gm-logo-wrap {
+        margin-bottom: 18px;
+    }
+
+    .gm-logo {
+        width: 72px;
+        height: 72px;
+        border-radius: 22px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, rgba(220, 70, 70, 0.95), rgba(255, 140, 60, 0.90));
+        color: #ffffff;
+        font-size: 30px;
+        font-weight: 800;
+        box-shadow: 0 18px 30px rgba(0, 0, 0, 0.20);
+    }
+
+    .gm-title {
+        margin: 0;
+        font-size: 40px;
+        line-height: 1.08;
+        font-weight: 800;
+        color: rgba(245, 247, 255, 0.98);
+    }
+
+    .gm-subtitle {
+        margin: 14px 0 0;
+        max-width: 680px;
+        color: rgba(232, 236, 255, 0.72);
+        line-height: 1.75;
+        font-size: 16px;
+    }
+
+    .gm-status {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 13px 14px;
+        margin-top: 18px;
+        border-radius: 14px;
+    }
+
+    .gm-status-ok {
+        background: rgba(0, 255, 163, 0.08);
+        border: 1px solid rgba(0, 255, 163, 0.22);
+    }
+
+    .gm-status-error {
+        background: rgba(255, 77, 77, 0.10);
+        border: 1px solid rgba(255, 77, 77, 0.22);
+    }
+
+    .gm-status-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: currentColor;
+        flex-shrink: 0;
+    }
+
+    .gm-status-message {
+        flex: 1;
+    }
+
+    .gm-status-close {
+        border: none;
+        background: transparent;
+        color: rgba(232, 236, 255, 0.72);
+        cursor: pointer;
+        font-size: 18px;
+    }
+
+    .gm-actions {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-top: 22px;
+    }
+
+    .gm-btn {
+        min-height: 46px;
+        padding: 12px 16px;
+        border-radius: 14px;
+        border: 1px solid rgba(255, 255, 255, 0.10);
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        white-space: nowrap;
+    }
+
+        .gm-btn:disabled {
+            opacity: 0.65;
+            cursor: not-allowed;
+        }
+
+    .gm-btn-primary {
+        background: linear-gradient(135deg, rgba(124, 92, 255, 0.92), rgba(0, 200, 255, 0.74));
+        border-color: rgba(124, 92, 255, 0.24);
+        color: #0b0f1a;
+        font-weight: 800;
+    }
+
+    .gm-btn-secondary {
+        background: rgba(255, 255, 255, 0.05);
+        color: rgba(232, 236, 255, 0.92);
+    }
+
+    .gm-hero-right {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+    }
+
+    .gm-info-card {
+        padding: 18px;
+        border-radius: 18px;
+        background: rgba(0, 0, 0, 0.20);
+        border: 1px solid rgba(255, 255, 255, 0.07);
+    }
+
+    .gm-info-title {
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.7px;
+        color: rgba(232, 236, 255, 0.58);
+        margin-bottom: 10px;
+    }
+
+    .gm-info-text {
+        color: rgba(232, 236, 255, 0.78);
+        line-height: 1.65;
+    }
+
+    .gm-info-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .gm-info-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        color: rgba(232, 236, 255, 0.76);
+    }
+
+        .gm-info-row strong {
+            color: rgba(245, 247, 255, 0.98);
+            text-align: right;
+            word-break: break-word;
+        }
+
+    .gm-feature-list {
+        padding: 18px;
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.07);
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .gm-feature-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: rgba(232, 236, 255, 0.86);
+    }
+
+    .gm-feature-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #7c5cff, #00c8ff);
+        flex-shrink: 0;
+    }
+
+    .gm-spinner {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        border: 2px solid rgba(255, 255, 255, 0.25);
+        border-top-color: rgba(255, 255, 255, 0.90);
+        animation: gmSpin 0.8s linear infinite;
+    }
+
+    .gm-btn-spinner {
+        width: 14px;
+        height: 14px;
+    }
+
+    @@keyframes gmSpin {
+        from {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    @@media (max-width: 920px) {
+        .gm-hero-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .gm-title {
+            font-size: 32px;
+        }
+    }
+</style>

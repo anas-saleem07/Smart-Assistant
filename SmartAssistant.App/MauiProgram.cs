@@ -52,9 +52,9 @@ namespace SmartAssistant.App
             builder.Services.AddMauiBlazorWebView();
 
             var baseAddress =
-                DeviceInfo.Platform == DevicePlatform.Android
-                    ? "http://10.0.2.2:5256/"
-                    : "https://localhost:7151/";
+    DeviceInfo.Platform == DevicePlatform.Android
+        ? "http://10.0.2.2:5256/"
+        : "https://localhost:7151/";
 
             builder.Services.AddScoped(_ => new HttpClient
             {

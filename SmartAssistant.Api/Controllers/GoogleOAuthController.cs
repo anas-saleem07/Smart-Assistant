@@ -2,6 +2,7 @@
 using SmartAssistant.Api.Models;
 using SmartAssistant.Api.Services.Email;
 using SmartAssistant.Api.Services.Google;
+using System.Net;
 
 namespace SmartAssistant.Api.Controllers
 {
@@ -26,10 +27,9 @@ namespace SmartAssistant.Api.Controllers
         [HttpGet("connect")]
         public IActionResult Connect([FromQuery] string? platform = "windows")
         {
+            Console.WriteLine("CALLBACK ENDPOINT HIT");
             var normalizedPlatform = NormalizePlatform(platform);
-
-            // Keep platform inside state so callback knows which redirect URI was used.
-            var state = $"{normalizedPlatform}:{Guid.NewGuid():N}";
+            var state = normalizedPlatform + ":" + Guid.NewGuid().ToString("N");
 
             var url = _emailOAuthService.GenerateGoogleAuthUrl(state, normalizedPlatform);
 
@@ -44,6 +44,8 @@ namespace SmartAssistant.Api.Controllers
         {
             try
             {
+
+                Console.WriteLine("STATUS ENDPOINT HIT");
                 var status = await _googleConnectionService.GetStatusAsync(ct);
                 return Ok(status);
             }
@@ -86,18 +88,37 @@ namespace SmartAssistant.Api.Controllers
             try
             {
                 if (string.IsNullOrWhiteSpace(code))
-                    return Redirect(AppMissingCodeDeepLink);
+                {
+                    return Content(
+                        BuildDeepLinkHtml(
+                            AppMissingCodeDeepLink,
+                            "Google sign-in failed",
+                            "Missing authorization code. Tap the button below to return to the app."),
+                        "text/html");
+                }
 
                 var platform = ExtractPlatformFromState(state);
 
                 await _emailOAuthService.HandleGoogleCallbackAsync(code, platform, ct);
 
-                return Redirect(AppSuccessDeepLink);
+                return Content(
+                    BuildDeepLinkHtml(
+                        AppSuccessDeepLink,
+                        "Gmail connected",
+                        "Your Gmail account is connected. Tap the button below if the app does not open automatically."),
+                    "text/html");
             }
             catch (Exception ex)
             {
                 var safeMessage = Uri.EscapeDataString(ex.Message);
-                return Redirect($"smartassistant://google-auth-complete?status=error&message={safeMessage}");
+                var errorDeepLink = "smartassistant://google-auth-complete?status=error&message=" + safeMessage;
+
+                return Content(
+                    BuildDeepLinkHtml(
+                        errorDeepLink,
+                        "Google sign-in failed",
+                        "Something went wrong. Tap the button below to return to the app."),
+                    "text/html");
             }
         }
 
@@ -107,18 +128,37 @@ namespace SmartAssistant.Api.Controllers
             try
             {
                 if (string.IsNullOrWhiteSpace(code))
-                    return Redirect(AppMissingCodeDeepLink);
+                {
+                    return Content(
+                        BuildDeepLinkHtml(
+                            AppMissingCodeDeepLink,
+                            "Google sign-in failed",
+                            "Missing authorization code. Tap the button below to return to the app."),
+                        "text/html");
+                }
 
                 var platform = ExtractPlatformFromState(state);
 
                 await _emailOAuthService.HandleGoogleCallbackAsync(code, platform, ct);
 
-                return Redirect(AppSuccessDeepLink);
+                return Content(
+                    BuildDeepLinkHtml(
+                        AppSuccessDeepLink,
+                        "Gmail connected",
+                        "Your Gmail account is connected. Tap the button below if the app does not open automatically."),
+                    "text/html");
             }
             catch (Exception ex)
             {
                 var safeMessage = Uri.EscapeDataString(ex.Message);
-                return Redirect($"smartassistant://google-auth-complete?status=error&message={safeMessage}");
+                var errorDeepLink = "smartassistant://google-auth-complete?status=error&message=" + safeMessage;
+
+                return Content(
+                    BuildDeepLinkHtml(
+                        errorDeepLink,
+                        "Google sign-in failed",
+                        "Something went wrong. Tap the button below to return to the app."),
+                    "text/html");
             }
         }
 
@@ -140,6 +180,41 @@ namespace SmartAssistant.Api.Controllers
                 return "windows";
 
             return NormalizePlatform(parts[0]);
+        }
+
+        private static string BuildDeepLinkHtml(string appDeepLink, string title, string message)
+        {
+            var safeTitle = WebUtility.HtmlEncode(title);
+            var safeMessage = WebUtility.HtmlEncode(message);
+            var safeDeepLink = WebUtility.HtmlEncode(appDeepLink);
+
+            return "<!DOCTYPE html>" +
+                   "<html>" +
+                   "<head>" +
+                   "<meta charset=\"utf-8\" />" +
+                   "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />" +
+                   "<title>" + safeTitle + "</title>" +
+                   "</head>" +
+                   "<body style=\"font-family: Arial, sans-serif; padding: 32px; background: #0b0f1a; color: #e8ecff;\">" +
+                   "<div style=\"max-width: 520px; margin: 0 auto;\">" +
+                   "<h2>" + safeTitle + "</h2>" +
+                   "<p>" + safeMessage + "</p>" +
+                   "<p><a href=\"" + safeDeepLink + "\" " +
+                   "style=\"display:inline-block; padding:12px 16px; border-radius:12px; text-decoration:none; font-weight:700; background:#7c5cff; color:#ffffff;\">" +
+                   "Return to SmartAssistant</a></p>" +
+                   "</div>" +
+                   "<script>" +
+                     "setTimeout(function(){ window.location.href = '" + JavaScriptStringEncode(appDeepLink) + "'; },     250);"  +
+                     "</script>" +
+                   "</body>" +
+                   "</html>";
+        }
+
+        private static string JavaScriptStringEncode(string value)
+        {
+            return value
+                .Replace("\\", "\\\\")
+                .Replace("'", "\\'");
         }
     }
 }

@@ -104,15 +104,29 @@
 
     protected override async Task OnInitializedAsync()
     {
+        App.PendingDeepLinkChanged += HandlePendingDeepLinkChanged;
         ReadQueryState();
         await LoadStatusAsync();
     }
 
+    public void Dispose()
+    {
+        App.PendingDeepLinkChanged -= HandlePendingDeepLinkChanged;
+    }
+
+    private void HandlePendingDeepLinkChanged()
+    {
+        _ = InvokeAsync(ProcessPendingDeepLinkAsync);
+    }
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (!firstRender)
-            return;
+        if (firstRender)
+            await ProcessPendingDeepLinkAsync();
+    }
 
+    private async Task ProcessPendingDeepLinkAsync()
+    {
         var pendingDeepLink = App.ConsumePendingDeepLink();
 
         if (string.IsNullOrWhiteSpace(pendingDeepLink))

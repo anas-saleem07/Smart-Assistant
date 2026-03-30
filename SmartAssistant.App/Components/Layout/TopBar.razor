@@ -11,7 +11,7 @@
     @if (isMenuOpen)
     {
         <div class="sa-top-actions-menu">
-            <button class="sa-top-actions-item" type="button" disabled>
+            <button class="sa-top-actions-item" type="button" @onclick="OpenSettings">
                 <span class="sa-top-actions-item-icon sa-top-actions-settings-icon"></span>
                 <span>Settings</span>
             </button>
@@ -66,6 +66,11 @@
             isMenuOpen = false;
             Navigation.NavigateTo("/google-auth", true);
         }
+    }
+    private void OpenSettings()
+    {
+        isMenuOpen = false;
+        Navigation.NavigateTo("/settings/automation");
     }
 }
 

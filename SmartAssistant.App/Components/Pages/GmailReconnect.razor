@@ -78,6 +78,21 @@
     private string statusText = "";
     private bool isError;
 
+    protected override void OnInitialized()
+    {
+        App.PendingDeepLinkChanged += HandlePendingDeepLinkChanged;
+    }
+
+    public void Dispose()
+    {
+        App.PendingDeepLinkChanged -= HandlePendingDeepLinkChanged;
+    }
+
+    private void HandlePendingDeepLinkChanged()
+    {
+        _ = InvokeAsync(ProcessPendingDeepLinkAsync);
+    }
+
     private void ClearStatus()
     {
         statusText = "";
@@ -102,7 +117,11 @@
 
             using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(8));
 
-            var response = await Http.GetAsync("api/google-oauth/connect", cts.Token);
+            var platform = DeviceInfo.Platform == DevicePlatform.Android
+                ? "android"
+                : "windows";
+
+            var response = await Http.GetAsync($"api/google-oauth/connect?platform={platform}", cts.Token);
             var body = await response.Content.ReadAsStringAsync(cts.Token);
 
             if (!response.IsSuccessStatusCode)
@@ -201,9 +220,12 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (!firstRender)
-            return;
+        if (firstRender)
+            await ProcessPendingDeepLinkAsync();
+    }
 
+    private async Task ProcessPendingDeepLinkAsync()
+    {
         var pendingDeepLink = App.ConsumePendingDeepLink();
 
         if (string.IsNullOrWhiteSpace(pendingDeepLink))

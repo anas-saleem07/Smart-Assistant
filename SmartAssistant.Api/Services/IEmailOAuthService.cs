@@ -26,6 +26,12 @@ public class EmailOAuthService : IEmailOAuthService
     {
         var redirectUri = GetRedirectUri(platform);
 
+        if (string.IsNullOrWhiteSpace(_options.ClientId))
+            throw new InvalidOperationException("GmailOAuth ClientId is missing.");
+
+        if (string.IsNullOrWhiteSpace(redirectUri))
+            throw new InvalidOperationException("RedirectUri is missing for platform: " + platform);
+
         var scope =
             "openid email profile " +
             "https://www.googleapis.com/auth/gmail.readonly " +
@@ -33,11 +39,11 @@ public class EmailOAuthService : IEmailOAuthService
             "https://www.googleapis.com/auth/calendar.events";
 
         return "https://accounts.google.com/o/oauth2/v2/auth" +
-               $"?client_id={Uri.EscapeDataString(_options.ClientId)}" +
-               $"&redirect_uri={Uri.EscapeDataString(redirectUri)}" +
+               "?client_id=" + Uri.EscapeDataString(_options.ClientId) +
+               "&redirect_uri=" + Uri.EscapeDataString(redirectUri) +
                "&response_type=code" +
-               $"&scope={Uri.EscapeDataString(scope)}" +
-               $"&state={Uri.EscapeDataString(state)}" +
+               "&scope=" + Uri.EscapeDataString(scope) +
+               "&state=" + Uri.EscapeDataString(state) +
                "&access_type=offline" +
                "&prompt=consent";
     }
@@ -89,10 +95,14 @@ public class EmailOAuthService : IEmailOAuthService
 
     private string GetRedirectUri(string platform)
     {
-        if (string.Equals(platform, "android", StringComparison.OrdinalIgnoreCase))
-            return _options.AndroidRedirectUri;
+        var redirectUri = string.Equals(platform, "android", StringComparison.OrdinalIgnoreCase)
+            ? _options.AndroidRedirectUri
+            : _options.WindowsRedirectUri;
 
-        return _options.WindowsRedirectUri;
+        if (string.IsNullOrWhiteSpace(redirectUri))
+            throw new InvalidOperationException("Google OAuth redirect URI is missing for platform: " + platform);
+
+        return redirectUri;
     }
 
     private async Task<TokenResult> ExchangeCodeForTokensAsync(string code, string redirectUri, CancellationToken ct)

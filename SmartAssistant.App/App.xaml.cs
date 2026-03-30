@@ -4,18 +4,24 @@
     {
         private static string? _pendingDeepLink;
 
+        public static event Action? PendingDeepLinkChanged;
+
         public App()
         {
             InitializeComponent();
-            MainPage = new MainPage();
             MainPage = new MainPage();
         }
 
         protected override void OnAppLinkRequestReceived(Uri uri)
         {
             base.OnAppLinkRequestReceived(uri);
+            SetPendingDeepLink(uri?.ToString());
+        }
 
-            _pendingDeepLink = uri?.ToString();
+        public static void SetPendingDeepLink(string? url)
+        {
+            _pendingDeepLink = url;
+            PendingDeepLinkChanged?.Invoke();
         }
 
         public static string? ConsumePendingDeepLink()

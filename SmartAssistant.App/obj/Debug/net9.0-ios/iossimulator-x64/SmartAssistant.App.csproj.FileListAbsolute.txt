@@ -351,9 +351,9 @@ D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-ios\iossimulator-x64\mauifont.in
 D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-ios\iossimulator-x64\mauisplash.inputs
 D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-ios\iossimulator-x64\resizetizer\sp\MauiInfo.plist
 D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-ios\iossimulator-x64\resizetizer\sp\MauiSplash.storyboard
-D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-ios\iossimulator-x64\resizetizer\sp\splash_58C11A0A2CDF3C43117FC29EECA319E6FBFEFE150B9123BB20E86A467F499449.png
-D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-ios\iossimulator-x64\resizetizer\sp\splash_58C11A0A2CDF3C43117FC29EECA319E6FBFEFE150B9123BB20E86A467F499449@2x.png
-D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-ios\iossimulator-x64\resizetizer\sp\splash_58C11A0A2CDF3C43117FC29EECA319E6FBFEFE150B9123BB20E86A467F499449@3x.png
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-ios\iossimulator-x64\resizetizer\sp\splash_D0B61A8771427B0CF1470081D34B24E401439D3D1900821010F1E7312E7ED2DB.png
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-ios\iossimulator-x64\resizetizer\sp\splash_D0B61A8771427B0CF1470081D34B24E401439D3D1900821010F1E7312E7ED2DB@2x.png
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-ios\iossimulator-x64\resizetizer\sp\splash_D0B61A8771427B0CF1470081D34B24E401439D3D1900821010F1E7312E7ED2DB@3x.png
 D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-ios\iossimulator-x64\mauisplash.stamp
 D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-ios\iossimulator-x64\resizetizer\r\Assets.xcassets\appicon.appiconset\appiconItunesArtwork.png
 D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-ios\iossimulator-x64\resizetizer\r\Assets.xcassets\appicon.appiconset\appicon83.5x83.5@2x.png
