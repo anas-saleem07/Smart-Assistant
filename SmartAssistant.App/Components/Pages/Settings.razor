@@ -1,0 +1,776 @@
+﻿@page "/settings"
+@inject HttpClient Http
+@inject NavigationManager Navigation
+@using System.Net.Http.Json
+
+<div class="st-page">
+    <div class="st-shell">
+
+        <header class="st-header">
+            <div>
+                <h1 class="st-title">Settings</h1>
+                <p class="st-subtitle">Manage reminder automation, scanning, office hours, and reply behavior.</p>
+            </div>
+
+            <div class="st-pill">
+                <span class="st-pill-dot"></span>
+                <span>@(isProcessing ? "Working..." : "Ready")</span>
+            </div>
+        </header>
+
+        @if (!string.IsNullOrWhiteSpace(statusText))
+        {
+            <div class="st-status @(isError ? "st-status-error" : "st-status-ok")">
+                <span class="st-status-icon">@(isError ? "!" : "OK")</span>
+                <span class="st-status-text">@statusText</span>
+                <button class="st-status-close" @onclick="ClearStatus">x</button>
+            </div>
+        }
+
+        <section class="st-card st-section">
+            <div class="st-section-header">
+                <h2 class="st-section-title">Reminder Scan</h2>
+                <p class="st-section-subtitle">Control reminder scanning, default reminder timing, and matching rules.</p>
+            </div>
+
+            <div class="st-grid">
+                <div class="st-field st-field-check">
+                    <label class="st-check">
+                        <input type="checkbox" @bind="settings.Enabled" />
+                        <span>Enable Reminder Automation</span>
+                    </label>
+                </div>
+
+                <div class="st-field">
+                    <label class="st-label">Scan Interval Minutes</label>
+                    <input class="st-input" type="number" @bind="settings.ScanIntervalMinutes" />
+                </div>
+
+                <div class="st-field">
+                    <label class="st-label">Default Reminder After Minutes</label>
+                    <input class="st-input" type="number" @bind="settings.DefaultReminderAfterMinutes" />
+                </div>
+
+                <div class="st-field st-field-wide">
+                    <label class="st-label">Reminder Keywords</label>
+                    <textarea class="st-input st-textarea"
+                              @bind="settings.KeywordsCsv"
+                              placeholder="action required, urgent, asap, deadline"></textarea>
+                </div>
+
+                <div class="st-field st-field-wide">
+                    <label class="st-label">Gmail Query</label>
+                    <textarea class="st-input st-textarea"
+                              @bind="settings.GmailQuery"
+                              placeholder="in:inbox newer_than:7d -category:promotions -category:social"></textarea>
+                </div>
+            </div>
+        </section>
+
+        <section class="st-card st-section">
+            <div class="st-section-header">
+                <h2 class="st-section-title">Auto Reply</h2>
+                <p class="st-section-subtitle">Configure reply behavior, matching keywords, and safety rules.</p>
+            </div>
+
+            <div class="st-grid">
+                <div class="st-field st-field-check">
+                    <label class="st-check">
+                        <input type="checkbox" @bind="settings.AutoReplyEnabled" />
+                        <span>Enable Auto Reply</span>
+                    </label>
+                </div>
+
+                <div class="st-field">
+                    <label class="st-label">AI Daily Limit</label>
+                    <input class="st-input" type="number" @bind="settings.AiDailyLimit" />
+                </div>
+
+                <div class="st-field st-field-check">
+                    <label class="st-check">
+                        <input type="checkbox" @bind="settings.RequireApprovalAfterOfficeHours" />
+                        <span>Require Approval After Office Hours</span>
+                    </label>
+                </div>
+
+                <div class="st-field st-field-check">
+                    <label class="st-check">
+                        <input type="checkbox" @bind="settings.AllowAutoReplyAfterOfficeHours" />
+                        <span>Allow Auto Reply After Office Hours</span>
+                    </label>
+                </div>
+
+                <div class="st-field st-field-wide">
+                    <label class="st-label">Auto Reply Keywords</label>
+                    <textarea class="st-input st-textarea"
+                              @bind="settings.AutoReplyKeywordsCsv"
+                              placeholder="interview, meeting, schedule, call, appointment"></textarea>
+                </div>
+            </div>
+        </section>
+
+        <section class="st-card st-section">
+            <div class="st-section-header">
+                <h2 class="st-section-title">Office Hours</h2>
+                <p class="st-section-subtitle">Set working hours, slot duration, and timezone used for suggestions.</p>
+            </div>
+
+            <div class="st-grid st-grid-three">
+                <div class="st-field">
+                    <label class="st-label">Office Start Hour</label>
+                    <input class="st-input" type="number" min="0" max="23" @bind="settings.OfficeStartHour" />
+                </div>
+
+                <div class="st-field">
+                    <label class="st-label">Office End Hour</label>
+                    <input class="st-input" type="number" min="1" max="24" @bind="settings.OfficeEndHour" />
+                </div>
+
+                <div class="st-field">
+                    <label class="st-label">Slot Minutes</label>
+                    <input class="st-input" type="number" min="1" @bind="settings.SlotMinutes" />
+                </div>
+
+                <div class="st-field st-field-wide">
+                    <label class="st-label">Timezone Id</label>
+                    <input class="st-input" @bind="settings.TimezoneId" placeholder="Asia/Karachi" />
+                </div>
+            </div>
+        </section>
+
+        <section class="st-card st-section">
+            <div class="st-section-header">
+                <h2 class="st-section-title">Calendar</h2>
+                <p class="st-section-subtitle">Control calendar creation and which Google calendar to use.</p>
+            </div>
+
+            <div class="st-grid">
+                <div class="st-field st-field-check">
+                    <label class="st-check">
+                        <input type="checkbox" @bind="settings.CalendarEnabled" />
+                        <span>Enable Calendar Integration</span>
+                    </label>
+                </div>
+
+                <div class="st-field st-field-wide">
+                    <label class="st-label">Calendar Id</label>
+                    <input class="st-input" @bind="settings.CalendarId" placeholder="primary" />
+                </div>
+            </div>
+        </section>
+
+        <section class="st-card st-section">
+            <div class="st-section-header">
+                <h2 class="st-section-title">System Status</h2>
+                <p class="st-section-subtitle">Read-only runtime information for visibility and troubleshooting.</p>
+            </div>
+
+            <div class="st-status-grid">
+                <div class="st-readonly-box">
+                    <div class="st-readonly-label">Last Run On</div>
+                    <div class="st-readonly-value">@FormatNullableDateTimeOffset(settings.LastRunOn)</div>
+                </div>
+
+                <div class="st-readonly-box">
+                    <div class="st-readonly-label">Last Run Status</div>
+                    <div class="st-readonly-value">@GetDisplayValue(settings.LastRunStatus)</div>
+                </div>
+
+                <div class="st-readonly-box">
+                    <div class="st-readonly-label">Last Run Created Count</div>
+                    <div class="st-readonly-value">@settings.LastRunCreatedCount</div>
+                </div>
+
+                <div class="st-readonly-box">
+                    <div class="st-readonly-label">AI Calls Today</div>
+                    <div class="st-readonly-value">@settings.AiCallsToday</div>
+                </div>
+
+                <div class="st-readonly-box">
+                    <div class="st-readonly-label">AI Usage Day Utc</div>
+                    <div class="st-readonly-value">@FormatNullableDateTime(settings.AiUsageDayUtc)</div>
+                </div>
+
+                <div class="st-readonly-box">
+                    <div class="st-readonly-label">AI Paused Until Utc</div>
+                    <div class="st-readonly-value">@FormatNullableDateTimeOffset(settings.AiPausedUntilUtc)</div>
+                </div>
+
+                <div class="st-readonly-box st-readonly-box-wide">
+                    <div class="st-readonly-label">Last Run Error</div>
+                    <div class="st-readonly-value">@GetDisplayValue(settings.LastRunError)</div>
+                </div>
+
+                <div class="st-readonly-box st-readonly-box-wide">
+                    <div class="st-readonly-label">AI Last Error</div>
+                    <div class="st-readonly-value">@GetDisplayValue(settings.AiLastError)</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="st-actions-bar">
+            <button class="st-btn st-btn-primary"
+                    @onclick="SaveSettingsAsync"
+                    disabled="@isProcessing">
+                @if (isProcessing)
+                {
+                    <span class="st-spinner"></span>
+                    <span>Saving...</span>
+                }
+                else
+                {
+                    <span>Save Settings</span>
+                }
+            </button>
+
+            <button class="st-btn st-btn-ghost"
+                    @onclick="LoadSettingsAsync"
+                    disabled="@isProcessing">
+                Refresh
+            </button>
+
+            <button class="st-btn st-btn-ghost"
+                    @onclick="GoBack"
+                    disabled="@isProcessing">
+                Back
+            </button>
+        </section>
+
+    </div>
+</div>
+
+@code {
+    private bool isProcessing;
+    private string statusText = "";
+    private bool isError;
+
+    private ReminderSettingsViewModel settings = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(8));
+
+            var gmailStatus = await Http.GetFromJsonAsync<GoogleConnectionStatusModel>(
+                "api/google-oauth/status",
+                cts.Token);
+
+            if (gmailStatus?.IsConnected != true)
+            {
+                Navigation.NavigateTo("/google-auth");
+                return;
+            }
+
+            await LoadSettingsAsync();
+        }
+        catch
+        {
+            Navigation.NavigateTo("/google-auth");
+        }
+    }
+
+    private void ClearStatus()
+    {
+        statusText = "";
+        isError = false;
+    }
+
+    private void SetStatus(string message, bool error)
+    {
+        statusText = message;
+        isError = error;
+    }
+
+    private async Task LoadSettingsAsync()
+    {
+        if (isProcessing)
+            return;
+
+        try
+        {
+            isProcessing = true;
+            ClearStatus();
+
+            using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(8));
+
+            settings =
+                await Http.GetFromJsonAsync<ReminderSettingsViewModel>(
+                    "api/reminder-settings",
+                    cts.Token)
+                ?? new ReminderSettingsViewModel();
+        }
+        catch (TaskCanceledException)
+        {
+            SetStatus("Request timed out while loading settings.", true);
+        }
+        catch (Exception ex)
+        {
+            SetStatus($"Failed to load settings: {ex.Message}", true);
+        }
+        finally
+        {
+            isProcessing = false;
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private async Task SaveSettingsAsync()
+    {
+        if (isProcessing)
+            return;
+
+        if (settings.ScanIntervalMinutes <= 0)
+        {
+            SetStatus("Scan interval minutes must be greater than 0.", true);
+            return;
+        }
+
+        if (settings.DefaultReminderAfterMinutes <= 0)
+        {
+            SetStatus("Default reminder after minutes must be greater than 0.", true);
+            return;
+        }
+
+        if (settings.OfficeStartHour < 0 || settings.OfficeStartHour > 23)
+        {
+            SetStatus("Office start hour must be between 0 and 23.", true);
+            return;
+        }
+
+        if (settings.OfficeEndHour < 1 || settings.OfficeEndHour > 24)
+        {
+            SetStatus("Office end hour must be between 1 and 24.", true);
+            return;
+        }
+
+        if (settings.OfficeStartHour >= settings.OfficeEndHour)
+        {
+            SetStatus("Office start hour must be less than office end hour.", true);
+            return;
+        }
+
+        if (settings.SlotMinutes <= 0)
+        {
+            SetStatus("Slot minutes must be greater than 0.", true);
+            return;
+        }
+
+        if (settings.AiDailyLimit < 0)
+        {
+            SetStatus("AI daily limit cannot be negative.", true);
+            return;
+        }
+
+        try
+        {
+            isProcessing = true;
+            ClearStatus();
+
+            using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(8));
+
+            var response = await Http.PutAsJsonAsync(
+                "api/reminder-settings",
+                settings,
+                cts.Token);
+
+            var body = await response.Content.ReadAsStringAsync(cts.Token);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                SetStatus($"Save failed ({(int)response.StatusCode}): {body}", true);
+                return;
+            }
+
+            var updatedSettings = await response.Content.ReadFromJsonAsync<ReminderSettingsViewModel>(cancellationToken: cts.Token);
+            if (updatedSettings != null)
+            {
+                settings = updatedSettings;
+            }
+
+            Navigation.NavigateTo("/reminders?settingsUpdated=1", true);
+            return;
+        }
+        catch (TaskCanceledException)
+        {
+            SetStatus("Request timed out while saving settings.", true);
+        }
+        catch (Exception ex)
+        {
+            SetStatus($"Failed to save settings: {ex.Message}", true);
+        }
+        finally
+        {
+            isProcessing = false;
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private void GoBack()
+    {
+        Navigation.NavigateTo("/reminders");
+    }
+
+    private static string GetDisplayValue(string? value)
+    {
+        return string.IsNullOrWhiteSpace(value) ? "Not available" : value;
+    }
+
+    private static string FormatNullableDateTimeOffset(DateTimeOffset? value)
+    {
+        return value.HasValue
+            ? value.Value.LocalDateTime.ToString("dd MMM yyyy hh:mm tt")
+            : "Not available";
+    }
+
+    private static string FormatNullableDateTime(DateTime? value)
+    {
+        return value.HasValue
+            ? value.Value.ToString("dd MMM yyyy")
+            : "Not available";
+    }
+
+    public sealed class ReminderSettingsViewModel
+    {
+        public bool Enabled { get; set; }
+
+        public int ScanIntervalMinutes { get; set; }
+        public int DefaultReminderAfterMinutes { get; set; }
+
+        public string KeywordsCsv { get; set; } = "";
+        public string GmailQuery { get; set; } = "";
+
+        public bool AutoReplyEnabled { get; set; }
+        public string AutoReplyKeywordsCsv { get; set; } = "";
+
+        public int AiDailyLimit { get; set; }
+
+        public int OfficeStartHour { get; set; }
+        public int OfficeEndHour { get; set; }
+        public int SlotMinutes { get; set; }
+        public string TimezoneId { get; set; } = "Asia/Karachi";
+
+        public bool CalendarEnabled { get; set; }
+        public string? CalendarId { get; set; } = "primary";
+
+        public bool RequireApprovalAfterOfficeHours { get; set; }
+        public bool AllowAutoReplyAfterOfficeHours { get; set; }
+
+        public DateTimeOffset? LastRunOn { get; set; }
+        public int LastRunCreatedCount { get; set; }
+        public string? LastRunStatus { get; set; }
+        public string? LastRunError { get; set; }
+
+        public int AiCallsToday { get; set; }
+        public DateTime? AiUsageDayUtc { get; set; }
+        public DateTimeOffset? AiPausedUntilUtc { get; set; }
+        public string? AiLastError { get; set; }
+    }
+
+    public sealed class GoogleConnectionStatusModel
+    {
+        public bool IsConnected { get; set; }
+        public bool NeedsReconnect { get; set; }
+        public string Provider { get; set; } = "Gmail";
+        public string Email { get; set; } = "";
+        public string Message { get; set; } = "";
+    }
+}
+
+<style>
+    .st-page {
+        min-height: 100vh;
+        background: radial-gradient(1200px 800px at 20% 10%, rgba(120, 90, 255, 0.18), transparent 55%), radial-gradient(1000px 700px at 80% 30%, rgba(0, 200, 255, 0.10), transparent 55%), linear-gradient(180deg, #0b0f1a 0%, #070a12 100%);
+        color: #e8ecff;
+        padding: 28px;
+    }
+
+    .st-shell {
+        max-width: 980px;
+        margin: 0 auto;
+    }
+
+    .st-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 18px;
+    }
+
+    .st-title {
+        font-size: 34px;
+        margin: 0;
+        letter-spacing: 0.3px;
+    }
+
+    .st-subtitle {
+        margin: 6px 0 0;
+        color: rgba(232, 236, 255, 0.70);
+    }
+
+    .st-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 12px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.10);
+        color: rgba(232, 236, 255, 0.85);
+        user-select: none;
+        white-space: nowrap;
+    }
+
+    .st-pill-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #7c5cff;
+        box-shadow: 0 0 12px rgba(124, 92, 255, 0.85);
+    }
+
+    .st-card {
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.10);
+        border-radius: 16px;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.28);
+        backdrop-filter: blur(10px);
+    }
+
+    .st-section {
+        padding: 16px;
+        margin-bottom: 18px;
+    }
+
+    .st-section-header {
+        margin-bottom: 14px;
+    }
+
+    .st-section-title {
+        margin: 0;
+        font-size: 18px;
+        color: rgba(232, 236, 255, 0.92);
+    }
+
+    .st-section-subtitle {
+        margin: 6px 0 0;
+        color: rgba(232, 236, 255, 0.68);
+        font-size: 13px;
+    }
+
+    .st-status {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 14px;
+        margin-bottom: 14px;
+        border-radius: 14px;
+    }
+
+    .st-status-ok {
+        border: 1px solid rgba(0, 255, 163, 0.25);
+        background: rgba(0, 255, 163, 0.08);
+    }
+
+    .st-status-error {
+        border: 1px solid rgba(255, 77, 77, 0.30);
+        background: rgba(255, 77, 77, 0.10);
+    }
+
+    .st-status-icon {
+        width: 22px;
+        height: 22px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        background: rgba(0, 0, 0, 0.18);
+        font-weight: 700;
+    }
+
+    .st-status-text {
+        flex: 1;
+        color: rgba(232, 236, 255, 0.92);
+    }
+
+    .st-status-close {
+        border: none;
+        background: transparent;
+        color: rgba(232, 236, 255, 0.70);
+        font-size: 18px;
+        cursor: pointer;
+    }
+
+    .st-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+        align-items: start;
+    }
+
+    .st-grid-three {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    .st-field {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .st-field-wide {
+        grid-column: 1 / -1;
+    }
+
+    .st-field-check {
+        justify-content: end;
+    }
+
+    .st-label {
+        font-size: 12px;
+        color: rgba(232, 236, 255, 0.70);
+        letter-spacing: 0.3px;
+    }
+
+    .st-input {
+        width: 100%;
+        padding: 12px 12px;
+        border-radius: 12px;
+        background: rgba(0, 0, 0, 0.28);
+        border: 1px solid rgba(255, 255, 255, 0.10);
+        color: #e8ecff;
+        outline: none;
+        box-sizing: border-box;
+    }
+
+        .st-input:focus {
+            border-color: rgba(124, 92, 255, 0.60);
+            box-shadow: 0 0 0 4px rgba(124, 92, 255, 0.15);
+        }
+
+    .st-textarea {
+        min-height: 96px;
+        resize: vertical;
+    }
+
+    .st-check {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        min-height: 46px;
+        padding: 12px 14px;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        color: rgba(232, 236, 255, 0.92);
+    }
+
+        .st-check input {
+            width: 16px;
+            height: 16px;
+        }
+
+    .st-status-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+    }
+
+    .st-readonly-box {
+        padding: 14px;
+        border-radius: 14px;
+        background: rgba(0, 0, 0, 0.18);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .st-readonly-box-wide {
+        grid-column: 1 / -1;
+    }
+
+    .st-readonly-label {
+        font-size: 12px;
+        color: rgba(232, 236, 255, 0.62);
+        margin-bottom: 8px;
+    }
+
+    .st-readonly-value {
+        color: rgba(232, 236, 255, 0.94);
+        word-break: break-word;
+    }
+
+    .st-actions-bar {
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+        margin-top: 8px;
+        margin-bottom: 18px;
+    }
+
+    .st-btn {
+        border-radius: 12px;
+        padding: 12px 14px;
+        border: 1px solid rgba(255,255,255,0.12);
+        cursor: pointer;
+        background: rgba(255,255,255,0.06);
+        color: rgba(232, 236, 255, 0.90);
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        user-select: none;
+        white-space: nowrap;
+    }
+
+        .st-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+    .st-btn-primary {
+        background: linear-gradient(135deg, rgba(124, 92, 255, 0.95), rgba(0, 200, 255, 0.75));
+        border: 1px solid rgba(124, 92, 255, 0.30);
+        color: #0b0f1a;
+        font-weight: 700;
+    }
+
+        .st-btn-primary:hover:enabled {
+            filter: brightness(1.05);
+        }
+
+    .st-btn-ghost:hover:enabled {
+        background: rgba(255,255,255,0.10);
+    }
+
+    .st-spinner {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        border: 2px solid rgba(0,0,0,0.25);
+        border-top-color: rgba(0,0,0,0.75);
+        display: inline-block;
+        animation: stspin 0.8s linear infinite;
+    }
+
+    @@keyframes stspin {
+        from {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    @@media (max-width: 860px) {
+        .st-grid,
+        .st-grid-three,
+        .st-status-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .st-actions-bar {
+            justify-content: flex-start;
+            flex-wrap: wrap;
+        }
+    }
+</style>

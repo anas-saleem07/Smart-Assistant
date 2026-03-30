@@ -180,6 +180,7 @@
             }
 
             await LoadReminders();
+            ShowSettingsUpdatedMessageIfNeeded();
         }
         catch
         {
@@ -197,6 +198,20 @@
     {
         statusText = message;
         isError = error;
+    }
+
+    private void ShowSettingsUpdatedMessageIfNeeded()
+    {
+        var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
+
+        if (string.IsNullOrWhiteSpace(uri.Query))
+            return;
+
+        if (uri.Query.Contains("settingsUpdated=1", StringComparison.OrdinalIgnoreCase))
+        {
+            SetStatus("Settings updated successfully.", false);
+            Navigation.NavigateTo("/reminders", false);
+        }
     }
 
     private async Task LoadReminders()
@@ -350,6 +365,7 @@
         public bool Completed { get; set; }
         public DateTime CreatedOn { get; set; }
     }
+
     public sealed class GoogleConnectionStatusModel
     {
         public bool IsConnected { get; set; }
@@ -498,10 +514,10 @@
         outline: none;
     }
 
-    .rm-input:focus {
-        border-color: rgba(124, 92, 255, 0.60);
-        box-shadow: 0 0 0 4px rgba(124, 92, 255, 0.15);
-    }
+        .rm-input:focus {
+            border-color: rgba(124, 92, 255, 0.60);
+            box-shadow: 0 0 0 4px rgba(124, 92, 255, 0.15);
+        }
 
     .rm-actions {
         display: flex;
@@ -523,10 +539,10 @@
         white-space: nowrap;
     }
 
-    .rm-btn:disabled {
-        cursor: not-allowed;
-        opacity: 0.6;
-    }
+        .rm-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
 
     .rm-btn-primary {
         background: linear-gradient(135deg, rgba(124, 92, 255, 0.95), rgba(0, 200, 255, 0.75));
@@ -535,9 +551,9 @@
         font-weight: 700;
     }
 
-    .rm-btn-primary:hover:enabled {
-        filter: brightness(1.05);
-    }
+        .rm-btn-primary:hover:enabled {
+            filter: brightness(1.05);
+        }
 
     .rm-btn-ghost:hover:enabled {
         background: rgba(255,255,255,0.10);
@@ -551,9 +567,9 @@
         border-radius: 10px;
     }
 
-    .rm-btn-danger:hover:enabled {
-        background: rgba(255, 77, 77, 0.18);
-    }
+        .rm-btn-danger:hover:enabled {
+            background: rgba(255, 77, 77, 0.18);
+        }
 
     .rm-list-header {
         display: flex;

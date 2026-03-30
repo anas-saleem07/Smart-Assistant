@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SmartAssistant.Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+81b03798ba4a79174606db4482d9e9fe51244241")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bf6f67f5f0a70beec0c3017cb2e2af0d766fffe2")]
 [assembly: System.Reflection.AssemblyProductAttribute("SmartAssistant.Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SmartAssistant.Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
