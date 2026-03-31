@@ -84,6 +84,7 @@
         public DateTimeOffset? SuggestedEndUtc { get; set; }
         public string? SuggestedCalendarEventId { get; set; }
         public string? SuggestedCalendarHtmlLink { get; set; }
+        public string? ProposedTimezoneId { get; set; }
 
 
     }
