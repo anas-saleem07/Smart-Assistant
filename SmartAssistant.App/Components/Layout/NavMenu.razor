@@ -34,6 +34,11 @@
             <span>Reminders</span>
         </NavLink>
 
+        <NavLink class="sa-nav-link" href="reminder-history" @onclick="CloseNav">
+            <span class="sa-link-icon sa-link-icon-reminder-history"></span>
+            <span>Reminder History</span>
+        </NavLink>
+
         <div class="sa-nav-section">Utilities</div>
 
         <NavLink class="sa-nav-link" href="counter" @onclick="CloseNav">
@@ -53,6 +58,7 @@
             <span>Gmail Access</span>
         </NavLink>
     </div>
+
 </aside>
 
 @code {
@@ -235,6 +241,7 @@
 
     .sa-link-icon-home::before,
     .sa-link-icon-reminders::before,
+    .sa-link-icon-reminder-history::before,
     .sa-link-icon-counter::before,
     .sa-link-icon-weather::before {
         content: "";
@@ -267,6 +274,18 @@
         background: currentColor;
         border-radius: 999px;
         box-shadow: 3px 4px 0 0 currentColor;
+    }
+
+    .sa-link-icon-reminder-history::after {
+        content: "";
+        position: absolute;
+        left: 4px;
+        top: 4px;
+        width: 8px;
+        height: 8px;
+        border-left: 2px solid currentColor;
+        border-bottom: 2px solid currentColor;
+        border-radius: 1px;
     }
 
     .sa-link-icon-counter::after {

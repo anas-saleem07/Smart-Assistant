@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
-using Google.Apis.Calendar.v3;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using SmartAssistant.Api.Data;
 using SmartAssistant.Api.Helpers;
 using SmartAssistant.Api.Models;
@@ -23,7 +21,12 @@ namespace SmartAssistant.Api.Controllers
         private readonly ApplicationDbContext _db;
         private readonly ICalendarService _calendar;
 
-        public ReminderController(IReminderService service, IMapper mapper, IReminderAutomationService automation, ApplicationDbContext db, ICalendarService calendar)
+        public ReminderController(
+            IReminderService service,
+            IMapper mapper,
+            IReminderAutomationService automation,
+            ApplicationDbContext db,
+            ICalendarService calendar)
         {
             _service = service;
             _mapper = mapper;
@@ -45,15 +48,13 @@ namespace SmartAssistant.Api.Controllers
 
             // Convert local UI time (e.g. Karachi time) to UTC before saving
             reminder.ReminderTime = AppTimeHelper.ConvertLocalDateTimeToUtc(
-            DateTime.SpecifyKind(vm.ReminderTime.DateTime, DateTimeKind.Unspecified),
-            settings.TimezoneId);
+                DateTime.SpecifyKind(vm.ReminderTime.DateTime, DateTimeKind.Unspecified),
+                settings.TimezoneId);
 
             // Save reminder (manual reminder)
             await _service.AddManualReminderAsync(reminder);
 
             // Calendar is mandatory for manual reminders too
-
-            // Prevent duplicate calendar sync
             if (string.IsNullOrWhiteSpace(reminder.CalendarEventId))
             {
                 try
@@ -63,8 +64,7 @@ namespace SmartAssistant.Api.Controllers
                     reminder.CalendarEventId = eventId;
                     reminder.CalendarSyncedOn = DateTimeOffset.UtcNow;
                     reminder.CalendarSyncError = null;
-                    var localCheck = AppTimeHelper.ConvertUtcToLocal(reminder.ReminderTime, settings.TimezoneId);
-                    // Put breakpoint here and verify localCheck is 4:30 PM when reminder.ReminderTime is saved
+
                     await _db.SaveChangesAsync(ct);
                 }
                 catch (OperationCanceledException)
@@ -86,8 +86,7 @@ namespace SmartAssistant.Api.Controllers
         {
             var reminders = await _service.GetAllAsync();
 
-            var settings = await _db.ReminderAutomationSettings
-                .FirstAsync(x => x.Id == 1);
+            var settings = await _db.ReminderAutomationSettings.FirstAsync(x => x.Id == 1);
 
             var items = reminders.Select(reminder => new ReminderViewModel
             {
@@ -105,6 +104,18 @@ namespace SmartAssistant.Api.Controllers
 
             return items;
         }
+
+        [HttpPut("status/{id:guid}")]
+        public async Task<IActionResult> UpdateStatus(Guid id, [FromBody] UpdateReminderStatusRequest request)
+        {
+            var result = await _service.SetCompletedAsync(id, request.Completed);
+
+            if (!result.Success)
+                return BadRequest(new { message = result.ErrorMessage });
+
+            return Ok(new { message = "Reminder status updated successfully." });
+        }
+
         [HttpDelete("delete/{id:guid}")]
         public async Task<IActionResult> Delete(Guid id)
         {
@@ -141,6 +152,11 @@ namespace SmartAssistant.Api.Controllers
 
             await _db.SaveChangesAsync(ct);
             return Ok(settings);
+        }
+
+        public sealed class UpdateReminderStatusRequest
+        {
+            public bool Completed { get; set; }
         }
     }
 }

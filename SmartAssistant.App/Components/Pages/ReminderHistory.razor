@@ -1,20 +1,20 @@
-﻿@page "/reminders"
+﻿@page "/reminder-history"
 @inject HttpClient Http
 @using System.Net.Http.Json
 @inject NavigationManager Navigation
 
 <div class="rm-page">
-    <div class="rm-shell">
+    <div class="rm-shell rm-shell-wide">
 
         <header class="rm-header">
             <div>
-                <h1 class="rm-title">Reminders</h1>
-                <p class="rm-subtitle">Keep track of what matters. Add, review, and manage your nearest reminders fast.</p>
+                <h1 class="rm-title">Reminder History</h1>
+                <p class="rm-subtitle">Review pending and completed reminders in a cleaner, more detailed history view.</p>
             </div>
 
             <div class="rm-header-actions">
-                <button class="rm-btn rm-btn-ghost" @onclick='() => Navigation.NavigateTo("/reminders-all")'>
-                    View All Reminders
+                <button class="rm-btn rm-btn-ghost" @onclick='() => Navigation.NavigateTo("/reminders")'>
+                    Back to Main Reminders
                 </button>
 
                 <div class="rm-pill">
@@ -23,10 +23,6 @@
                 </div>
             </div>
         </header>
-
-        <section class="rm-approval-host">
-            <AutoReplyApprovalBar />
-        </section>
 
         @if (!string.IsNullOrWhiteSpace(statusText))
         {
@@ -37,76 +33,48 @@
             </div>
         }
 
-        <section class="rm-card rm-form">
-            <div class="rm-form-grid">
+        <section class="rm-card rm-filter-card">
+            <div class="rm-filter-row">
+                <button class="rm-chip @(selectedFilter == ReminderFilter.All ? "rm-chip-active" : "")"
+                        @onclick='() => ChangeFilter(ReminderFilter.All)'>
+                    All
+                </button>
 
-                <div class="rm-field">
-                    <label class="rm-label">Title</label>
-                    <input class="rm-input"
-                           @bind="newReminder.Title"
-                           placeholder="e.g., Pay electricity bill" />
-                </div>
+                <button class="rm-chip @(selectedFilter == ReminderFilter.Incomplete ? "rm-chip-active" : "")"
+                        @onclick='() => ChangeFilter(ReminderFilter.Incomplete)'>
+                    Incomplete
+                </button>
 
-                <div class="rm-field">
-                    <label class="rm-label">Description</label>
-                    <input class="rm-input"
-                           @bind="newReminder.Description"
-                           placeholder="Optional details..." />
-                </div>
+                <button class="rm-chip @(selectedFilter == ReminderFilter.Completed ? "rm-chip-active" : "")"
+                        @onclick='() => ChangeFilter(ReminderFilter.Completed)'>
+                    Completed
+                </button>
 
-                <div class="rm-field">
-                    <label class="rm-label">Reminder Time</label>
-                    <input class="rm-input"
-                           type="datetime-local"
-                           @bind="newReminder.ReminderTime"
-                           @bind:format="yyyy-MM-ddTHH:mm" />
-                </div>
-
-                <div class="rm-actions">
-                    <button class="rm-btn rm-btn-primary"
-                            @onclick="AddReminder"
-                            disabled="@isProcessing">
-                        @if (isProcessing)
-                        {
-                            <span class="rm-spinner"></span>
-                            <span>Adding...</span>
-                        }
-                        else
-                        {
-                            <span>Add Reminder</span>
-                        }
-                    </button>
-
-                    <button class="rm-btn rm-btn-ghost"
-                            @onclick="LoadReminders"
-                            disabled="@isProcessing">
-                        Refresh
-                    </button>
-                </div>
-
+                <button class="rm-btn rm-btn-ghost" @onclick="LoadReminders" disabled="@isProcessing">
+                    Refresh
+                </button>
             </div>
         </section>
 
         <section class="rm-list">
             <div class="rm-list-header">
-                <h2 class="rm-list-title">Upcoming Pending Reminders</h2>
-                <span class="rm-count">@visibleReminders.Count</span>
+                <h2 class="rm-list-title">Reminder Table</h2>
+                <span class="rm-count">@filteredReminders.Count</span>
             </div>
 
-            @if (visibleReminders.Count == 0)
+            @if (filteredReminders.Count == 0)
             {
                 <div class="rm-empty rm-card">
                     <div class="rm-empty-icon">Time</div>
-
                     <div>
-                        <div class="rm-empty-title">No pending reminders for the next three days</div>
-                        <div class="rm-empty-sub">Completed and older reminders are available in Reminder History.</div>
+                        <div class="rm-empty-title">No reminders found</div>
+                        <div class="rm-empty-sub">Try another filter or add more reminders.</div>
                     </div>
                 </div>
             }
             else
             {
-                @foreach (var group in groupedVisibleReminders)
+                @foreach (var group in groupedReminders)
                 {
                     <section class="rm-group-section">
                         <div class="rm-group-header">
@@ -114,76 +82,68 @@
                             <span class="rm-count">@group.Items.Count</span>
                         </div>
 
-                        <div class="rm-grid">
-                            @foreach (var reminder in group.Items)
-                            {
-                                var canMarkComplete = CanMarkComplete(reminder);
-
-                                <article class="rm-item rm-card @(reminder.Completed ? "rm-item-completed" : "")">
-                                    <div class="rm-item-top">
-                                        <div class="rm-item-title">@GetReminderHeading(reminder)</div>
-
-                                        <div class="rm-item-actions">
-                                            @if (!reminder.Completed)
-                                            {
-                                                <button class="rm-btn rm-btn-success"
-                                                        @onclick="() => UpdateReminderStatus(reminder.Id, true)"
-                                                        disabled="@(!canMarkComplete || isProcessing)">
-                                                    Complete
-                                                </button>
-                                            }
-                                            else
-                                            {
-                                                <button class="rm-btn rm-btn-ghost"
-                                                        @onclick="() => UpdateReminderStatus(reminder.Id, false)"
-                                                        disabled="@isProcessing">
-                                                    Mark Incomplete
-                                                </button>
-                                            }
-
-                                            <button class="rm-btn rm-btn-danger"
-                                                    @onclick="() => DeleteReminder(reminder.Id)"
-                                                    disabled="@isProcessing">
-                                                Delete
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                    <div class="rm-simple-list">
-                                        <div class="rm-simple-row">
-                                            <div class="rm-simple-label">From</div>
-                                            <div class="rm-simple-value">@GetCleanFromText(reminder)</div>
-                                        </div>
-
-                                        <div class="rm-simple-row">
-                                            <div class="rm-simple-label">Where</div>
-                                            <div class="rm-simple-value">@GetCleanWhereText(reminder)</div>
-                                        </div>
-
-                                        <div class="rm-simple-row">
-                                            <div class="rm-simple-label">Time</div>
-                                            <div class="rm-simple-value">@GetCleanTimeText(reminder)</div>
-                                        </div>
-                                    </div>
-
-                                    <div class="rm-item-meta">
-                                        <span class="rm-badge @(reminder.Completed ? "rm-badge-completed" : "rm-badge-pending")">
-                                            @(reminder.Completed ? "Completed" : "Pending")
-                                        </span>
-
-                                        <span class="rm-meta-sep">•</span>
-
-                                        <span>@reminder.ReminderTimeLocalText</span>
-                                    </div>
-
-                                    @if (!reminder.Completed && !canMarkComplete)
+                        <div class="rm-table-wrap rm-card">
+                            <table class="rm-table">
+                                <thead>
+                                    <tr>
+                                        <th>Status</th>
+                                        <th>Title</th>
+                                        <th>Description</th>
+                                        <th>Reminder Time</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var reminder in group.Items)
                                     {
-                                        <div class="rm-note">
-                                            This reminder can be completed only after its due time is reached.
-                                        </div>
+                                        var canMarkComplete = CanMarkComplete(reminder);
+
+                                        <tr class="@(reminder.Completed ? "rm-row-completed" : "")">
+                                            <td>
+                                                <span class="rm-badge @(reminder.Completed ? "rm-badge-completed" : "rm-badge-pending")">
+                                                    @(reminder.Completed ? "Completed" : "Pending")
+                                                </span>
+                                            </td>
+                                            <td>@GetReminderHeading(reminder)</td>
+                                            <td>@BuildHistoryDescription(reminder)</td>
+                                            <td>@reminder.ReminderTimeLocalText</td>
+                                            <td>
+                                                <div class="rm-table-actions">
+                                                    @if (!reminder.Completed)
+                                                    {
+                                                        <button class="rm-btn rm-btn-success rm-btn-table"
+                                                                @onclick="() => UpdateReminderStatus(reminder.Id, true)"
+                                                                disabled="@(!canMarkComplete || isProcessing)">
+                                                            Complete
+                                                        </button>
+                                                    }
+                                                    else
+                                                    {
+                                                        <button class="rm-btn rm-btn-ghost rm-btn-table"
+                                                                @onclick="() => UpdateReminderStatus(reminder.Id, false)"
+                                                                disabled="@isProcessing">
+                                                            Incomplete
+                                                        </button>
+                                                    }
+
+                                                    <button class="rm-btn rm-btn-danger rm-btn-table"
+                                                            @onclick="() => DeleteReminder(reminder.Id)"
+                                                            disabled="@isProcessing">
+                                                        Delete
+                                                    </button>
+                                                </div>
+
+                                                @if (!reminder.Completed && !canMarkComplete)
+                                                {
+                                                    <div class="rm-table-note">
+                                                        Available after due time
+                                                    </div>
+                                                }
+                                            </td>
+                                        </tr>
                                     }
-                                </article>
-                            }
+                                </tbody>
+                            </table>
                         </div>
                     </section>
                 }
@@ -198,16 +158,11 @@
     private string statusText = "";
     private bool isError;
 
+    private ReminderFilter selectedFilter = ReminderFilter.All;
+
     private List<ReminderDto> reminders = new();
-    private List<ReminderDto> visibleReminders = new();
-    private List<ReminderGroupVm> groupedVisibleReminders = new();
-
-    private CreateReminderRequest newReminder = new()
-    {
-        ReminderTime = DateTime.Now
-    };
-
-    #region Private Methods
+    private List<ReminderDto> filteredReminders = new();
+    private List<ReminderGroupVm> groupedReminders = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -226,7 +181,6 @@
             }
 
             await LoadReminders();
-            ShowSettingsUpdatedMessageIfNeeded();
         }
         catch
         {
@@ -244,20 +198,6 @@
     {
         statusText = message;
         isError = error;
-    }
-
-    private void ShowSettingsUpdatedMessageIfNeeded()
-    {
-        var currentUri = Navigation.ToAbsoluteUri(Navigation.Uri);
-
-        if (string.IsNullOrWhiteSpace(currentUri.Query))
-            return;
-
-        if (currentUri.Query.Contains("settingsUpdated=1", StringComparison.OrdinalIgnoreCase))
-        {
-            SetStatus("Settings updated successfully.", false);
-            Navigation.NavigateTo("/reminders", false);
-        }
     }
 
     private async Task LoadReminders()
@@ -278,7 +218,7 @@
                     cancellationTokenSource.Token)
                 ?? new List<ReminderDto>();
 
-            BuildVisibleReminders();
+            ApplyFilterAndGrouping();
         }
         catch (TaskCanceledException)
         {
@@ -295,47 +235,51 @@
         }
     }
 
-    private void BuildVisibleReminders()
+    private void ChangeFilter(ReminderFilter filter)
     {
-        var today = DateTime.Now.Date;
-        var tomorrow = today.AddDays(1);
-        var dayAfterTomorrow = today.AddDays(2);
+        selectedFilter = filter;
+        ApplyFilterAndGrouping();
+    }
 
-        visibleReminders = reminders
-            .Where(reminder =>
-            {
-                if (reminder.Completed)
-                    return false;
+    private void ApplyFilterAndGrouping()
+    {
+        IEnumerable<ReminderDto> query = reminders;
 
-                var localDate = reminder.ReminderTime.ToLocalTime().Date;
+        if (selectedFilter == ReminderFilter.Incomplete)
+            query = query.Where(reminder => !reminder.Completed);
+        else if (selectedFilter == ReminderFilter.Completed)
+            query = query.Where(reminder => reminder.Completed);
 
-                return localDate == today
-                    || localDate == tomorrow
-                    || localDate == dayAfterTomorrow;
-            })
-            .OrderBy(reminder => reminder.ReminderTime.ToLocalTime().Date)
+        filteredReminders = query
+            .OrderBy(reminder => GetGroupSortOrder(reminder))
+            .ThenBy(reminder => reminder.Completed)
             .ThenBy(reminder => reminder.ReminderTime)
             .ToList();
 
-        groupedVisibleReminders = visibleReminders
-            .GroupBy(reminder => GetMainScreenGroupTitle(reminder))
+        groupedReminders = filteredReminders
+            .GroupBy(reminder => GetGroupTitle(reminder))
             .Select(group => new ReminderGroupVm
             {
                 Title = group.Key,
                 Items = group
-                    .OrderBy(reminder => reminder.ReminderTime)
-                    .ToList()
+                    .OrderBy(reminder => reminder.Completed)
+                    .ThenBy(reminder => reminder.ReminderTime)
+                    .ToList(),
+                GroupOrder = group.Min(reminder => GetGroupSortOrder(reminder))
             })
-            .OrderBy(group => group.SortOrder)
+            .OrderBy(group => group.GroupOrder)
+            .ThenBy(group => group.Title)
             .ToList();
     }
 
-    private string GetMainScreenGroupTitle(ReminderDto reminder)
+    private string GetGroupTitle(ReminderDto reminder)
     {
-        var localDate = reminder.ReminderTime.ToLocalTime().Date;
+        var localDate = reminder.ReminderTime.ToLocalTime().DateTime.Date;
         var today = DateTime.Now.Date;
         var tomorrow = today.AddDays(1);
-        var dayAfterTomorrow = today.AddDays(2);
+
+        if (localDate < today)
+            return "Overdue";
 
         if (localDate == today)
             return "Today";
@@ -343,10 +287,25 @@
         if (localDate == tomorrow)
             return "Tomorrow";
 
-        if (localDate == dayAfterTomorrow)
-            return "Day After Tomorrow";
-
         return localDate.ToString("dddd, dd MMM yyyy");
+    }
+
+    private int GetGroupSortOrder(ReminderDto reminder)
+    {
+        var localDate = reminder.ReminderTime.ToLocalTime().DateTime.Date;
+        var today = DateTime.Now.Date;
+        var tomorrow = today.AddDays(1);
+
+        if (localDate < today)
+            return 0;
+
+        if (localDate == today)
+            return 1;
+
+        if (localDate == tomorrow)
+            return 2;
+
+        return 100 + (localDate - today).Days;
     }
 
     private bool CanMarkComplete(ReminderDto reminder)
@@ -390,61 +349,6 @@
         catch (Exception exception)
         {
             SetStatus($"Failed to update reminder status: {exception.Message}", true);
-        }
-        finally
-        {
-            isProcessing = false;
-            await InvokeAsync(StateHasChanged);
-        }
-    }
-
-    private async Task AddReminder()
-    {
-        if (isProcessing)
-            return;
-
-        if (string.IsNullOrWhiteSpace(newReminder.Title))
-        {
-            SetStatus("Title is required.", true);
-            return;
-        }
-
-        try
-        {
-            isProcessing = true;
-            ClearStatus();
-
-            using var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(8));
-
-            var response = await Http.PostAsJsonAsync(
-                "api/reminder/create",
-                newReminder,
-                cancellationTokenSource.Token);
-
-            var responseBody = await response.Content.ReadAsStringAsync(cancellationTokenSource.Token);
-
-            if (!response.IsSuccessStatusCode)
-            {
-                SetStatus($"Create failed ({(int)response.StatusCode}): {responseBody}", true);
-                return;
-            }
-
-            SetStatus("Reminder added successfully.", false);
-
-            newReminder = new CreateReminderRequest
-            {
-                ReminderTime = DateTime.Now
-            };
-
-            await LoadReminders();
-        }
-        catch (TaskCanceledException)
-        {
-            SetStatus("Request timed out while adding reminder.", true);
-        }
-        catch (Exception exception)
-        {
-            SetStatus($"Failed to add reminder: {exception.Message}", true);
         }
         finally
         {
@@ -596,31 +500,6 @@
         return "Not available";
     }
 
-    private string GetCleanTimeText(ReminderDto reminder)
-    {
-        if (!string.IsNullOrWhiteSpace(reminder.Title))
-        {
-            var title = reminder.Title.Trim();
-
-            var atTimeIndex = title.IndexOf(" @ ", StringComparison.OrdinalIgnoreCase);
-            if (atTimeIndex >= 0)
-            {
-                var timeText = title[(atTimeIndex + 3)..].Trim();
-
-                var parenthesisStartIndex = timeText.LastIndexOf('(');
-                if (parenthesisStartIndex > 0)
-                    timeText = timeText[..parenthesisStartIndex].Trim();
-
-                return timeText;
-            }
-        }
-
-        if (!string.IsNullOrWhiteSpace(reminder.ReminderTimeLocalText))
-            return reminder.ReminderTimeLocalText;
-
-        return "Not available";
-    }
-
     private string ToTitleCaseSafe(string value)
     {
         if (string.IsNullOrWhiteSpace(value))
@@ -633,17 +512,56 @@
         return string.Join(" ", words);
     }
 
-    #endregion
-
-    #region Models
-
-    public sealed class CreateReminderRequest
+    private string BuildHistoryDescription(ReminderDto reminder)
     {
-        public string Title { get; set; } = "";
-        public string Description { get; set; } = "";
-        public DateTime ReminderTime { get; set; }
+        var sender = GetCleanFromText(reminder);
+        var company = GetCleanWhereText(reminder);
+        var purpose = GetPurposeText(reminder);
+
+        var parts = new List<string>();
+
+        if (!string.IsNullOrWhiteSpace(sender) && !sender.Equals("Not available", StringComparison.OrdinalIgnoreCase))
+            parts.Add(sender);
+
+        if (!string.IsNullOrWhiteSpace(company) && !company.Equals("Not available", StringComparison.OrdinalIgnoreCase))
+            parts.Add(company);
+
+        if (!string.IsNullOrWhiteSpace(purpose))
+            parts.Add(purpose);
+
+        if (parts.Count == 0)
+            return string.IsNullOrWhiteSpace(reminder.Description) ? "-" : reminder.Description!;
+
+        return string.Join(" | ", parts);
     }
 
+    private string GetPurposeText(ReminderDto reminder)
+    {
+        var combinedText = ((reminder.Title ?? "") + " " + (reminder.Description ?? "")).Trim();
+
+        if (string.IsNullOrWhiteSpace(combinedText))
+            return "General Reminder";
+
+        if (combinedText.Contains("interview", StringComparison.OrdinalIgnoreCase))
+            return "Interview";
+
+        if (combinedText.Contains("meeting", StringComparison.OrdinalIgnoreCase))
+            return "Meeting";
+
+        if (combinedText.Contains("call", StringComparison.OrdinalIgnoreCase))
+            return "Call";
+
+        if (combinedText.Contains("appointment", StringComparison.OrdinalIgnoreCase))
+            return "Appointment";
+
+        if (combinedText.Contains("invoice", StringComparison.OrdinalIgnoreCase))
+            return "Invoice";
+
+        if (combinedText.Contains("follow up", StringComparison.OrdinalIgnoreCase))
+            return "Follow Up";
+
+        return "General Reminder";
+    }
     public sealed class ReminderDto
     {
         public Guid Id { get; set; }
@@ -672,27 +590,16 @@
     public sealed class ReminderGroupVm
     {
         public string Title { get; set; } = "";
+        public int GroupOrder { get; set; }
         public List<ReminderDto> Items { get; set; } = new();
-
-        public int SortOrder
-        {
-            get
-            {
-                if (Title == "Today")
-                    return 1;
-
-                if (Title == "Tomorrow")
-                    return 2;
-
-                if (Title == "Day After Tomorrow")
-                    return 3;
-
-                return 99;
-            }
-        }
     }
 
-    #endregion
+    public enum ReminderFilter
+    {
+        All = 1,
+        Incomplete = 2,
+        Completed = 3
+    }
 }
 
 <style>
@@ -706,6 +613,10 @@
     .rm-shell {
         max-width: 980px;
         margin: 0 auto;
+    }
+
+    .rm-shell-wide {
+        max-width: 1320px;
     }
 
     .rm-header {
@@ -756,31 +667,12 @@
         box-shadow: 0 0 12px rgba(124, 92, 255, 0.85);
     }
 
-    .rm-approval-host {
-        margin-bottom: 18px;
-    }
-
     .rm-card {
         background: var(--card);
         border: 1px solid var(--cardBorder);
         border-radius: 16px;
         box-shadow: 0 18px 40px rgba(0, 0, 0, 0.34), 0 6px 18px rgba(0, 0, 0, 0.22), 0 0 0 1px rgba(255, 255, 255, 0.02) inset, 0 0 24px rgba(124, 92, 255, 0.08);
         backdrop-filter: blur(10px);
-    }
-
-    .rm-item {
-        padding: 16px;
-        transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
-    }
-
-        .rm-item:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 22px 44px rgba(0, 0, 0, 0.38), 0 8px 20px rgba(0, 0, 0, 0.24), 0 0 28px rgba(0, 200, 255, 0.08);
-            border-color: rgba(255, 255, 255, 0.14);
-        }
-
-    .rm-item-completed {
-        opacity: 0.78;
     }
 
     .rm-status {
@@ -826,49 +718,32 @@
         cursor: pointer;
     }
 
-    .rm-form {
-        padding: 16px;
+    .rm-filter-card {
+        padding: 14px;
         margin-bottom: 18px;
     }
 
-    .rm-form-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr 240px;
-        gap: 14px;
-        align-items: end;
-    }
-
-    .rm-field {
+    .rm-filter-row {
         display: flex;
-        flex-direction: column;
-        gap: 8px;
-    }
-
-    .rm-label {
-        font-size: 12px;
-        color: rgba(232, 236, 255, 0.70);
-        letter-spacing: 0.3px;
-    }
-
-    .rm-input {
-        width: 100%;
-        padding: 12px 12px;
-        border-radius: 12px;
-        background: rgba(0, 0, 0, 0.28);
-        border: 1px solid rgba(255, 255, 255, 0.10);
-        color: #e8ecff;
-        outline: none;
-    }
-
-        .rm-input:focus {
-            border-color: rgba(124, 92, 255, 0.60);
-            box-shadow: 0 0 0 4px rgba(124, 92, 255, 0.15);
-        }
-
-    .rm-actions {
-        display: flex;
+        align-items: center;
         gap: 10px;
-        justify-content: flex-end;
+        flex-wrap: wrap;
+    }
+
+    .rm-chip {
+        padding: 10px 14px;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(255, 255, 255, 0.06);
+        color: rgba(232, 236, 255, 0.88);
+        cursor: pointer;
+    }
+
+    .rm-chip-active {
+        background: linear-gradient(135deg, rgba(124, 92, 255, 0.95), rgba(0, 200, 255, 0.75));
+        color: #0b0f1a;
+        border-color: rgba(124, 92, 255, 0.30);
+        font-weight: 700;
     }
 
     .rm-btn {
@@ -888,17 +763,6 @@
         .rm-btn:disabled {
             cursor: not-allowed;
             opacity: 0.6;
-        }
-
-    .rm-btn-primary {
-        background: linear-gradient(135deg, rgba(124, 92, 255, 0.95), rgba(0, 200, 255, 0.75));
-        border: 1px solid rgba(124, 92, 255, 0.30);
-        color: #0b0f1a;
-        font-weight: 700;
-    }
-
-        .rm-btn-primary:hover:enabled {
-            filter: brightness(1.05);
         }
 
     .rm-btn-ghost:hover:enabled {
@@ -928,6 +792,10 @@
         .rm-btn-success:hover:enabled {
             background: rgba(0, 255, 163, 0.18);
         }
+
+    .rm-btn-table {
+        padding: 8px 10px;
+    }
 
     .rm-list-header {
         display: flex;
@@ -968,82 +836,43 @@
         color: rgba(232, 236, 255, 0.92);
     }
 
-    .rm-grid {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 14px;
+    .rm-table-wrap {
+        overflow-x: auto;
     }
 
-    .rm-item-top {
-        display: flex;
-        align-items: flex-start;
-        justify-content: space-between;
-        gap: 12px;
-        margin-bottom: 14px;
+    .rm-table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 1080px;
     }
 
-    .rm-item-actions {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        flex-wrap: wrap;
-        justify-content: flex-end;
-    }
+        .rm-table thead th {
+            text-align: left;
+            font-size: 12px;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+            color: rgba(232, 236, 255, 0.65);
+            padding: 14px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
 
-    .rm-item-title {
-        flex: 1;
-        font-size: 20px;
-        font-weight: 800;
-        color: rgba(232, 236, 255, 0.97);
-        line-height: 1.35;
-        word-break: break-word;
-    }
+        .rm-table tbody td {
+            padding: 14px 16px;
+            vertical-align: top;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            color: rgba(232, 236, 255, 0.92);
+            line-height: 1.5;
+        }
 
-    .rm-simple-list {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        margin-bottom: 14px;
-    }
-
-    .rm-simple-row {
-        padding: 12px 14px;
-        border-radius: 14px;
-        background: rgba(0, 0, 0, 0.22);
-        border: 1px solid rgba(255, 255, 255, 0.06);
-        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03), 0 8px 18px rgba(0, 0, 0, 0.16);
-    }
-
-    .rm-simple-label {
-        font-size: 11px;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.45px;
-        color: rgba(232, 236, 255, 0.58);
-        margin-bottom: 6px;
-    }
-
-    .rm-simple-value {
-        font-size: 15px;
-        line-height: 1.45;
-        color: rgba(232, 236, 255, 0.95);
-        word-break: break-word;
-    }
-
-    .rm-item-meta {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        color: rgba(232, 236, 255, 0.68);
-        font-size: 12px;
-        margin-top: 6px;
-        flex-wrap: wrap;
+    .rm-row-completed {
+        opacity: 0.75;
     }
 
     .rm-badge {
         padding: 5px 10px;
         border-radius: 999px;
         color: rgba(232, 236, 255, 0.88);
+        display: inline-block;
     }
 
     .rm-badge-pending {
@@ -1056,19 +885,16 @@
         border: 1px solid rgba(0, 255, 163, 0.22);
     }
 
-    .rm-meta-sep {
-        opacity: 0.55;
+    .rm-table-actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
     }
 
-    .rm-note {
-        margin-top: 12px;
-        padding: 10px 12px;
-        border-radius: 12px;
-        border: 1px solid rgba(255, 196, 0, 0.18);
-        background: rgba(255, 196, 0, 0.08);
+    .rm-table-note {
+        margin-top: 8px;
         color: rgba(255, 230, 168, 0.95);
         font-size: 12px;
-        line-height: 1.45;
     }
 
     .rm-empty {
@@ -1101,53 +927,12 @@
         font-size: 13px;
     }
 
-    .rm-spinner {
-        width: 14px;
-        height: 14px;
-        border-radius: 50%;
-        border: 2px solid rgba(0, 0, 0, 0.25);
-        border-top-color: rgba(0, 0, 0, 0.75);
-        display: inline-block;
-        animation: rmspin 0.8s linear infinite;
-    }
-
-    @@keyframes rmspin {
-        from {
-            transform: rotate(0deg);
-        }
-
-        to {
-            transform: rotate(360deg);
-        }
-    }
-
     @@media (max-width: 860px) {
         .rm-header {
             flex-direction: column;
         }
 
         .rm-header-actions {
-            width: 100%;
-            justify-content: flex-start;
-        }
-
-        .rm-form-grid {
-            grid-template-columns: 1fr;
-        }
-
-        .rm-actions {
-            justify-content: flex-start;
-        }
-
-        .rm-grid {
-            grid-template-columns: 1fr;
-        }
-
-        .rm-item-top {
-            flex-direction: column;
-        }
-
-        .rm-item-actions {
             width: 100%;
             justify-content: flex-start;
         }

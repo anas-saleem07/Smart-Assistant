@@ -317,10 +317,8 @@ D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-ios\iossimulator-x64\scopedcss\C
 D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-ios\iossimulator-x64\scopedcss\Components\Layout\NavMenu.razor.rz.scp.css
 D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-ios\iossimulator-x64\scopedcss\bundle\SmartAssistant.App.styles.css
 D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-ios\iossimulator-x64\scopedcss\projectbundle\SmartAssistant.App.bundle.scp.css
-D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-ios\iossimulator-x64\compressed\2jzm9u7kdw-nzufhe8n46.gz
 D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-ios\iossimulator-x64\compressed\yd183426xq-6gzpyzhau4.gz
 D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-ios\iossimulator-x64\compressed\y1mfxytrjn-8inm30yfxf.gz
-D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-ios\iossimulator-x64\compressed\htmek2v7se-oabhczf9kg.gz
 D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-ios\iossimulator-x64\compressed\3kntm1eues-oa35vov9kc.gz
 D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-ios\iossimulator-x64\compressed\25c30jwdw2-l2e2kb02vv.gz
 D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-ios\iossimulator-x64\compressed\j7pv1de54w-xgwscxtq2t.gz
@@ -338,10 +336,8 @@ D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-ios\iossimulator-x64\staticwebas
 D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-ios\iossimulator-x64\staticwebassets.upToDateCheck.txt
 D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-ios\iossimulator-x64\compressed\publish\j7pv1de54w-xgwscxtq2t.br
 D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-ios\iossimulator-x64\compressed\publish\19vi8jiadu-xgwscxtq2t.br
-D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-ios\iossimulator-x64\compressed\publish\2jzm9u7kdw-nzufhe8n46.br
 D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-ios\iossimulator-x64\compressed\publish\yd183426xq-6gzpyzhau4.br
 D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-ios\iossimulator-x64\compressed\publish\y1mfxytrjn-8inm30yfxf.br
-D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-ios\iossimulator-x64\compressed\publish\htmek2v7se-oabhczf9kg.br
 D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-ios\iossimulator-x64\compressed\publish\3kntm1eues-oa35vov9kc.br
 D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-ios\iossimulator-x64\compressed\publish\25c30jwdw2-l2e2kb02vv.br
 D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-ios\iossimulator-x64\staticwebassets.publish.json
@@ -400,3 +396,7 @@ D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-ios\iossimulator-x64\refint\Smar
 D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-ios\iossimulator-x64\SmartAssistant.App.pdb
 D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-ios\iossimulator-x64\SmartAssistant.App.genruntimeconfig.cache
 D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-ios\iossimulator-x64\ref\SmartAssistant.App.dll
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-ios\iossimulator-x64\compressed\2jzm9u7kdw-e5tk7yf482.gz
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-ios\iossimulator-x64\compressed\htmek2v7se-ds0onivxcn.gz
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-ios\iossimulator-x64\compressed\publish\2jzm9u7kdw-e5tk7yf482.br
+D:\Anas FYP\SmartAssistant.App\obj\Debug\net9.0-ios\iossimulator-x64\compressed\publish\htmek2v7se-ds0onivxcn.br
