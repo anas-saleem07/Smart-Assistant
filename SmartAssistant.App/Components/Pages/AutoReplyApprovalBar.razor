@@ -33,7 +33,21 @@
                     <div class="ar-badge">Approval needed</div>
                     <div class="ar-id">#@pendingItem.Id</div>
                 </div>
+                @if (!string.IsNullOrWhiteSpace(pendingItem.Subject))
+                {
+                    <div class="ar-line">
+                        <span class="ar-label">Subject</span>
+                        <span class="ar-value">@pendingItem.Subject</span>
+                    </div>
+                }
 
+                @if (!string.IsNullOrWhiteSpace(pendingItem.From))
+                {
+                    <div class="ar-line">
+                        <span class="ar-label">From</span>
+                        <span class="ar-value">@pendingItem.From</span>
+                    </div>
+                }
                 <div class="ar-line">
                     <span class="ar-label">Reason</span>
                     <span class="ar-value">@pendingItem.RequestSummary</span>
@@ -183,7 +197,7 @@
         await SendSimpleActionAsync(
             item,
             $"api/auto-reply/approve-suggested-slot/{item.Id}",
-            "Reschedule email sent.");
+            "Reschedule email sent. The slot remains tentative until the other side confirms.");
     }
 
     private async Task RejectRequest(PendingAutoReplyViewModel item)
@@ -231,25 +245,40 @@
 
             if (result == null || !result.Success)
             {
-                SetStatus(result?.Message ?? "Failed to create Google Calendar event.", true);
+                SetStatus(result?.Message ?? "Failed to create draft Google Calendar event.", true);
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(result.EventHtmlLink))
+            var suggestedTimeText = "";
+
+            if (result.StartUtc.HasValue && result.EndUtc.HasValue)
             {
-                SetStatus("Calendar event was created but no open link was returned.", true);
-                return;
+                suggestedTimeText =
+                    ToLocalRangeText(result.StartUtc.Value, result.EndUtc.Value, "PKT");
+            }
+            else if (result.StartUtc.HasValue)
+            {
+                suggestedTimeText =
+                    ToLocalSingleText(result.StartUtc.Value, "PKT");
             }
 
-            await Launcher.Default.OpenAsync(result.EventHtmlLink);
+            var statusMessage = string.IsNullOrWhiteSpace(suggestedTimeText)
+                ? "Draft suggested slot saved successfully. It is not confirmed yet. Review or edit it in Google Calendar, then come back to the app and send the reschedule email."
+                : "Draft suggested slot saved successfully for " + suggestedTimeText + ". It is not confirmed yet. Review or edit it in Google Calendar, then come back to the app and send the reschedule email.";
+
+            SetStatus(statusMessage, false);
 
             await LoadPendingApprovals();
-            SetStatus("Google Calendar event created and opened successfully.", false);
             await InvokeAsync(StateHasChanged);
+
+            if (!string.IsNullOrWhiteSpace(result.EventHtmlLink))
+            {
+                await Launcher.Default.OpenAsync(result.EventHtmlLink);
+            }
         }
         catch (TaskCanceledException)
         {
-            SetStatus("Request timed out while creating Google Calendar event.", true);
+            SetStatus("Request timed out while creating draft Google Calendar event.", true);
         }
         catch (Exception exception)
         {
@@ -354,7 +383,32 @@
         refreshTimer?.Dispose();
         refreshCancellationSource?.Dispose();
     }
+    private string ToLocalSingleText(DateTimeOffset utc, string timeZoneLabel)
+    {
+        var localTime = utc.ToLocalTime().DateTime;
+        return localTime.ToString("dddd, MMM d, yyyy h:mm tt") + " " + timeZoneLabel;
+    }
 
+    private string ToLocalRangeText(DateTimeOffset startUtc, DateTimeOffset endUtc, string timeZoneLabel)
+    {
+        var startLocal = startUtc.ToLocalTime().DateTime;
+        var endLocal = endUtc.ToLocalTime().DateTime;
+
+        if (startLocal.Date == endLocal.Date)
+        {
+            return startLocal.ToString("dddd, MMM d, yyyy h:mm tt") +
+                   " - " +
+                   endLocal.ToString("h:mm tt") +
+                   " " +
+                   timeZoneLabel;
+        }
+
+        return startLocal.ToString("dddd, MMM d, yyyy h:mm tt") +
+               " - " +
+               endLocal.ToString("dddd, MMM d, yyyy h:mm tt") +
+               " " +
+               timeZoneLabel;
+    }
     public sealed class ApiErrorResponse
     {
         public string Code { get; set; } = "";
@@ -367,6 +421,7 @@
         public string Provider { get; set; } = "";
         public string MessageId { get; set; } = "";
         public string Subject { get; set; } = "";
+        public string From { get; set; } = "";
         public string RequestSummary { get; set; } = "";
         public DateTimeOffset? ProposedStartUtc { get; set; }
         public DateTimeOffset? ProposedEndUtc { get; set; }

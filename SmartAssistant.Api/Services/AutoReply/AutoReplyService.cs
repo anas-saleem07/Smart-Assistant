@@ -36,6 +36,7 @@ namespace SmartAssistant.Api.Services.AutoReply
         public string Provider { get; set; } = "";
         public string MessageId { get; set; } = "";
         public string Subject { get; set; } = "";
+        public string From { get; set; } = "";
         public string RequestSummary { get; set; } = "";
         public DateTimeOffset? ProposedStartUtc { get; set; }
         public DateTimeOffset? ProposedEndUtc { get; set; }
@@ -215,9 +216,6 @@ namespace SmartAssistant.Api.Services.AutoReply
             if (IsCancellationRequest(email))
                 return false;
 
-            // Important:
-            // Confirmation replies can contain quoted old "reschedule" text.
-            // So only the latest reply text is used by IsFinalConfirmationEmail.
             if (!IsFinalConfirmationEmail(email))
                 return false;
 
@@ -314,10 +312,26 @@ namespace SmartAssistant.Api.Services.AutoReply
                 await EnsureCalendarEventForReminderAsync(savedReminder, settings, ct);
             }
 
+            if (!string.IsNullOrWhiteSpace(matchedRow.SuggestedCalendarEventId))
+            {
+                try
+                {
+                    await _calendar.DeleteEventAsync(matchedRow.SuggestedCalendarEventId, settings, ct);
+                }
+                catch
+                {
+                    // Do not fail the final confirmation flow if tentative event cleanup fails.
+                }
+            }
+
             matchedRow.WaitingForExternalConfirmation = false;
             matchedRow.ReplyRequiresApproval = false;
             matchedRow.ReplyDraftBody = null;
             matchedRow.ReplyLastError = "Confirmed by sender. Reminder created.";
+            matchedRow.SuggestedCalendarHtmlLink = null;
+            matchedRow.SuggestedCalendarEventId = null;
+            matchedRow.SuggestedStartUtc = null;
+            matchedRow.SuggestedEndUtc = null;
 
             currentEmailProcessed.ReplyLastError = "Confirmation processed. Reminder created.";
 
@@ -355,11 +369,36 @@ namespace SmartAssistant.Api.Services.AutoReply
             if (!looksLikeSchedulingEmail)
                 return false;
 
-            var processed = await _db.EmailProcessed
-                .FirstOrDefaultAsync(item => item.Provider == email.Provider && item.MessageId == email.Id, ct);
+            var processed = await GetOrCreateEmailProcessedRowAsync(email, ct);
+            var processedChanged = false;
 
-            if (processed == null)
-                return false;
+            if (string.IsNullOrWhiteSpace(processed.Subject) && !string.IsNullOrWhiteSpace(email.Subject))
+            {
+                processed.Subject = email.Subject.Trim();
+                processedChanged = true;
+            }
+
+            if (string.IsNullOrWhiteSpace(processed.From) && !string.IsNullOrWhiteSpace(email.From))
+            {
+                processed.From = email.From.Trim();
+                processedChanged = true;
+            }
+
+            if (processedChanged)
+            {
+                await _db.SaveChangesAsync(ct);
+            }
+
+            if (processed.Replied)
+                return true;
+
+            if (!processed.ReplyNeeded)
+            {
+                processed.ReplyNeeded = true;
+                processed.ReplyQueuedOn = DateTimeOffset.UtcNow;
+                processed.ReplyLastError = null;
+                await _db.SaveChangesAsync(ct);
+            }
 
             if (processed.Replied)
                 return true;
@@ -647,7 +686,7 @@ namespace SmartAssistant.Api.Services.AutoReply
             var result = new ApprovalCalendarOpenDto
             {
                 Success = false,
-                Message = "Unable to create calendar event."
+                Message = "Unable to create draft calendar event."
             };
 
             var row = await _db.EmailProcessed.FirstOrDefaultAsync(item => item.Id == emailProcessedId, ct);
@@ -707,17 +746,35 @@ namespace SmartAssistant.Api.Services.AutoReply
 
             var suggestedEndUtc = suggestedStartUtc.Value.AddMinutes(slotDurationMinutes);
 
+            if (!string.IsNullOrWhiteSpace(row.SuggestedCalendarEventId))
+            {
+                try
+                {
+                    await _calendar.DeleteEventAsync(row.SuggestedCalendarEventId, settings, ct);
+                }
+                catch
+                {
+                    // Ignore cleanup failure for old draft event.
+                }
+            }
+
+            var draftEventTitle = "Tentative: Suggested meeting slot";
+            var draftEventDescription =
+                "This is a draft suggested slot created by SmartAssistant." + Environment.NewLine +
+                "It is not confirmed yet." + Environment.NewLine +
+                "Final confirmation will happen only after the other side confirms by email.";
+
             var calendarCreateResult = await _calendar.CreateApprovalSuggestionEventAsync(
                 suggestedStartUtc.Value,
                 suggestedEndUtc,
-                "Suggested meeting slot",
-                "Created from SmartAssistant approval notification bar.",
+                draftEventTitle,
+                draftEventDescription,
                 settings,
                 ct);
 
             if (calendarCreateResult == null)
             {
-                result.Message = "Google Calendar event could not be created.";
+                result.Message = "Google Calendar draft event could not be created.";
                 return result;
             }
 
@@ -727,11 +784,16 @@ namespace SmartAssistant.Api.Services.AutoReply
             row.SuggestedCalendarHtmlLink = calendarCreateResult.EventHtmlLink;
             row.CalendarCreatedOn = DateTimeOffset.UtcNow;
             row.CalendarLastError = null;
+            var suggestedRangeText = FormatLocalRange(
+    suggestedStartUtc.Value,
+    suggestedEndUtc,
+    settings);
+            row.ReplyLastError = "Draft suggested slot saved successfully for " + suggestedRangeText + ".";
 
             await _db.SaveChangesAsync(ct);
 
             result.Success = true;
-            result.Message = "Google Calendar event created successfully.";
+            result.Message = "Draft suggested slot saved successfully for " + suggestedRangeText + ".";
             result.EventHtmlLink = calendarCreateResult.EventHtmlLink;
             result.EventId = calendarCreateResult.EventId;
             result.StartUtc = suggestedStartUtc.Value;
@@ -809,7 +871,21 @@ namespace SmartAssistant.Api.Services.AutoReply
 
                     if (suggestedStartUtc.HasValue)
                     {
-                        suggestedLocalText = FormatLocal(suggestedStartUtc.Value, settings);
+                        var suggestedEndUtc = pendingRow.SuggestedEndUtc;
+
+                        if (!suggestedEndUtc.HasValue && suggestedStartUtc.HasValue)
+                        {
+                            suggestedEndUtc = suggestedStartUtc.Value.AddMinutes(settings.SlotMinutes);
+                        }
+
+                        if (suggestedStartUtc.HasValue && suggestedEndUtc.HasValue)
+                        {
+                            suggestedLocalText = FormatLocalRange(suggestedStartUtc.Value, suggestedEndUtc.Value, settings);
+                        }
+                        else if (suggestedStartUtc.HasValue)
+                        {
+                            suggestedLocalText = FormatLocal(suggestedStartUtc.Value, settings);
+                        }
                     }
                 }
                 catch
@@ -823,13 +899,16 @@ namespace SmartAssistant.Api.Services.AutoReply
                     Id = pendingRow.Id,
                     Provider = pendingRow.Provider ?? "",
                     MessageId = pendingRow.MessageId ?? "",
-                    Subject = "Pending scheduling approval",
+                    Subject = !string.IsNullOrWhiteSpace(pendingRow.Subject)
+              ? pendingRow.Subject
+              : "Pending scheduling approval",
+                    From = pendingRow.From ?? "",
                     RequestSummary = pendingRow.ReplyLastError ?? "Approval required.",
                     ProposedStartUtc = pendingRow.ProposedStartUtc,
                     ProposedEndUtc = pendingRow.ProposedEndUtc,
                     ProposedLocalText = pendingRow.ProposedStartUtc.HasValue
-                        ? FormatLocal(pendingRow.ProposedStartUtc.Value, settings)
-                        : "",
+              ? FormatLocal(pendingRow.ProposedStartUtc.Value, settings)
+              : "",
                     SuggestedStartUtc = suggestedStartUtc,
                     SuggestedLocalText = suggestedLocalText,
                     ReplyLastError = pendingRow.ReplyLastError
@@ -1014,18 +1093,26 @@ namespace SmartAssistant.Api.Services.AutoReply
                 if (!row.SuggestedStartUtc.HasValue)
                     return false;
 
+                // Build proper range text
+                var suggestedEndUtcForReply =
+                    row.SuggestedEndUtc ?? row.SuggestedStartUtc.Value.AddMinutes(settings.SlotMinutes);
+
+                var suggestedRangeText =
+                    FormatLocalRange(row.SuggestedStartUtc.Value, suggestedEndUtcForReply, settings);
+
+                // Now use it
                 replyBody =
                     greeting + "\n\n" +
                     "Thank you for reaching out. I am unable to confirm the original proposed slot.\n" +
-                    "Could we reschedule to " + FormatLocal(row.SuggestedStartUtc.Value, settings) + "?\n\n" +
+                    "Could we reschedule to " + suggestedRangeText + "?\n\n" +
                     "Best regards,\n" +
                     senderName;
 
                 await _emailClient.ReplyAsync(row.MessageId, replyBody.Trim(), ct);
 
-                // Required flow:
-                // wait for confirmation -> then reminder -> then calendar event
+                // Suggested slot remains tentative until the other side confirms.
                 row.WaitingForExternalConfirmation = true;
+                row.ReplyLastError = "Suggested slot sent. Waiting for external confirmation.";
             }
 
             row.Replied = true;
@@ -1204,9 +1291,47 @@ namespace SmartAssistant.Api.Services.AutoReply
             return false;
         }
 
+        private static string GetTimeZoneLabel(ReminderAutomationSettings settings)
+        {
+            if (string.IsNullOrWhiteSpace(settings.TimezoneId))
+                return "local time";
+
+            if (settings.TimezoneId.Equals("Asia/Karachi", StringComparison.OrdinalIgnoreCase) ||
+                settings.TimezoneId.Equals("Pakistan Standard Time", StringComparison.OrdinalIgnoreCase))
+                return "PKT";
+
+            return settings.TimezoneId;
+        }
+
         private static string FormatLocal(DateTimeOffset utc, ReminderAutomationSettings settings)
         {
-            return AppTimeHelper.FormatUtcAsLocal(utc, settings.TimezoneId, "dddd, MMM d, h:mm tt");
+            var localText = AppTimeHelper.FormatUtcAsLocal(utc, settings.TimezoneId, "dddd, MMM d, h:mm tt");
+            return localText + " " + GetTimeZoneLabel(settings);
+        }
+
+        private static string FormatLocalRange(DateTimeOffset startUtc, DateTimeOffset endUtc, ReminderAutomationSettings settings)
+        {
+            var targetTimeZone = AppTimeHelper.ResolveTimeZone(settings.TimezoneId);
+
+            var startLocal = TimeZoneInfo.ConvertTime(startUtc, targetTimeZone).DateTime;
+            var endLocal = TimeZoneInfo.ConvertTime(endUtc, targetTimeZone).DateTime;
+
+            var timeZoneLabel = GetTimeZoneLabel(settings);
+
+            if (startLocal.Date == endLocal.Date)
+            {
+                return startLocal.ToString("dddd, MMM d, yyyy h:mm tt") +
+                       " - " +
+                       endLocal.ToString("h:mm tt") +
+                       " " +
+                       timeZoneLabel;
+            }
+
+            return startLocal.ToString("dddd, MMM d, yyyy h:mm tt") +
+                   " - " +
+                   endLocal.ToString("dddd, MMM d, yyyy h:mm tt") +
+                   " " +
+                   timeZoneLabel;
         }
 
         private static bool TryGetProposedUtcRange(
@@ -1557,13 +1682,42 @@ namespace SmartAssistant.Api.Services.AutoReply
                 .FirstOrDefaultAsync(item => item.Provider == email.Provider && item.MessageId == email.Id, ct);
 
             if (existing != null)
+            {
+                var changed = false;
+
+                if (string.IsNullOrWhiteSpace(existing.Subject) && !string.IsNullOrWhiteSpace(email.Subject))
+                {
+                    existing.Subject = email.Subject.Trim();
+                    changed = true;
+                }
+
+                if (string.IsNullOrWhiteSpace(existing.From) && !string.IsNullOrWhiteSpace(email.From))
+                {
+                    existing.From = email.From.Trim();
+                    changed = true;
+                }
+
+                if (string.IsNullOrWhiteSpace(existing.CalendarEventId) && !string.IsNullOrWhiteSpace(email.CalendarEventId))
+                {
+                    existing.CalendarEventId = email.CalendarEventId;
+                    changed = true;
+                }
+
+                if (changed)
+                {
+                    await _db.SaveChangesAsync(ct);
+                }
+
                 return existing;
+            }
 
             var row = new EmailProcessed
             {
                 Provider = email.Provider,
                 MessageId = email.Id,
                 ProcessedOn = DateTimeOffset.UtcNow,
+                Subject = string.IsNullOrWhiteSpace(email.Subject) ? null : email.Subject.Trim(),
+                From = string.IsNullOrWhiteSpace(email.From) ? null : email.From.Trim(),
                 CalendarEventId = email.CalendarEventId
             };
 

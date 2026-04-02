@@ -86,6 +86,9 @@
         public string? SuggestedCalendarHtmlLink { get; set; }
         public string? ProposedTimezoneId { get; set; }
 
+        public string? Subject { get; set; }
+        public string? From { get; set; }
+
 
     }
 }
