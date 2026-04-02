@@ -1,6 +1,7 @@
 ﻿@using System.Net
 @using System.Net.Http.Json
 @using System.Text.Json
+@using System.Text.RegularExpressions
 @using Microsoft.Maui.ApplicationModel
 @inject HttpClient Http
 @inject NavigationManager Nav
@@ -33,49 +34,32 @@
                     <div class="ar-badge">Approval needed</div>
                     <div class="ar-id">#@pendingItem.Id</div>
                 </div>
+
                 @if (!string.IsNullOrWhiteSpace(pendingItem.Subject))
                 {
-                    <div class="ar-line">
-                        <span class="ar-label">Subject</span>
-                        <span class="ar-value">@pendingItem.Subject</span>
+                    <div class="ar-subject">
+                        @GetCleanSubjectText(pendingItem)
                     </div>
                 }
 
-                @if (!string.IsNullOrWhiteSpace(pendingItem.From))
-                {
-                    <div class="ar-line">
-                        <span class="ar-label">From</span>
-                        <span class="ar-value">@pendingItem.From</span>
+                <div class="ar-simple-list">
+
+                    <div class="ar-simple-row">
+                        <div class="ar-simple-label">From</div>
+                        <div class="ar-simple-value">@GetFromDisplayText(pendingItem)</div>
                     </div>
-                }
-                <div class="ar-line">
-                    <span class="ar-label">Reason</span>
-                    <span class="ar-value">@pendingItem.RequestSummary</span>
+
+                    <div class="ar-simple-row">
+                        <div class="ar-simple-label">Time</div>
+                        <div class="ar-simple-value">@GetScheduleAndSuggestedText(pendingItem)</div>
+                    </div>
+
+                    <div class="ar-simple-row">
+                        <div class="ar-simple-label">Reason</div>
+                        <div class="ar-simple-value">@GetReasonText(pendingItem)</div>
+                    </div>
+
                 </div>
-
-                @if (!string.IsNullOrWhiteSpace(pendingItem.ProposedLocalText))
-                {
-                    <div class="ar-line">
-                        <span class="ar-label">Requested slot</span>
-                        <span class="ar-value">@pendingItem.ProposedLocalText</span>
-                    </div>
-                }
-
-                @if (!string.IsNullOrWhiteSpace(pendingItem.SuggestedLocalText))
-                {
-                    <div class="ar-line">
-                        <span class="ar-label">Suggested slot</span>
-                        <span class="ar-value">@pendingItem.SuggestedLocalText</span>
-                    </div>
-                }
-
-                @if (string.IsNullOrWhiteSpace(pendingItem.ProposedLocalText))
-                {
-                    <div class="ar-line">
-                        <span class="ar-label">Requested slot</span>
-                        <span class="ar-value">Could not parse requested time. Suggested slot will be based on the next available office-hour slot.</span>
-                    </div>
-                }
 
                 <div class="ar-actions">
                     <button class="ar-btn ar-btn-yes"
@@ -115,6 +99,8 @@
     private CancellationTokenSource? refreshCancellationSource;
     private long? activeActionId;
 
+    #region Lifecycle
+
     protected override async Task OnInitializedAsync()
     {
         await LoadPendingApprovals();
@@ -124,6 +110,17 @@
 
         _ = RunRefreshLoopAsync(refreshCancellationSource.Token);
     }
+
+    public void Dispose()
+    {
+        refreshCancellationSource?.Cancel();
+        refreshTimer?.Dispose();
+        refreshCancellationSource?.Dispose();
+    }
+
+    #endregion
+
+    #region Private Methods
 
     private async Task RunRefreshLoopAsync(CancellationToken cancellationToken)
     {
@@ -189,7 +186,7 @@
         await SendSimpleActionAsync(
             item,
             $"api/auto-reply/approve-same-slot/{item.Id}",
-           "Original slot approved. Reminder created and acceptance email sent.");
+            "Original slot approved. Reminder created and acceptance email sent.");
     }
 
     private async Task SendSuggestedSlot(PendingAutoReplyViewModel item)
@@ -253,13 +250,16 @@
 
             if (result.StartUtc.HasValue && result.EndUtc.HasValue)
             {
-                suggestedTimeText =
-                    ToLocalRangeText(result.StartUtc.Value, result.EndUtc.Value, "PKT");
+                suggestedTimeText = ToLocalRangeText(
+                    result.StartUtc.Value,
+                    result.EndUtc.Value,
+                    "PKT");
             }
             else if (result.StartUtc.HasValue)
             {
-                suggestedTimeText =
-                    ToLocalSingleText(result.StartUtc.Value, "PKT");
+                suggestedTimeText = ToLocalSingleText(
+                    result.StartUtc.Value,
+                    "PKT");
             }
 
             var statusMessage = string.IsNullOrWhiteSpace(suggestedTimeText)
@@ -377,12 +377,186 @@
         isError = false;
     }
 
-    public void Dispose()
+    private string GetCleanSubjectText(PendingAutoReplyViewModel pendingItem)
     {
-        refreshCancellationSource?.Cancel();
-        refreshTimer?.Dispose();
-        refreshCancellationSource?.Dispose();
+        if (string.IsNullOrWhiteSpace(pendingItem.Subject))
+            return "Interview request";
+
+        var subject = pendingItem.Subject.Trim();
+
+        if (subject.StartsWith("Re:", StringComparison.OrdinalIgnoreCase))
+            subject = subject[3..].Trim();
+
+        return string.IsNullOrWhiteSpace(subject) ? "Interview request" : subject;
     }
+
+    private string GetFromDisplayText(PendingAutoReplyViewModel pendingItem)
+    {
+        var cleanFrom = GetCleanFromText(pendingItem);
+        var companyName = GetCompanyDisplayText(pendingItem);
+
+        if (!string.IsNullOrWhiteSpace(companyName) &&
+            !string.Equals(companyName, "Not available", StringComparison.OrdinalIgnoreCase))
+        {
+            return cleanFrom + " (" + companyName + ")";
+        }
+
+        return cleanFrom;
+    }
+
+    private string GetCleanFromText(PendingAutoReplyViewModel pendingItem)
+    {
+        var sourceText = ((pendingItem.From ?? "") + " " + (pendingItem.Subject ?? "")).Trim();
+
+        var emailMatch = Regex.Match(
+            sourceText,
+            @"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}");
+
+        var emailText = emailMatch.Success ? emailMatch.Value : "";
+
+        var nameText = "";
+
+        if (!string.IsNullOrWhiteSpace(pendingItem.From))
+        {
+            var fromText = pendingItem.From.Trim();
+
+            var angleBracketIndex = fromText.IndexOf('<');
+            if (angleBracketIndex > 0)
+            {
+                nameText = fromText[..angleBracketIndex].Trim().Trim('"');
+            }
+            else
+            {
+                var cleanedFrom = Regex.Replace(fromText, @"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}", "").Trim();
+                cleanedFrom = cleanedFrom.Replace("<", "").Replace(">", "").Trim();
+
+                if (!string.IsNullOrWhiteSpace(cleanedFrom))
+                    nameText = cleanedFrom;
+            }
+        }
+
+        if (string.IsNullOrWhiteSpace(nameText) && !string.IsNullOrWhiteSpace(emailText))
+        {
+            var emailName = emailText.Split('@')[0]
+                .Replace(".", " ")
+                .Replace("_", " ")
+                .Trim();
+
+            nameText = ToTitleCaseSafe(emailName);
+        }
+
+        if (!string.IsNullOrWhiteSpace(nameText) && !string.IsNullOrWhiteSpace(emailText))
+            return $"{nameText} ({emailText})";
+
+        if (!string.IsNullOrWhiteSpace(emailText))
+            return emailText;
+
+        if (!string.IsNullOrWhiteSpace(nameText))
+            return nameText;
+
+        return "Not available";
+    }
+
+    private string GetCompanyDisplayText(PendingAutoReplyViewModel pendingItem)
+    {
+        if (string.IsNullOrWhiteSpace(pendingItem.Subject))
+            return "";
+
+        var subject = pendingItem.Subject.Trim();
+
+        var fromIndex = subject.IndexOf(" from ", StringComparison.OrdinalIgnoreCase);
+        if (fromIndex >= 0)
+        {
+            var companyText = subject[(fromIndex + 6)..].Trim();
+
+            var atIndex = companyText.IndexOf(" @ ", StringComparison.OrdinalIgnoreCase);
+            if (atIndex > 0)
+                companyText = companyText[..atIndex].Trim();
+
+            var onIndex = companyText.IndexOf(" on ", StringComparison.OrdinalIgnoreCase);
+            if (onIndex > 0)
+                companyText = companyText[..onIndex].Trim();
+
+            companyText = companyText.Trim('(', ')', ' ');
+
+            if (!string.IsNullOrWhiteSpace(companyText))
+                return companyText;
+        }
+
+        return "";
+    }
+
+    private string GetScheduleAndSuggestedText(PendingAutoReplyViewModel pendingItem)
+    {
+        var lines = new List<string>();
+
+        var scheduleText = GetScheduleTimeText(pendingItem);
+        if (!string.IsNullOrWhiteSpace(scheduleText))
+            lines.Add("Schedule Time: " + scheduleText);
+
+        var suggestedText = GetSuggestedSlotText(pendingItem);
+        if (!string.IsNullOrWhiteSpace(suggestedText))
+            lines.Add("Suggested Slot: " + suggestedText);
+
+        if (lines.Count == 0)
+            return "Not available";
+
+        return string.Join("\n", lines);
+    }
+
+    private string GetScheduleTimeText(PendingAutoReplyViewModel pendingItem)
+    {
+        if (!string.IsNullOrWhiteSpace(pendingItem.ProposedLocalText))
+            return pendingItem.ProposedLocalText;
+
+        if (pendingItem.ProposedStartUtc.HasValue && pendingItem.ProposedEndUtc.HasValue)
+        {
+            return ToLocalRangeText(
+                pendingItem.ProposedStartUtc.Value,
+                pendingItem.ProposedEndUtc.Value,
+                "PKT");
+        }
+
+        return "";
+    }
+
+    private string GetSuggestedSlotText(PendingAutoReplyViewModel pendingItem)
+    {
+        if (!string.IsNullOrWhiteSpace(pendingItem.SuggestedLocalText))
+            return pendingItem.SuggestedLocalText;
+
+        if (pendingItem.SuggestedStartUtc.HasValue)
+            return ToLocalSingleText(pendingItem.SuggestedStartUtc.Value, "PKT");
+
+        return "";
+    }
+
+    private string GetReasonText(PendingAutoReplyViewModel pendingItem)
+    {
+        if (!string.IsNullOrWhiteSpace(pendingItem.RequestSummary))
+            return pendingItem.RequestSummary.Trim();
+
+        if (!string.IsNullOrWhiteSpace(pendingItem.ReplyLastError))
+            return pendingItem.ReplyLastError.Trim();
+
+        if (!string.IsNullOrWhiteSpace(GetSuggestedSlotText(pendingItem)))
+            return "Requested time is outside office hours or conflicts with another reminder.";
+
+        return "Approval required before sending auto reply.";
+    }
+
+    private string ToTitleCaseSafe(string value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+            return "";
+
+        var words = value
+            .Split(' ', StringSplitOptions.RemoveEmptyEntries)
+            .Select(word => char.ToUpperInvariant(word[0]) + word[1..].ToLowerInvariant());
+
+        return string.Join(" ", words);
+    }
+
     private string ToLocalSingleText(DateTimeOffset utc, string timeZoneLabel)
     {
         var localTime = utc.ToLocalTime().DateTime;
@@ -409,6 +583,11 @@
                " " +
                timeZoneLabel;
     }
+
+    #endregion
+
+    #region Models
+
     public sealed class ApiErrorResponse
     {
         public string Code { get; set; } = "";
@@ -440,6 +619,8 @@
         public DateTimeOffset? StartUtc { get; set; }
         public DateTimeOffset? EndUtc { get; set; }
     }
+
+    #endregion
 }
 
 <style>
@@ -487,12 +668,21 @@
     }
 
     .ar-card {
-        padding: 14px;
-        border-radius: 16px;
-        background: rgba(255,255,255,0.06);
-        border: 1px solid rgba(255,255,255,0.10);
+        padding: 16px;
+        border-radius: 18px;
+        background: var(--card);
+        border: 1px solid var(--cardBorder);
         margin-top: 12px;
+        box-shadow: 0 18px 42px rgba(0, 0, 0, 0.36), 0 8px 20px rgba(0, 0, 0, 0.24), 0 0 0 1px rgba(255, 255, 255, 0.02) inset, 0 0 26px rgba(255, 179, 0, 0.07);
+        backdrop-filter: blur(12px);
+        transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
     }
+
+        .ar-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 24px 48px rgba(0, 0, 0, 0.40), 0 10px 24px rgba(0, 0, 0, 0.26), 0 0 30px rgba(255, 179, 0, 0.10);
+            border-color: rgba(255, 255, 255, 0.14);
+        }
 
     .ar-card-top {
         display: flex;
@@ -518,29 +708,51 @@
         font-size: 12px;
     }
 
-    .ar-line {
+    .ar-subject {
+        font-size: 18px;
+        font-weight: 800;
+        line-height: 1.35;
+        color: #f7f9ff;
+        margin-bottom: 14px;
+    }
+
+    .ar-simple-list {
         display: flex;
+        flex-direction: column;
         gap: 10px;
-        flex-wrap: wrap;
-        margin-bottom: 8px;
+        margin-bottom: 16px;
     }
 
-    .ar-label {
-        min-width: 120px;
-        color: rgba(232, 236, 255, 0.66);
-        font-size: 13px;
+    .ar-simple-row {
+        padding: 12px 14px;
+        border-radius: 14px;
+        background: rgba(0, 0, 0, 0.22);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03), 0 8px 18px rgba(0, 0, 0, 0.16);
     }
 
-    .ar-value {
-        color: rgba(232, 236, 255, 0.94);
-        font-size: 13px;
+    .ar-simple-label {
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+        color: rgba(232, 236, 255, 0.62);
+        margin-bottom: 6px;
+    }
+
+    .ar-simple-value {
+        font-size: 14px;
+        line-height: 1.6;
+        color: rgba(232, 236, 255, 0.95);
+        word-break: break-word;
+        white-space: pre-line;
     }
 
     .ar-actions {
         display: flex;
         gap: 10px;
         flex-wrap: wrap;
-        margin-top: 14px;
+        margin-top: 6px;
     }
 
     .ar-btn {
@@ -552,10 +764,10 @@
         font-weight: 700;
     }
 
-    .ar-btn:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
-    }
+        .ar-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
 
     .ar-btn-yes {
         background: linear-gradient(135deg, #15c37e, #00a8ff);

@@ -19,7 +19,9 @@
             </div>
         </header>
 
-        <AutoReplyApprovalBar />
+        <section class="rm-approval-host">
+            <AutoReplyApprovalBar />
+        </section>
 
         @if (!string.IsNullOrWhiteSpace(statusText))
         {
@@ -56,11 +58,9 @@
                 </div>
 
                 <div class="rm-actions">
-
                     <button class="rm-btn rm-btn-primary"
                             @onclick="AddReminder"
                             disabled="@isProcessing">
-
                         @if (isProcessing)
                         {
                             <span class="rm-spinner"></span>
@@ -70,7 +70,6 @@
                         {
                             <span>Add Reminder</span>
                         }
-
                     </button>
 
                     <button class="rm-btn rm-btn-ghost"
@@ -78,7 +77,6 @@
                             disabled="@isProcessing">
                         Refresh
                     </button>
-
                 </div>
 
             </div>
@@ -105,30 +103,40 @@
             else
             {
                 <div class="rm-grid">
-
                     @foreach (var reminder in reminders.OrderByDescending(reminderItem => reminderItem.ReminderTime))
                     {
                         <article class="rm-item rm-card">
 
                             <div class="rm-item-top">
-
-                                <div class="rm-item-title">@reminder.Title</div>
+                                <div class="rm-item-title">@GetReminderHeading(reminder)</div>
 
                                 <button class="rm-btn rm-btn-danger"
                                         @onclick="() => DeleteReminder(reminder.Id)"
                                         disabled="@isProcessing">
                                     Delete
                                 </button>
+                            </div>
+
+                            <div class="rm-simple-list">
+
+                                <div class="rm-simple-row">
+                                    <div class="rm-simple-label">From</div>
+                                    <div class="rm-simple-value">@GetCleanFromText(reminder)</div>
+                                </div>
+
+                                <div class="rm-simple-row">
+                                    <div class="rm-simple-label">Where</div>
+                                    <div class="rm-simple-value">@GetCleanWhereText(reminder)</div>
+                                </div>
+
+                                <div class="rm-simple-row">
+                                    <div class="rm-simple-label">Time</div>
+                                    <div class="rm-simple-value">@GetCleanTimeText(reminder)</div>
+                                </div>
 
                             </div>
 
-                            @if (!string.IsNullOrWhiteSpace(reminder.Description))
-                            {
-                                <div class="rm-item-desc">@reminder.Description</div>
-                            }
-
                             <div class="rm-item-meta">
-
                                 <span class="rm-badge">
                                     @(reminder.Completed ? "Completed" : "Pending")
                                 </span>
@@ -136,12 +144,10 @@
                                 <span class="rm-meta-sep">•</span>
 
                                 <span>@reminder.ReminderTimeLocalText</span>
-
                             </div>
 
                         </article>
                     }
-
                 </div>
             }
 
@@ -151,7 +157,6 @@
 </div>
 
 @code {
-
     private bool isProcessing;
     private string statusText = "";
     private bool isError;
@@ -163,15 +168,17 @@
         ReminderTime = DateTime.Now
     };
 
+    #region Private Methods
+
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(8));
+            using var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(8));
 
             var gmailStatus = await Http.GetFromJsonAsync<GoogleConnectionStatusModel>(
                 "api/google-oauth/status",
-                cts.Token);
+                cancellationTokenSource.Token);
 
             if (gmailStatus?.IsConnected != true)
             {
@@ -202,12 +209,12 @@
 
     private void ShowSettingsUpdatedMessageIfNeeded()
     {
-        var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
+        var currentUri = Navigation.ToAbsoluteUri(Navigation.Uri);
 
-        if (string.IsNullOrWhiteSpace(uri.Query))
+        if (string.IsNullOrWhiteSpace(currentUri.Query))
             return;
 
-        if (uri.Query.Contains("settingsUpdated=1", StringComparison.OrdinalIgnoreCase))
+        if (currentUri.Query.Contains("settingsUpdated=1", StringComparison.OrdinalIgnoreCase))
         {
             SetStatus("Settings updated successfully.", false);
             Navigation.NavigateTo("/reminders", false);
@@ -224,21 +231,21 @@
             isProcessing = true;
             ClearStatus();
 
-            using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(8));
+            using var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(8));
 
             reminders =
                 await Http.GetFromJsonAsync<List<ReminderDto>>(
                     "api/reminder/list",
-                    cts.Token)
+                    cancellationTokenSource.Token)
                 ?? new List<ReminderDto>();
         }
         catch (TaskCanceledException)
         {
             SetStatus("Request timed out while loading reminders.", true);
         }
-        catch (Exception ex)
+        catch (Exception exception)
         {
-            SetStatus($"Failed to load reminders: {ex.Message}", true);
+            SetStatus($"Failed to load reminders: {exception.Message}", true);
         }
         finally
         {
@@ -263,19 +270,18 @@
             isProcessing = true;
             ClearStatus();
 
-            using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(8));
+            using var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(8));
 
-            var response =
-                await Http.PostAsJsonAsync(
-                    "api/reminder/create",
-                    newReminder,
-                    cts.Token);
+            var response = await Http.PostAsJsonAsync(
+                "api/reminder/create",
+                newReminder,
+                cancellationTokenSource.Token);
 
-            var body = await response.Content.ReadAsStringAsync(cts.Token);
+            var responseBody = await response.Content.ReadAsStringAsync(cancellationTokenSource.Token);
 
             if (!response.IsSuccessStatusCode)
             {
-                SetStatus($"Create failed ({(int)response.StatusCode}): {body}", true);
+                SetStatus($"Create failed ({(int)response.StatusCode}): {responseBody}", true);
                 return;
             }
 
@@ -292,9 +298,9 @@
         {
             SetStatus("Request timed out while adding reminder.", true);
         }
-        catch (Exception ex)
+        catch (Exception exception)
         {
-            SetStatus($"Failed to add reminder: {ex.Message}", true);
+            SetStatus($"Failed to add reminder: {exception.Message}", true);
         }
         finally
         {
@@ -303,7 +309,7 @@
         }
     }
 
-    private async Task DeleteReminder(Guid id)
+    private async Task DeleteReminder(Guid reminderId)
     {
         if (isProcessing)
             return;
@@ -313,18 +319,17 @@
             isProcessing = true;
             ClearStatus();
 
-            using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(8));
+            using var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(8));
 
-            var response =
-                await Http.DeleteAsync(
-                    $"api/reminder/delete/{id}",
-                    cts.Token);
+            var response = await Http.DeleteAsync(
+                $"api/reminder/delete/{reminderId}",
+                cancellationTokenSource.Token);
 
-            var body = await response.Content.ReadAsStringAsync(cts.Token);
+            var responseBody = await response.Content.ReadAsStringAsync(cancellationTokenSource.Token);
 
             if (!response.IsSuccessStatusCode)
             {
-                SetStatus($"Delete failed ({(int)response.StatusCode}): {body}", true);
+                SetStatus($"Delete failed ({(int)response.StatusCode}): {responseBody}", true);
                 return;
             }
 
@@ -336,9 +341,9 @@
         {
             SetStatus("Request timed out while deleting reminder.", true);
         }
-        catch (Exception ex)
+        catch (Exception exception)
         {
-            SetStatus($"Failed to delete reminder: {ex.Message}", true);
+            SetStatus($"Failed to delete reminder: {exception.Message}", true);
         }
         finally
         {
@@ -347,6 +352,146 @@
         }
     }
 
+    private string GetReminderHeading(ReminderDto reminder)
+    {
+        if (string.IsNullOrWhiteSpace(reminder.Title))
+            return "Interview reminder";
+
+        var title = reminder.Title.Trim();
+
+        if (title.StartsWith("Re:", StringComparison.OrdinalIgnoreCase))
+            title = title[3..].Trim();
+
+        var atTimeIndex = title.IndexOf(" @ ", StringComparison.OrdinalIgnoreCase);
+        if (atTimeIndex > 0)
+            title = title[..atTimeIndex].Trim();
+
+        return string.IsNullOrWhiteSpace(title) ? "Interview reminder" : title;
+    }
+
+    private string GetCleanFromText(ReminderDto reminder)
+    {
+        var combinedText = ((reminder.Title ?? "") + " " + (reminder.Description ?? "")).Trim();
+
+        var emailMatch = System.Text.RegularExpressions.Regex.Match(
+            combinedText,
+            @"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}");
+
+        var emailText = emailMatch.Success ? emailMatch.Value : "";
+
+        var nameMatch = System.Text.RegularExpressions.Regex.Match(
+            combinedText,
+            @"From:\s*([^<\r\n]+)",
+            System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+
+        var nameText = nameMatch.Success ? nameMatch.Groups[1].Value.Trim() : "";
+
+        if (string.IsNullOrWhiteSpace(nameText) && !string.IsNullOrWhiteSpace(reminder.Title))
+        {
+            var title = reminder.Title.Trim();
+
+            var parenthesisStartIndex = title.LastIndexOf('(');
+            var parenthesisEndIndex = title.LastIndexOf(')');
+
+            if (parenthesisStartIndex >= 0 && parenthesisEndIndex > parenthesisStartIndex)
+            {
+                var possibleEmail = title[(parenthesisStartIndex + 1)..parenthesisEndIndex].Trim();
+                if (possibleEmail.Contains("@", StringComparison.OrdinalIgnoreCase))
+                    emailText = possibleEmail;
+            }
+        }
+
+        if (!string.IsNullOrWhiteSpace(emailText))
+        {
+            var emailName = emailText.Split('@')[0]
+                .Replace(".", " ")
+                .Replace("_", " ")
+                .Trim();
+
+            var readableEmailName = ToTitleCaseSafe(emailName);
+
+            if (!string.IsNullOrWhiteSpace(nameText))
+                return $"{nameText} ({emailText})";
+
+            return $"{readableEmailName} ({emailText})";
+        }
+
+        if (!string.IsNullOrWhiteSpace(nameText))
+            return nameText;
+
+        return "Not available";
+    }
+
+    private string GetCleanWhereText(ReminderDto reminder)
+    {
+        if (string.IsNullOrWhiteSpace(reminder.Title))
+            return "Not available";
+
+        var title = reminder.Title.Trim();
+
+        var fromIndex = title.IndexOf(" from ", StringComparison.OrdinalIgnoreCase);
+        if (fromIndex >= 0)
+        {
+            var companyText = title[(fromIndex + 6)..].Trim();
+
+            var atTimeIndex = companyText.IndexOf(" @ ", StringComparison.OrdinalIgnoreCase);
+            if (atTimeIndex > 0)
+                companyText = companyText[..atTimeIndex].Trim();
+
+            var onIndex = companyText.IndexOf(" on ", StringComparison.OrdinalIgnoreCase);
+            if (onIndex > 0)
+                companyText = companyText[..onIndex].Trim();
+
+            if (!string.IsNullOrWhiteSpace(companyText))
+                return companyText;
+        }
+
+        if (title.Contains("Interview Alert", StringComparison.OrdinalIgnoreCase))
+            return "Interview Alert";
+
+        return "Not available";
+    }
+
+    private string GetCleanTimeText(ReminderDto reminder)
+    {
+        if (!string.IsNullOrWhiteSpace(reminder.Title))
+        {
+            var title = reminder.Title.Trim();
+
+            var atTimeIndex = title.IndexOf(" @ ", StringComparison.OrdinalIgnoreCase);
+            if (atTimeIndex >= 0)
+            {
+                var timeText = title[(atTimeIndex + 3)..].Trim();
+
+                var parenthesisStartIndex = timeText.LastIndexOf('(');
+                if (parenthesisStartIndex > 0)
+                    timeText = timeText[..parenthesisStartIndex].Trim();
+
+                return timeText;
+            }
+        }
+
+        if (!string.IsNullOrWhiteSpace(reminder.ReminderTimeLocalText))
+            return reminder.ReminderTimeLocalText;
+
+        return "Not available";
+    }
+
+    private string ToTitleCaseSafe(string value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+            return "";
+
+        var words = value
+            .Split(' ', StringSplitOptions.RemoveEmptyEntries)
+            .Select(word => char.ToUpperInvariant(word[0]) + word[1..].ToLowerInvariant());
+
+        return string.Join(" ", words);
+    }
+
+    #endregion
+
+    #region Models
 
     public sealed class CreateReminderRequest
     {
@@ -374,6 +519,8 @@
         public string Email { get; set; } = "";
         public string Message { get; set; } = "";
     }
+
+    #endregion
 }
 
 <style>
@@ -429,13 +576,28 @@
         box-shadow: 0 0 12px rgba(124, 92, 255, 0.85);
     }
 
+    .rm-approval-host {
+        margin-bottom: 18px;
+    }
+
     .rm-card {
-        background: rgba(255, 255, 255, 0.06);
-        border: 1px solid rgba(255, 255, 255, 0.10);
+        background: var(--card);
+        border: 1px solid var(--cardBorder);
         border-radius: 16px;
-        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.28);
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.34), 0 6px 18px rgba(0, 0, 0, 0.22), 0 0 0 1px rgba(255, 255, 255, 0.02) inset, 0 0 24px rgba(124, 92, 255, 0.08);
         backdrop-filter: blur(10px);
     }
+
+    .rm-item {
+        padding: 16px;
+        transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+    }
+
+        .rm-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 22px 44px rgba(0, 0, 0, 0.38), 0 8px 20px rgba(0, 0, 0, 0.24), 0 0 28px rgba(0, 200, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.14);
+        }
 
     .rm-status {
         display: flex;
@@ -463,7 +625,7 @@
         align-items: center;
         justify-content: center;
         border-radius: 8px;
-        background: rgba(0,0,0,0.18);
+        background: rgba(0, 0, 0, 0.18);
         font-weight: 700;
     }
 
@@ -528,9 +690,9 @@
     .rm-btn {
         border-radius: 12px;
         padding: 12px 14px;
-        border: 1px solid rgba(255,255,255,0.12);
+        border: 1px solid rgba(255, 255, 255, 0.12);
         cursor: pointer;
-        background: rgba(255,255,255,0.06);
+        background: rgba(255, 255, 255, 0.06);
         color: rgba(232, 236, 255, 0.90);
         display: inline-flex;
         align-items: center;
@@ -556,7 +718,7 @@
         }
 
     .rm-btn-ghost:hover:enabled {
-        background: rgba(255,255,255,0.10);
+        background: rgba(255, 255, 255, 0.10);
     }
 
     .rm-btn-danger {
@@ -587,8 +749,8 @@
     .rm-count {
         padding: 6px 10px;
         border-radius: 999px;
-        background: rgba(255,255,255,0.08);
-        border: 1px solid rgba(255,255,255,0.10);
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.10);
         color: rgba(232, 236, 255, 0.80);
         font-size: 12px;
     }
@@ -599,28 +761,52 @@
         gap: 14px;
     }
 
-    .rm-item {
-        padding: 14px;
-    }
-
     .rm-item-top {
         display: flex;
         align-items: flex-start;
         justify-content: space-between;
         gap: 12px;
-        margin-bottom: 10px;
+        margin-bottom: 14px;
     }
 
     .rm-item-title {
-        font-size: 16px;
-        font-weight: 700;
-        color: rgba(232, 236, 255, 0.96);
-        line-height: 1.2;
+        flex: 1;
+        font-size: 20px;
+        font-weight: 800;
+        color: rgba(232, 236, 255, 0.97);
+        line-height: 1.35;
+        word-break: break-word;
     }
 
-    .rm-item-desc {
-        color: rgba(232, 236, 255, 0.72);
-        margin-bottom: 10px;
+    .rm-simple-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 14px;
+    }
+
+    .rm-simple-row {
+        padding: 12px 14px;
+        border-radius: 14px;
+        background: rgba(0, 0, 0, 0.22);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03), 0 8px 18px rgba(0, 0, 0, 0.16);
+    }
+
+    .rm-simple-label {
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.45px;
+        color: rgba(232, 236, 255, 0.58);
+        margin-bottom: 6px;
+    }
+
+    .rm-simple-value {
+        font-size: 15px;
+        line-height: 1.45;
+        color: rgba(232, 236, 255, 0.95);
+        word-break: break-word;
     }
 
     .rm-item-meta {
@@ -629,6 +815,8 @@
         gap: 10px;
         color: rgba(232, 236, 255, 0.68);
         font-size: 12px;
+        margin-top: 6px;
+        flex-wrap: wrap;
     }
 
     .rm-badge {
@@ -677,8 +865,8 @@
         width: 14px;
         height: 14px;
         border-radius: 50%;
-        border: 2px solid rgba(0,0,0,0.25);
-        border-top-color: rgba(0,0,0,0.75);
+        border: 2px solid rgba(0, 0, 0, 0.25);
+        border-top-color: rgba(0, 0, 0, 0.75);
         display: inline-block;
         animation: rmspin 0.8s linear infinite;
     }

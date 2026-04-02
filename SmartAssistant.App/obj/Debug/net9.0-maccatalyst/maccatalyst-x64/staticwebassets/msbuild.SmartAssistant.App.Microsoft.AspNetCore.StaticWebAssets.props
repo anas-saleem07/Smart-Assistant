@@ -12,12 +12,12 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>e5tk7yf482</Fingerprint>
-      <Integrity>bhCZyC/yM2+DaFXr8z25+5MeWfXWqMJNNA4ZLAXbjjU=</Integrity>
+      <Fingerprint>nzufhe8n46</Fingerprint>
+      <Integrity>XcyPnqXTEjCi02NlTAuNJLsnkjzA0GZg6vIG79K/h0A=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <FileLength>3376</FileLength>
-      <LastWriteTime>Tue, 24 Feb 2026 09:20:31 GMT</LastWriteTime>
+      <FileLength>3900</FileLength>
+      <LastWriteTime>Thu, 02 Apr 2026 11:19:46 GMT</LastWriteTime>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\css\app.css'))</OriginalItemSpec>
     </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\css\bootstrap\bootstrap.min.css'))">
@@ -72,12 +72,12 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>ds0onivxcn</Fingerprint>
-      <Integrity>/Uif4U/Qg6Fyw2stqpQVMbx2kYhBQ+TLoabAOnaknbw=</Integrity>
+      <Fingerprint>oabhczf9kg</Fingerprint>
+      <Integrity>kIRl6SACKP6qon4Ai4TTvGK07mavIalTTu3Xn912Irs=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <FileLength>1740</FileLength>
-      <LastWriteTime>Thu, 26 Feb 2026 09:47:16 GMT</LastWriteTime>
+      <FileLength>1626</FileLength>
+      <LastWriteTime>Thu, 02 Apr 2026 11:29:54 GMT</LastWriteTime>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\css\dark-theme.css'))</OriginalItemSpec>
     </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\index.html'))">
@@ -137,7 +137,7 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <FileLength>5481</FileLength>
-      <LastWriteTime>Thu, 02 Apr 2026 07:49:39 GMT</LastWriteTime>
+      <LastWriteTime>Thu, 02 Apr 2026 11:49:18 GMT</LastWriteTime>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\SmartAssistant.App.styles.css'))</OriginalItemSpec>
     </StaticWebAsset>
   </ItemGroup>
