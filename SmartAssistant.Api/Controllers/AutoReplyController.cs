@@ -113,5 +113,27 @@ namespace SmartAssistant.Api.Controllers
                 });
             }
         }
+
+        [HttpGet("history")]
+        public async Task<ActionResult<List<ProcessedEmailHistoryDto>>> GetHistory(CancellationToken ct)
+        {
+            try
+            {
+                var items = await _autoReply.GetProcessedEmailHistoryAsync(ct);
+                return Ok(items);
+            }
+            catch (GoogleOAuthReconnectRequiredException)
+            {
+                return Unauthorized(new
+                {
+                    code = "gmail_reconnect_required",
+                    message = "Gmail account needs reconnect."
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("GET /api/auto-reply/history failed: " + ex.Message);
+            }
+        }
     }
 }

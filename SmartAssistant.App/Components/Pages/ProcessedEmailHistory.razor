@@ -1,0 +1,771 @@
+﻿@page "/processed-email-history"
+@inject HttpClient Http
+@using System.Net.Http.Json
+@inject NavigationManager Navigation
+
+<div class="rm-page">
+    <div class="rm-shell rm-shell-wide">
+
+        <header class="rm-header">
+            <div>
+                <h1 class="rm-title">Processed Email History</h1>
+                <p class="rm-subtitle">Review processed scheduling emails, their final status, and related details.</p>
+            </div>
+
+            <div class="rm-header-actions">
+                <button class="rm-btn rm-btn-ghost" @onclick='() => Navigation.NavigateTo("/reminders")'>
+                    Back to Reminders
+                </button>
+
+                <div class="rm-pill">
+                    <span class="rm-pill-dot"></span>
+                    <span>@(isProcessing ? "Working..." : "Ready")</span>
+                </div>
+            </div>
+        </header>
+
+        @if (!string.IsNullOrWhiteSpace(statusText))
+        {
+            <div class="rm-status @(isError ? "rm-status-error" : "rm-status-ok")">
+                <span class="rm-status-icon">@(isError ? "!" : "OK")</span>
+                <span class="rm-status-text">@statusText</span>
+                <button class="rm-status-close" @onclick="ClearStatus">x</button>
+            </div>
+        }
+
+        <section class="rm-card rm-filter-card">
+            <div class="rm-filter-row">
+                <button class="rm-chip @(selectedFilter == EmailHistoryFilter.All ? "rm-chip-active" : "")"
+                        @onclick='() => ChangeFilter(EmailHistoryFilter.All)'>
+                    All
+                </button>
+
+                <button class="rm-chip @(selectedFilter == EmailHistoryFilter.ApprovalPending ? "rm-chip-active" : "")"
+                        @onclick='() => ChangeFilter(EmailHistoryFilter.ApprovalPending)'>
+                    Approval Pending
+                </button>
+
+                <button class="rm-chip @(selectedFilter == EmailHistoryFilter.WaitingConfirmation ? "rm-chip-active" : "")"
+                        @onclick='() => ChangeFilter(EmailHistoryFilter.WaitingConfirmation)'>
+                    Waiting Confirmation
+                </button>
+
+                <button class="rm-chip @(selectedFilter == EmailHistoryFilter.Confirmed ? "rm-chip-active" : "")"
+                        @onclick='() => ChangeFilter(EmailHistoryFilter.Confirmed)'>
+                    Confirmed
+                </button>
+
+                <button class="rm-chip @(selectedFilter == EmailHistoryFilter.ReschedulePending ? "rm-chip-active" : "")"
+                        @onclick='() => ChangeFilter(EmailHistoryFilter.ReschedulePending)'>
+                    Waiting Reschedule
+                </button>
+
+                <button class="rm-chip @(selectedFilter == EmailHistoryFilter.Rejected ? "rm-chip-active" : "")"
+                        @onclick='() => ChangeFilter(EmailHistoryFilter.Rejected)'>
+                    Rejected
+                </button>
+
+                <button class="rm-chip @(selectedFilter == EmailHistoryFilter.Error ? "rm-chip-active" : "")"
+                        @onclick='() => ChangeFilter(EmailHistoryFilter.Error)'>
+                    Error
+                </button>
+
+                <button class="rm-chip @(selectedFilter == EmailHistoryFilter.AutoAccepted ? "rm-chip-active" : "")"
+                        @onclick='() => ChangeFilter(EmailHistoryFilter.AutoAccepted)'>
+                    Auto Accepted
+                </button>
+
+                <button class="rm-btn rm-btn-ghost" @onclick="LoadHistory" disabled="@isProcessing">
+                    Refresh
+                </button>
+            </div>
+        </section>
+
+        <section class="rm-list">
+            <div class="rm-list-header">
+                <h2 class="rm-list-title">Processed Emails</h2>
+                <span class="rm-count">@filteredItems.Count</span>
+            </div>
+
+            @if (filteredItems.Count == 0)
+            {
+                <div class="rm-empty rm-card">
+                    <div class="rm-empty-icon">Mail</div>
+                    <div>
+                        <div class="rm-empty-title">No processed emails found</div>
+                        <div class="rm-empty-sub">Try another filter or refresh the page.</div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                @foreach (var group in groupedItems)
+                {
+                    <section class="rm-group-section">
+                        <div class="rm-group-header">
+                            <h3 class="rm-group-title">@group.Title</h3>
+                            <span class="rm-count">@group.Items.Count</span>
+                        </div>
+
+                        <div class="rm-table-wrap rm-card">
+                            <table class="rm-table">
+                                <thead>
+                                    <tr>
+                                        <th>Subject</th>
+                                        <th>Status</th>
+                                        <th>Error / Reason</th>
+                                        <th>Processed Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in group.Items)
+                                    {
+                                        <tr>
+                                            <td>@GetSubjectText(item)</td>
+                                            <td>
+                                                <span class="rm-badge @GetStatusBadgeClass(item.ProcessingStatus)">
+                                                    @GetStatusLabel(item.ProcessingStatus)
+                                                </span>
+                                            </td>
+                                            <td>@GetReasonText(item)</td>
+                                            <td>@FormatHistoryDate(item.ProcessedOn)</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+                }
+            }
+        </section>
+
+    </div>
+</div>
+
+@code {
+    private bool isProcessing;
+    private string statusText = "";
+    private bool isError;
+
+    private EmailHistoryFilter selectedFilter = EmailHistoryFilter.All;
+
+    private List<ProcessedEmailHistoryDto> items = new();
+    private List<ProcessedEmailHistoryDto> filteredItems = new();
+    private List<ProcessedEmailHistoryGroupVm> groupedItems = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            using var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(8));
+
+            var gmailStatus = await Http.GetFromJsonAsync<GoogleConnectionStatusModel>(
+                "api/google-oauth/status",
+                cancellationTokenSource.Token);
+
+            if (gmailStatus?.IsConnected != true)
+            {
+                Navigation.NavigateTo("/google-auth");
+                return;
+            }
+
+            await LoadHistory();
+        }
+        catch
+        {
+            Navigation.NavigateTo("/google-auth");
+        }
+    }
+
+    private void ClearStatus()
+    {
+        statusText = "";
+        isError = false;
+    }
+
+    private void SetStatus(string message, bool error)
+    {
+        statusText = message;
+        isError = error;
+    }
+
+    private async Task LoadHistory()
+    {
+        if (isProcessing)
+            return;
+
+        try
+        {
+            isProcessing = true;
+            ClearStatus();
+
+            using var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(8));
+
+            items =
+                await Http.GetFromJsonAsync<List<ProcessedEmailHistoryDto>>(
+                    "api/auto-reply/history",
+                    cancellationTokenSource.Token)
+                ?? new List<ProcessedEmailHistoryDto>();
+
+            ApplyFilterAndGrouping();
+        }
+        catch (TaskCanceledException)
+        {
+            SetStatus("Request timed out while loading processed email history.", true);
+        }
+        catch (Exception exception)
+        {
+            SetStatus($"Failed to load processed email history: {exception.Message}", true);
+        }
+        finally
+        {
+            isProcessing = false;
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private void ChangeFilter(EmailHistoryFilter filter)
+    {
+        selectedFilter = filter;
+        ApplyFilterAndGrouping();
+    }
+
+    private void ApplyFilterAndGrouping()
+    {
+        IEnumerable<ProcessedEmailHistoryDto> query = items;
+
+        if (selectedFilter == EmailHistoryFilter.ApprovalPending)
+            query = query.Where(item => item.ProcessingStatus == "ApprovalPending");
+        else if (selectedFilter == EmailHistoryFilter.WaitingConfirmation)
+            query = query.Where(item => item.ProcessingStatus == "WaitingSenderConfirmation");
+        else if (selectedFilter == EmailHistoryFilter.Confirmed)
+            query = query.Where(item => item.ProcessingStatus == "Confirmed");
+        else if (selectedFilter == EmailHistoryFilter.ReschedulePending)
+            query = query.Where(item => item.ProcessingStatus == "ReschedulePending");
+        else if (selectedFilter == EmailHistoryFilter.Rejected)
+            query = query.Where(item => item.ProcessingStatus == "RejectedBySender" || item.ProcessingStatus == "RejectedByUser");
+        else if (selectedFilter == EmailHistoryFilter.Error)
+            query = query.Where(item => item.ProcessingStatus == "Error");
+        else if (selectedFilter == EmailHistoryFilter.AutoAccepted)
+            query = query.Where(item => item.ProcessingStatus == "AutoAccepted");
+
+        filteredItems = query
+            .OrderByDescending(item => item.ProcessedOn)
+            .ToList();
+
+        groupedItems = filteredItems
+            .GroupBy(item => GetGroupTitle(item.ProcessedOn))
+            .Select(group => new ProcessedEmailHistoryGroupVm
+            {
+                Title = group.Key,
+                SortDate = group.Max(item => item.ProcessedOn.Date),
+                Items = group.OrderByDescending(item => item.ProcessedOn).ToList()
+            })
+            .OrderByDescending(group => group.SortDate)
+            .ToList();
+    }
+
+    private string GetGroupTitle(DateTimeOffset processedOn)
+    {
+        var localDate = processedOn.ToLocalTime().Date;
+        var today = DateTime.Now.Date;
+        var yesterday = today.AddDays(-1);
+
+        if (localDate == today)
+            return "Today";
+
+        if (localDate == yesterday)
+            return "Yesterday";
+
+        return localDate.ToString("dddd, dd MMM yyyy");
+    }
+
+    private string GetStatusLabel(string? status)
+    {
+        return status switch
+        {
+            "ApprovalPending" => "Approval Pending",
+            "ReschedulePending" => "Waiting Reschedule",
+            "WaitingSenderConfirmation" => "Waiting Confirmation",
+            "Confirmed" => "Confirmed",
+            "RejectedBySender" => "Rejected",
+            "RejectedByUser" => "Rejected By Me",
+            "Error" => "Error",
+            "AutoAccepted" => "Auto Accepted",
+            _ => "Unknown"
+        };
+    }
+
+    private string GetStatusBadgeClass(string? status)
+    {
+        return status switch
+        {
+            "Confirmed" => "rm-badge-completed",
+            "AutoAccepted" => "rm-badge-completed",
+            "RejectedBySender" => "rm-badge-error",
+            "RejectedByUser" => "rm-badge-error",
+            "Error" => "rm-badge-error",
+            _ => "rm-badge-pending"
+        };
+    }
+
+    private string GetSubjectText(ProcessedEmailHistoryDto item)
+    {
+        return string.IsNullOrWhiteSpace(item.Subject) ? "Processed scheduling email" : item.Subject;
+    }
+
+    private string GetSenderText(ProcessedEmailHistoryDto item)
+    {
+        return string.IsNullOrWhiteSpace(item.From) ? "Not available" : item.From;
+    }
+
+    private string GetDetailsText(ProcessedEmailHistoryDto item)
+    {
+        return string.IsNullOrWhiteSpace(item.Details) ? "-" : item.Details;
+    }
+
+    private string GetProposedText(ProcessedEmailHistoryDto item)
+    {
+        if (!item.ProposedStartUtc.HasValue)
+            return "-";
+
+        if (item.ProposedEndUtc.HasValue)
+            return FormatRange(item.ProposedStartUtc.Value, item.ProposedEndUtc.Value);
+
+        return FormatSingle(item.ProposedStartUtc.Value);
+    }
+
+    private string GetSuggestedText(ProcessedEmailHistoryDto item)
+    {
+        if (!item.SuggestedStartUtc.HasValue)
+            return "-";
+
+        if (item.SuggestedEndUtc.HasValue)
+            return FormatRange(item.SuggestedStartUtc.Value, item.SuggestedEndUtc.Value);
+
+        return FormatSingle(item.SuggestedStartUtc.Value);
+    }
+
+    private string FormatSingle(DateTimeOffset value)
+    {
+        return value.ToLocalTime().ToString("ddd, dd MMM yyyy hh:mm tt");
+    }
+
+    private string FormatRange(DateTimeOffset start, DateTimeOffset end)
+    {
+        var startLocal = start.ToLocalTime();
+        var endLocal = end.ToLocalTime();
+
+        if (startLocal.Date == endLocal.Date)
+            return startLocal.ToString("ddd, dd MMM yyyy hh:mm tt") + " - " + endLocal.ToString("hh:mm tt");
+
+        return startLocal.ToString("ddd, dd MMM yyyy hh:mm tt") + " - " + endLocal.ToString("ddd, dd MMM yyyy hh:mm tt");
+    }
+
+    private string FormatHistoryDate(DateTimeOffset value)
+    {
+        return value.ToLocalTime().ToString("ddd, dd MMM yyyy hh:mm tt");
+    }
+
+    private string GetReasonText(ProcessedEmailHistoryDto item)
+    {
+        if (item.ProcessingStatus == "Confirmed")
+            return "-";
+
+        if (item.ProcessingStatus == "AutoAccepted")
+            return "-";
+
+        if (item.ProcessingStatus == "RejectedByUser")
+        {
+            if (!string.IsNullOrWhiteSpace(item.Details))
+                return item.Details;
+
+            return "Rejected by user due to timing.";
+        }
+
+        if (item.ProcessingStatus == "RejectedBySender")
+        {
+            if (!string.IsNullOrWhiteSpace(item.Details))
+                return item.Details;
+
+            return "Rejected by sender.";
+        }
+
+        if (item.ProcessingStatus == "WaitingSenderConfirmation")
+        {
+            if (!string.IsNullOrWhiteSpace(item.Details))
+                return item.Details;
+
+            return "Waiting for sender confirmation.";
+        }
+
+        if (item.ProcessingStatus == "ApprovalPending")
+        {
+            if (!string.IsNullOrWhiteSpace(item.Details))
+                return item.Details;
+
+            return "Approval pending.";
+        }
+
+        if (item.ProcessingStatus == "ReschedulePending")
+        {
+            if (!string.IsNullOrWhiteSpace(item.Details))
+                return item.Details;
+
+            return "Waiting for reschedule from sender.";
+        }
+
+        if (item.ProcessingStatus == "Error")
+        {
+            if (!string.IsNullOrWhiteSpace(item.Details))
+                return item.Details;
+
+            return "Processing failed.";
+        }
+
+        return string.IsNullOrWhiteSpace(item.Details) ? "-" : item.Details;
+    }
+
+    public sealed class ProcessedEmailHistoryDto
+    {
+        public long Id { get; set; }
+        public string Provider { get; set; } = "";
+        public string MessageId { get; set; } = "";
+        public string Subject { get; set; } = "";
+        public string From { get; set; } = "";
+        public string ProcessingStatus { get; set; } = "";
+        public string Details { get; set; } = "";
+        public DateTimeOffset? ProposedStartUtc { get; set; }
+        public DateTimeOffset? ProposedEndUtc { get; set; }
+        public DateTimeOffset? SuggestedStartUtc { get; set; }
+        public DateTimeOffset? SuggestedEndUtc { get; set; }
+        public DateTimeOffset ProcessedOn { get; set; }
+        public DateTimeOffset? RepliedOn { get; set; }
+    }
+
+    public sealed class GoogleConnectionStatusModel
+    {
+        public bool IsConnected { get; set; }
+        public bool NeedsReconnect { get; set; }
+        public string Provider { get; set; } = "Gmail";
+        public string Email { get; set; } = "";
+        public string Message { get; set; } = "";
+    }
+
+    public sealed class ProcessedEmailHistoryGroupVm
+    {
+        public string Title { get; set; } = "";
+        public DateTime SortDate { get; set; }
+        public List<ProcessedEmailHistoryDto> Items { get; set; } = new();
+    }
+
+    public enum EmailHistoryFilter
+    {
+        All = 1,
+        ApprovalPending = 2,
+        WaitingConfirmation = 3,
+        Confirmed = 4,
+        ReschedulePending = 5,
+        Rejected = 6,
+        Error = 7,
+        AutoAccepted = 8
+    }
+}
+
+<style>
+    .rm-page {
+        min-height: 100vh;
+        background: radial-gradient(1200px 800px at 20% 10%, rgba(120, 90, 255, 0.18), transparent 55%), radial-gradient(1000px 700px at 80% 30%, rgba(0, 200, 255, 0.10), transparent 55%), linear-gradient(180deg, #0b0f1a 0%, #070a12 100%);
+        color: #e8ecff;
+        padding: 28px;
+    }
+
+    .rm-shell {
+        max-width: 980px;
+        margin: 0 auto;
+    }
+
+    .rm-shell-wide {
+        max-width: 1320px;
+    }
+
+    .rm-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 18px;
+    }
+
+    .rm-header-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+    }
+
+    .rm-title {
+        font-size: 34px;
+        margin: 0;
+        letter-spacing: 0.3px;
+    }
+
+    .rm-subtitle {
+        margin: 6px 0 0;
+        color: rgba(232, 236, 255, 0.70);
+    }
+
+    .rm-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 12px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.10);
+        color: rgba(232, 236, 255, 0.85);
+        user-select: none;
+        white-space: nowrap;
+    }
+
+    .rm-pill-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #7c5cff;
+        box-shadow: 0 0 12px rgba(124, 92, 255, 0.85);
+    }
+
+    .rm-card {
+        background: var(--card);
+        border: 1px solid var(--cardBorder);
+        border-radius: 16px;
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.34), 0 6px 18px rgba(0, 0, 0, 0.22), 0 0 0 1px rgba(255, 255, 255, 0.02) inset, 0 0 24px rgba(124, 92, 255, 0.08);
+        backdrop-filter: blur(10px);
+    }
+
+    .rm-status {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 14px;
+        margin-bottom: 14px;
+        border-radius: 14px;
+    }
+
+    .rm-status-ok {
+        border: 1px solid rgba(0, 255, 163, 0.25);
+        background: rgba(0, 255, 163, 0.08);
+    }
+
+    .rm-status-error {
+        border: 1px solid rgba(255, 77, 77, 0.30);
+        background: rgba(255, 77, 77, 0.10);
+    }
+
+    .rm-status-icon {
+        width: 22px;
+        height: 22px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        background: rgba(0, 0, 0, 0.18);
+        font-weight: 700;
+    }
+
+    .rm-status-text {
+        flex: 1;
+        color: rgba(232, 236, 255, 0.92);
+    }
+
+    .rm-status-close {
+        border: none;
+        background: transparent;
+        color: rgba(232, 236, 255, 0.70);
+        font-size: 18px;
+        cursor: pointer;
+    }
+
+    .rm-filter-card {
+        padding: 14px;
+        margin-bottom: 18px;
+    }
+
+    .rm-filter-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .rm-chip {
+        padding: 10px 14px;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(255, 255, 255, 0.06);
+        color: rgba(232, 236, 255, 0.88);
+        cursor: pointer;
+    }
+
+    .rm-chip-active {
+        background: linear-gradient(135deg, rgba(124, 92, 255, 0.95), rgba(0, 200, 255, 0.75));
+        color: #0b0f1a;
+        border-color: rgba(124, 92, 255, 0.30);
+        font-weight: 700;
+    }
+
+    .rm-btn {
+        border-radius: 12px;
+        padding: 12px 14px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        cursor: pointer;
+        background: rgba(255, 255, 255, 0.06);
+        color: rgba(232, 236, 255, 0.90);
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        user-select: none;
+        white-space: nowrap;
+    }
+
+        .rm-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+    .rm-btn-ghost:hover:enabled {
+        background: rgba(255, 255, 255, 0.10);
+    }
+
+    .rm-list-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: 8px 0 12px;
+    }
+
+    .rm-list-title {
+        margin: 0;
+        font-size: 18px;
+        color: rgba(232, 236, 255, 0.90);
+    }
+
+    .rm-count {
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.10);
+        color: rgba(232, 236, 255, 0.80);
+        font-size: 12px;
+    }
+
+    .rm-group-section {
+        margin-bottom: 20px;
+    }
+
+    .rm-group-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: 0 0 12px;
+    }
+
+    .rm-group-title {
+        margin: 0;
+        font-size: 18px;
+        color: rgba(232, 236, 255, 0.92);
+    }
+
+    .rm-table-wrap {
+        overflow-x: auto;
+    }
+
+    .rm-table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 760px;
+    }
+
+        .rm-table thead th {
+            text-align: left;
+            font-size: 12px;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+            color: rgba(232, 236, 255, 0.65);
+            padding: 14px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .rm-table tbody td {
+            padding: 14px 16px;
+            vertical-align: top;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            color: rgba(232, 236, 255, 0.92);
+            line-height: 1.5;
+        }
+
+    .rm-badge {
+        padding: 5px 10px;
+        border-radius: 999px;
+        color: rgba(232, 236, 255, 0.88);
+        display: inline-block;
+    }
+
+    .rm-badge-pending {
+        background: rgba(124, 92, 255, 0.16);
+        border: 1px solid rgba(124, 92, 255, 0.28);
+    }
+
+    .rm-badge-completed {
+        background: rgba(0, 255, 163, 0.10);
+        border: 1px solid rgba(0, 255, 163, 0.22);
+    }
+
+    .rm-badge-error {
+        background: rgba(255, 77, 77, 0.12);
+        border: 1px solid rgba(255, 77, 77, 0.25);
+    }
+
+    .rm-empty {
+        padding: 18px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+
+    .rm-empty-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(124, 92, 255, 0.14);
+        border: 1px solid rgba(124, 92, 255, 0.26);
+        font-size: 20px;
+    }
+
+    .rm-empty-title {
+        font-weight: 800;
+        color: rgba(232, 236, 255, 0.95);
+    }
+
+    .rm-empty-sub {
+        color: rgba(232, 236, 255, 0.68);
+        margin-top: 4px;
+        font-size: 13px;
+    }
+
+    @@media (max-width: 860px) {
+        .rm-header {
+            flex-direction: column;
+        }
+
+        .rm-header-actions {
+            width: 100%;
+            justify-content: flex-start;
+        }
+    }
+</style>

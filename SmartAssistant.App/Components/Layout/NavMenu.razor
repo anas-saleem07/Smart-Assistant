@@ -1,12 +1,21 @@
 ﻿@using Microsoft.AspNetCore.Components.Routing
 
+@* =========================
+   Nav Toggle
+   ========================= *@
 <button class="sa-nav-toggle" @onclick="ToggleNav" aria-label="Toggle navigation">
     <span class="sa-nav-toggle-bars"></span>
 </button>
 
 <div class="sa-nav-backdrop @(isOpen ? "open" : "")" @onclick="CloseNav"></div>
 
+@* =========================
+   Sidebar Nav
+   ========================= *@
 <aside class="sa-nav @(isOpen ? "open" : "")">
+    @* =========================
+       Brand Header
+       ========================= *@
     <div class="sa-nav-header">
         <div class="sa-nav-brand">
             <div class="sa-nav-logo-wrap">
@@ -21,13 +30,16 @@
         </div>
     </div>
 
+    @* =========================
+       Main Links
+       ========================= *@
     <nav class="sa-nav-links">
         <div class="sa-nav-section">Main</div>
 
-        <NavLink class="sa-nav-link" href="" Match="NavLinkMatch.All" @onclick="CloseNav">
+        @* <NavLink class="sa-nav-link" href="" Match="NavLinkMatch.All" @onclick="CloseNav">
             <span class="sa-link-icon sa-link-icon-home"></span>
             <span>Home</span>
-        </NavLink>
+        </NavLink> *@
 
         <NavLink class="sa-nav-link" href="reminders" @onclick="CloseNav">
             <span class="sa-link-icon sa-link-icon-reminders"></span>
@@ -39,9 +51,14 @@
             <span>Reminder History</span>
         </NavLink>
 
+        <NavLink class="sa-nav-link" href="processed-email-history" @onclick="CloseNav">
+            <span class="sa-link-icon sa-link-icon-processed-email"></span>
+            <span>Processed Emails</span>
+        </NavLink>
+
         <div class="sa-nav-section">Utilities</div>
 
-        <NavLink class="sa-nav-link" href="counter" @onclick="CloseNav">
+        @* <NavLink class="sa-nav-link" href="counter" @onclick="CloseNav">
             <span class="sa-link-icon sa-link-icon-counter"></span>
             <span>Counter</span>
         </NavLink>
@@ -49,30 +66,39 @@
         <NavLink class="sa-nav-link" href="weather" @onclick="CloseNav">
             <span class="sa-link-icon sa-link-icon-weather"></span>
             <span>Weather</span>
-        </NavLink>
+        </NavLink> *@
     </nav>
 
+    @* =========================
+       Footer
+       ========================= *@
     <div class="sa-nav-footer">
         <NavLink class="sa-nav-link sa-nav-link-gmail" href="google-auth" @onclick="CloseNav">
             <span class="sa-gmail-badge">G</span>
             <span>Gmail Access</span>
         </NavLink>
     </div>
-
 </aside>
 
 @code {
+    #region Fields
     private bool isOpen = false;
+    #endregion
 
+    #region Nav Actions
     private void ToggleNav() => isOpen = !isOpen;
 
     private void CloseNav()
     {
         isOpen = false;
     }
+    #endregion
 }
 
 <style>
+    /* =========================
+           Nav Toggle
+           ========================= */
     .sa-nav-toggle {
         display: none;
         position: fixed;
@@ -125,6 +151,9 @@
             display: block;
         }
 
+    /* =========================
+           Sidebar Shell
+           ========================= */
     .sa-nav {
         width: 280px;
         min-height: 100vh;
@@ -191,6 +220,9 @@
         color: rgba(235, 240, 255, 0.58);
     }
 
+    /* =========================
+           Nav Links
+           ========================= */
     .sa-nav-links {
         display: flex;
         flex-direction: column;
@@ -231,86 +263,206 @@
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.18);
         }
 
+    /* =========================
+           Base Icon
+           ========================= */
     .sa-link-icon {
         width: 18px;
         height: 18px;
         position: relative;
         flex-shrink: 0;
         opacity: 0.95;
+        display: inline-block;
+        transition: transform 0.2s ease;
     }
 
-    .sa-link-icon-home::before,
-    .sa-link-icon-reminders::before,
-    .sa-link-icon-reminder-history::before,
-    .sa-link-icon-counter::before,
-    .sa-link-icon-weather::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        border-radius: 5px;
+    .sa-nav-link:hover .sa-link-icon {
+        transform: scale(1.08);
+    }
+
+    /* =========================
+           Legacy Simple Icons
+           ========================= */
+    .sa-link-icon-home {
         border: 2px solid currentColor;
+        border-radius: 4px;
     }
 
-    .sa-link-icon-home::after {
-        content: "";
-        position: absolute;
-        left: 3px;
-        top: -2px;
-        width: 10px;
-        height: 10px;
-        border-top: 2px solid currentColor;
-        border-left: 2px solid currentColor;
-        transform: rotate(45deg);
-        background: transparent;
+        .sa-link-icon-home::before {
+            content: "";
+            position: absolute;
+            left: 2px;
+            top: -4px;
+            width: 10px;
+            height: 10px;
+            border-top: 2px solid currentColor;
+            border-left: 2px solid currentColor;
+            transform: rotate(45deg);
+        }
+
+    .sa-link-icon-counter {
+        border: 2px solid currentColor;
+        border-radius: 4px;
     }
 
-    .sa-link-icon-reminders::after {
-        content: "";
-        position: absolute;
-        left: 7px;
-        top: 2px;
-        width: 2px;
-        height: 6px;
-        background: currentColor;
+        .sa-link-icon-counter::before {
+            content: "";
+            position: absolute;
+            left: 3px;
+            top: 8px;
+            width: 10px;
+            height: 2px;
+            background: currentColor;
+            border-radius: 999px;
+        }
+
+        .sa-link-icon-counter::after {
+            content: "";
+            position: absolute;
+            left: 7px;
+            top: 4px;
+            width: 2px;
+            height: 10px;
+            background: currentColor;
+            border-radius: 999px;
+        }
+
+    .sa-link-icon-weather {
+        border: 2px solid currentColor;
         border-radius: 999px;
-        box-shadow: 3px 4px 0 0 currentColor;
     }
 
-    .sa-link-icon-reminder-history::after {
-        content: "";
-        position: absolute;
-        left: 4px;
-        top: 4px;
-        width: 8px;
-        height: 8px;
-        border-left: 2px solid currentColor;
-        border-bottom: 2px solid currentColor;
-        border-radius: 1px;
+        .sa-link-icon-weather::before {
+            content: "";
+            position: absolute;
+            right: -2px;
+            top: -2px;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+
+    /* =========================
+           Reminders Icon
+           Calendar style
+           ========================= */
+    .sa-link-icon-reminders {
+        border: 2px solid #8f72ff;
+        border-radius: 4px;
+        box-shadow: 0 0 10px rgba(124, 92, 255, 0.35);
     }
 
-    .sa-link-icon-counter::after {
-        content: "";
-        position: absolute;
-        left: 3px;
-        top: 7px;
-        width: 10px;
-        height: 2px;
-        background: currentColor;
-        border-radius: 999px;
-        box-shadow: 4px -4px 0 0 currentColor;
-    }
+        .sa-link-icon-reminders::before {
+            content: "";
+            position: absolute;
+            left: 2px;
+            right: 2px;
+            top: 4px;
+            height: 2px;
+            background: #8f72ff;
+            border-radius: 999px;
+        }
 
-    .sa-link-icon-weather::after {
-        content: "";
-        position: absolute;
-        right: -1px;
-        top: -1px;
-        width: 7px;
-        height: 7px;
+        .sa-link-icon-reminders::after {
+            content: "";
+            position: absolute;
+            top: -3px;
+            left: 3px;
+            width: 2px;
+            height: 5px;
+            background: #8f72ff;
+            border-radius: 999px;
+            box-shadow: 8px 0 0 #8f72ff;
+        }
+
+    /* =========================
+           Reminder History Icon
+           Clock style
+           ========================= */
+    .sa-link-icon-reminder-history {
+        border: 2px solid rgba(232, 236, 255, 0.75);
         border-radius: 50%;
-        background: currentColor;
     }
 
+        .sa-link-icon-reminder-history::before {
+            content: "";
+            position: absolute;
+            left: 8px;
+            top: 3px;
+            width: 2px;
+            height: 6px;
+            background: rgba(232, 236, 255, 0.75);
+            border-radius: 999px;
+        }
+
+        .sa-link-icon-reminder-history::after {
+            content: "";
+            position: absolute;
+            left: 8px;
+            top: 8px;
+            width: 5px;
+            height: 2px;
+            background: rgba(232, 236, 255, 0.75);
+            border-radius: 999px;
+            transform-origin: left center;
+            transform: rotate(35deg);
+        }
+
+    /* =========================
+           Processed Email Icon
+           Envelope style
+           ========================= */
+    .sa-link-icon-processed-email {
+        border: 2px solid #35cfff;
+        border-radius: 4px;
+        box-shadow: 0 0 10px rgba(0, 200, 255, 0.28);
+    }
+
+        .sa-link-icon-processed-email::before {
+            content: "";
+            position: absolute;
+            left: 1px;
+            right: 1px;
+            top: 2px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent 0%, transparent 8%, #35cfff 8%, #35cfff 42%, transparent 42%, transparent 58%, #7c5cff 58%, #7c5cff 92%, transparent 92%, transparent 100%);
+            transform: skewY(24deg);
+        }
+
+        .sa-link-icon-processed-email::after {
+            content: "";
+            position: absolute;
+            left: 2px;
+            right: 2px;
+            top: 3px;
+            height: 8px;
+            border-left: 2px solid #35cfff;
+            border-right: 2px solid #7c5cff;
+            transform: skewY(-28deg);
+            opacity: 0.95;
+        }
+
+    /* =========================
+           Active Icon States
+           ========================= */
+    .sa-nav-link.active .sa-link-icon-reminders {
+        border-color: #a68cff;
+        box-shadow: 0 0 14px rgba(124, 92, 255, 0.45);
+    }
+
+    .sa-nav-link.active .sa-link-icon-reminder-history {
+        border-color: rgba(255, 255, 255, 0.92);
+    }
+
+    .sa-nav-link.active .sa-link-icon-processed-email {
+        border-color: #55d8ff;
+        box-shadow: 0 0 14px rgba(0, 200, 255, 0.40);
+    }
+
+    /* =========================
+           Footer
+           ========================= */
     .sa-nav-footer {
         margin-top: auto;
         padding-top: 12px;
@@ -335,6 +487,9 @@
         flex-shrink: 0;
     }
 
+    /* =========================
+           Mobile
+           ========================= */
     @@media (max-width: 900px) {
         .sa-nav-toggle {
             display: inline-flex;

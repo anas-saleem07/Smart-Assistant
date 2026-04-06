@@ -214,14 +214,25 @@ namespace SmartAssistant.Api.Services.Automation
                 .FirstOrDefaultAsync(item => item.Provider == email.Provider && item.MessageId == email.Id, ct);
 
             if (existing != null)
+            {
+                if (string.IsNullOrWhiteSpace(existing.ProcessingStatus) && IsCancellationEmail(email))
+                {
+                    existing.ProcessingStatus = ProcessingStatuses.RejectedBySender;
+                    existing.ReplyLastError = existing.ReplyLastError ?? "Cancellation processed.";
+                    await _db.SaveChangesAsync(ct);
+                }
+
                 return;
+            }
 
             _db.EmailProcessed.Add(new EmailProcessed
             {
                 Provider = email.Provider,
                 MessageId = email.Id,
                 ProcessedOn = DateTimeOffset.UtcNow,
-                CalendarEventId = email.CalendarEventId
+                CalendarEventId = email.CalendarEventId,
+                ProcessingStatus = IsCancellationEmail(email) ? ProcessingStatuses.RejectedBySender : null,
+                ReplyLastError = IsCancellationEmail(email) ? "Cancellation processed." : null
             });
 
             try

@@ -88,6 +88,7 @@
 
         public string? Subject { get; set; }
         public string? From { get; set; }
+        public string? ProcessingStatus { get; set; }
 
 
     }

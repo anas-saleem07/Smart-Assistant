@@ -26,8 +26,8 @@ namespace SmartAssistant.Api.Services.AutoReply
         Task<List<PendingAutoReplyDto>> GetPendingApprovalsAsync(CancellationToken ct);
         Task<bool> ApprovePendingReplyAsync(long emailProcessedId, bool useSuggestedSlot, CancellationToken ct);
         Task<bool> RejectPendingReplyAsync(long emailProcessedId, CancellationToken ct);
-
         Task<ApprovalCalendarOpenDto> CreateSuggestedCalendarEventAsync(long emailProcessedId, CancellationToken ct);
+        Task<List<ProcessedEmailHistoryDto>> GetProcessedEmailHistoryAsync(CancellationToken ct);
     }
 
     public sealed class PendingAutoReplyDto
@@ -54,6 +54,22 @@ namespace SmartAssistant.Api.Services.AutoReply
         public string EventId { get; set; } = "";
         public DateTimeOffset? StartUtc { get; set; }
         public DateTimeOffset? EndUtc { get; set; }
+    }
+    public sealed class ProcessedEmailHistoryDto
+    {
+        public long Id { get; set; }
+        public string Provider { get; set; } = "";
+        public string MessageId { get; set; } = "";
+        public string Subject { get; set; } = "";
+        public string From { get; set; } = "";
+        public string ProcessingStatus { get; set; } = "";
+        public string Details { get; set; } = "";
+        public DateTimeOffset? ProposedStartUtc { get; set; }
+        public DateTimeOffset? ProposedEndUtc { get; set; }
+        public DateTimeOffset? SuggestedStartUtc { get; set; }
+        public DateTimeOffset? SuggestedEndUtc { get; set; }
+        public DateTimeOffset ProcessedOn { get; set; }
+        public DateTimeOffset? RepliedOn { get; set; }
     }
     #endregion
 
@@ -187,6 +203,8 @@ namespace SmartAssistant.Api.Services.AutoReply
                 row.SuggestedEndUtc = null;
                 row.Replied = false;
                 row.RepliedOn = null;
+
+                SetProcessingStatus(row, ProcessingStatuses.RejectedBySender);
             }
 
             var existingCancellationRow = await _db.EmailProcessed
@@ -203,8 +221,14 @@ namespace SmartAssistant.Api.Services.AutoReply
                     ReplyNeeded = false,
                     Replied = false,
                     WaitingForExternalConfirmation = false,
-                    ReplyLastError = "Cancellation processed."
+                    ReplyLastError = "Cancellation processed.",
+                    ProcessingStatus = ProcessingStatuses.RejectedBySender
                 });
+            }
+            else
+            {
+                existingCancellationRow.ReplyLastError = "Cancellation processed.";
+                SetProcessingStatus(existingCancellationRow, ProcessingStatuses.RejectedBySender);
             }
 
             await _db.SaveChangesAsync(ct);
@@ -255,6 +279,7 @@ namespace SmartAssistant.Api.Services.AutoReply
             if (matchedRow == null)
             {
                 currentEmailProcessed.ReplyLastError = "Confirmation email received, but no matching reschedule request was found.";
+                SetProcessingStatus(currentEmailProcessed, ProcessingStatuses.Error);
                 await _db.SaveChangesAsync(ct);
                 return false;
             }
@@ -263,6 +288,7 @@ namespace SmartAssistant.Api.Services.AutoReply
             if (!finalStartUtc.HasValue)
             {
                 currentEmailProcessed.ReplyLastError = "Confirmation email received, but no final rescheduled meeting time was available.";
+                SetProcessingStatus(currentEmailProcessed, ProcessingStatuses.Error);
                 await _db.SaveChangesAsync(ct);
                 return false;
             }
@@ -320,7 +346,6 @@ namespace SmartAssistant.Api.Services.AutoReply
                 }
                 catch
                 {
-                    // Do not fail the final confirmation flow if tentative event cleanup fails.
                 }
             }
 
@@ -332,8 +357,10 @@ namespace SmartAssistant.Api.Services.AutoReply
             matchedRow.SuggestedCalendarEventId = null;
             matchedRow.SuggestedStartUtc = null;
             matchedRow.SuggestedEndUtc = null;
+            SetProcessingStatus(matchedRow, ProcessingStatuses.Confirmed);
 
             currentEmailProcessed.ReplyLastError = "Confirmation processed. Reminder created.";
+            SetProcessingStatus(currentEmailProcessed, ProcessingStatuses.Confirmed);
 
             await _db.SaveChangesAsync(ct);
             return true;
@@ -424,6 +451,7 @@ namespace SmartAssistant.Api.Services.AutoReply
             if (settings.AiPausedUntilUtc.HasValue && settings.AiPausedUntilUtc.Value > DateTimeOffset.UtcNow)
             {
                 processed.ReplyLastError = "AI paused until " + settings.AiPausedUntilUtc.Value.ToString("u");
+                SetProcessingStatus(processed, ProcessingStatuses.Error);
                 await _db.SaveChangesAsync(ct);
                 return false;
             }
@@ -435,6 +463,7 @@ namespace SmartAssistant.Api.Services.AutoReply
                 await _db.SaveChangesAsync(ct);
 
                 processed.ReplyLastError = "AI quota reached. Will retry later.";
+                SetProcessingStatus(processed, ProcessingStatuses.Error);
                 await _db.SaveChangesAsync(ct);
                 return false;
             }
@@ -477,7 +506,7 @@ namespace SmartAssistant.Api.Services.AutoReply
                         processed.ReplyDraftBody = draft;
                         processed.ReplyLastError = "Approval required: proposed time is outside office hours.";
                         processed.WaitingForExternalConfirmation = false;
-
+                        SetProcessingStatus(processed, ProcessingStatuses.ApprovalPending);
                         await _db.SaveChangesAsync(ct);
                         return false;
                     }
@@ -502,6 +531,7 @@ namespace SmartAssistant.Api.Services.AutoReply
                 catch (Exception ex)
                 {
                     processed.ReplyLastError = "Calendar check failed: " + ex.Message;
+                    SetProcessingStatus(processed, ProcessingStatuses.Error);
                     await _db.SaveChangesAsync(ct);
                     return false;
                 }
@@ -524,6 +554,7 @@ namespace SmartAssistant.Api.Services.AutoReply
                         if (!accepted)
                         {
                             processed.ReplyLastError = "Calendar invite acceptance failed.";
+                            SetProcessingStatus(processed, ProcessingStatuses.Error);
                             await _db.SaveChangesAsync(ct);
                             return false;
                         }
@@ -548,7 +579,7 @@ namespace SmartAssistant.Api.Services.AutoReply
                     processed.RepliedOn = DateTimeOffset.UtcNow;
                     processed.ReplyNeeded = false;
                     processed.ReplyLastError = null;
-
+                    SetProcessingStatus(processed, ProcessingStatuses.AutoAccepted);
                     settings.AiCallsToday += 1;
                     await _db.SaveChangesAsync(ct);
 
@@ -591,7 +622,7 @@ namespace SmartAssistant.Api.Services.AutoReply
                     ? nextFreeUtc.Value.AddMinutes(settings.SlotMinutes)
                     : null;
                 processed.WaitingForExternalConfirmation = false;
-
+                SetProcessingStatus(processed, ProcessingStatuses.ApprovalPending);
                 await _db.SaveChangesAsync(ct);
                 return false;
             }
@@ -602,6 +633,7 @@ namespace SmartAssistant.Api.Services.AutoReply
                 processed.ReplyRequiresApproval = true;
                 processed.ReplyDraftBody = null;
                 processed.ReplyLastError = "Approval required: scheduling email detected but exact proposed time could not be parsed.";
+                SetProcessingStatus(processed, ProcessingStatuses.ApprovalPending);
                 await _db.SaveChangesAsync(ct);
 
                 return false;
@@ -628,6 +660,7 @@ namespace SmartAssistant.Api.Services.AutoReply
             catch (Exception ex)
             {
                 processed.ReplyLastError = "AI error: " + ex.Message;
+                SetProcessingStatus(processed, ProcessingStatuses.Error);
                 await _db.SaveChangesAsync(ct);
                 return false;
             }
@@ -635,6 +668,7 @@ namespace SmartAssistant.Api.Services.AutoReply
             if (string.IsNullOrWhiteSpace(aiReplyBody))
             {
                 processed.ReplyLastError = "AI returned empty reply.";
+                SetProcessingStatus(processed, ProcessingStatuses.Error);
                 await _db.SaveChangesAsync(ct);
                 return false;
             }
@@ -653,7 +687,7 @@ namespace SmartAssistant.Api.Services.AutoReply
             processed.RepliedOn = DateTimeOffset.UtcNow;
             processed.ReplyNeeded = false;
             processed.ReplyLastError = null;
-
+            SetProcessingStatus(processed, ProcessingStatuses.AutoAccepted);
             settings.AiCallsToday += 1;
             await _db.SaveChangesAsync(ct);
 
@@ -952,7 +986,8 @@ namespace SmartAssistant.Api.Services.AutoReply
             row.ReplyRequiresApproval = false;
             row.ReplyDraftBody = null;
             row.WaitingForExternalConfirmation = false;
-            row.ReplyLastError = null;
+            row.ReplyLastError = "Rejected by user due to timing. Waiting for reschedule from sender.";
+            SetProcessingStatus(row, ProcessingStatuses.ReschedulePending);
 
             await _db.SaveChangesAsync(ct);
             return true;
@@ -1007,8 +1042,6 @@ namespace SmartAssistant.Api.Services.AutoReply
                     row.ProposedEndUtc.Value,
                     settings);
 
-                // Same slot approval is allowed for outside office hours.
-                // For inside office hours, original slot must still be free.
                 if (!isOutsideOfficeHours)
                 {
                     bool isFreeNow;
@@ -1030,6 +1063,7 @@ namespace SmartAssistant.Api.Services.AutoReply
                     catch (Exception ex)
                     {
                         row.ReplyLastError = "Calendar check failed during approval: " + ex.Message;
+                        SetProcessingStatus(row, ProcessingStatuses.Error);
                         await _db.SaveChangesAsync(ct);
                         return false;
                     }
@@ -1037,6 +1071,7 @@ namespace SmartAssistant.Api.Services.AutoReply
                     if (!isFreeNow)
                     {
                         row.ReplyLastError = "Original slot is busy. Please send the suggested slot instead.";
+                        SetProcessingStatus(row, ProcessingStatuses.Error);
                         await _db.SaveChangesAsync(ct);
                         return false;
                     }
@@ -1051,8 +1086,6 @@ namespace SmartAssistant.Api.Services.AutoReply
                     "Best regards,\n" +
                     senderName;
 
-                // Required flow:
-                // reminder now -> acceptance mail -> calendar event add
                 var savedReminder = await CreateReminderForAcceptedSlotAsync(
                     row,
                     "Confirmed meeting",
@@ -1068,6 +1101,8 @@ namespace SmartAssistant.Api.Services.AutoReply
                 }
 
                 row.WaitingForExternalConfirmation = false;
+                row.ReplyLastError = "Original slot approved and confirmed.";
+                SetProcessingStatus(row, ProcessingStatuses.Confirmed);
             }
             else
             {
@@ -1093,14 +1128,12 @@ namespace SmartAssistant.Api.Services.AutoReply
                 if (!row.SuggestedStartUtc.HasValue)
                     return false;
 
-                // Build proper range text
                 var suggestedEndUtcForReply =
                     row.SuggestedEndUtc ?? row.SuggestedStartUtc.Value.AddMinutes(settings.SlotMinutes);
 
                 var suggestedRangeText =
                     FormatLocalRange(row.SuggestedStartUtc.Value, suggestedEndUtcForReply, settings);
 
-                // Now use it
                 replyBody =
                     greeting + "\n\n" +
                     "Thank you for reaching out. I am unable to confirm the original proposed slot.\n" +
@@ -1110,22 +1143,45 @@ namespace SmartAssistant.Api.Services.AutoReply
 
                 await _emailClient.ReplyAsync(row.MessageId, replyBody.Trim(), ct);
 
-                // Suggested slot remains tentative until the other side confirms.
                 row.WaitingForExternalConfirmation = true;
                 row.ReplyLastError = "Suggested slot sent. Waiting for external confirmation.";
+                SetProcessingStatus(row, ProcessingStatuses.WaitingSenderConfirmation);
             }
 
             row.Replied = true;
             row.RepliedOn = DateTimeOffset.UtcNow;
             row.ReplyNeeded = false;
             row.ReplyRequiresApproval = false;
-            row.ReplyLastError = null;
             row.ReplyDraftBody = null;
 
             settings.AiCallsToday += 1;
 
             await _db.SaveChangesAsync(ct);
             return true;
+        }
+        public async Task<List<ProcessedEmailHistoryDto>> GetProcessedEmailHistoryAsync(CancellationToken ct)
+        {
+            var items = await _db.EmailProcessed
+                .OrderByDescending(item => item.ProcessedOn)
+                .Select(item => new ProcessedEmailHistoryDto
+                {
+                    Id = item.Id,
+                    Provider = item.Provider,
+                    MessageId = item.MessageId,
+                    Subject = item.Subject ?? "",
+                    From = item.From ?? "",
+                    ProcessingStatus = item.ProcessingStatus ?? "",
+                    Details = item.ReplyLastError ?? "",
+                    ProposedStartUtc = item.ProposedStartUtc,
+                    ProposedEndUtc = item.ProposedEndUtc,
+                    SuggestedStartUtc = item.SuggestedStartUtc,
+                    SuggestedEndUtc = item.SuggestedEndUtc,
+                    ProcessedOn = item.ProcessedOn,
+                    RepliedOn = item.RepliedOn
+                })
+                .ToListAsync(ct);
+
+            return items;
         }
         #endregion
 
@@ -1896,6 +1952,10 @@ namespace SmartAssistant.Api.Services.AutoReply
             return
                 text.Contains("could we reschedule to") ||
                 text.Contains("unable to confirm the original proposed slot");
+        }
+        private static void SetProcessingStatus(EmailProcessed row, string status)
+        {
+            row.ProcessingStatus = status;
         }
         #endregion
     }

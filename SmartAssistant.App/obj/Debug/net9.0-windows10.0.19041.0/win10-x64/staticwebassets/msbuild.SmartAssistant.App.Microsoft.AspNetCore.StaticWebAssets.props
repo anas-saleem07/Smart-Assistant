@@ -137,7 +137,7 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <FileLength>5481</FileLength>
-      <LastWriteTime>Thu, 02 Apr 2026 11:49:07 GMT</LastWriteTime>
+      <LastWriteTime>Mon, 06 Apr 2026 09:49:04 GMT</LastWriteTime>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\SmartAssistant.App.styles.css'))</OriginalItemSpec>
     </StaticWebAsset>
   </ItemGroup>
