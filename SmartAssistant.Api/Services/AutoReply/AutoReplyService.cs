@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Globalization;
 
 namespace SmartAssistant.Api.Services.AutoReply
 {
@@ -272,6 +273,9 @@ namespace SmartAssistant.Api.Services.AutoReply
                 if (reminderAlreadyExists)
                     continue;
 
+                if (!IsMatchingConfirmationForPendingRow(email, candidateRow))
+                    continue;
+
                 matchedRow = candidateRow;
                 break;
             }
@@ -414,18 +418,7 @@ namespace SmartAssistant.Api.Services.AutoReply
             if (processedChanged)
             {
                 await _db.SaveChangesAsync(ct);
-            }
-
-            if (processed.Replied)
-                return true;
-
-            if (!processed.ReplyNeeded)
-            {
-                processed.ReplyNeeded = true;
-                processed.ReplyQueuedOn = DateTimeOffset.UtcNow;
-                processed.ReplyLastError = null;
-                await _db.SaveChangesAsync(ct);
-            }
+            }          
 
             if (processed.Replied)
                 return true;
@@ -1200,17 +1193,17 @@ namespace SmartAssistant.Api.Services.AutoReply
 
             var splitMarkers = new[]
             {
-                "\nOn ",
-                "\r\nOn ",
-                "\nFrom:",
-                "\r\nFrom:",
-                "\n-----Original Message-----",
-                "\r\n-----Original Message-----",
-                "\n________________________________",
-                "\r\n________________________________",
-                "\n> ",
-                "\r\n> "
-            };
+        "\nOn ",
+        "\r\nOn ",
+        "\nFrom:",
+        "\r\nFrom:",
+        "\n-----Original Message-----",
+        "\r\n-----Original Message-----",
+        "\n________________________________",
+        "\r\n________________________________",
+        "\n> ",
+        "\r\n> "
+    };
 
             var latestPart = text;
 
@@ -1218,6 +1211,7 @@ namespace SmartAssistant.Api.Services.AutoReply
             {
                 var marker = splitMarkers[markerIndex];
                 var markerPosition = latestPart.IndexOf(marker, StringComparison.OrdinalIgnoreCase);
+
                 if (markerPosition >= 0)
                 {
                     latestPart = latestPart.Substring(0, markerPosition).Trim();
@@ -1281,29 +1275,38 @@ namespace SmartAssistant.Api.Services.AutoReply
                 text.Contains("could we reschedule to");
         }
 
+
         private static string DetectReplyGreeting(EmailMessage email)
         {
-            var text = GetFullEmailText(email).ToLowerInvariant();
+            var latestReplyText = GetLatestReplyText(email);
 
-            if (text.Contains("assalamu alaikum") ||
-                text.Contains("assalam o alaikum") ||
-                text.Contains("assalamualaikum") ||
-                text.Contains("assalam") ||
-                text.Contains("asalam") ||
-                text.Contains("salam") ||
-                text.Contains("aoa"))
-                return "Wa Alaikum Assalam";
-
-            if (text.Contains("dear"))
-                return "Dear";
-
-            if (text.Contains("hello"))
+            if (string.IsNullOrWhiteSpace(latestReplyText))
                 return "Hello";
 
-            if (text.Contains("hi"))
+            var lines = latestReplyText
+                .Split(new[] { "\r\n", "\n" }, StringSplitOptions.None)
+                .Select(line => line.Trim())
+                .Where(line => !string.IsNullOrWhiteSpace(line))
+                .ToList();
+
+            if (lines.Count == 0)
+                return "Hello";
+
+            var firstLine = lines[0];
+
+            if (Regex.IsMatch(firstLine, @"^(assalamu alaikum|assalam o alaikum|assalamualaikum|asalam o alaikum|aoa|salam)\b", RegexOptions.IgnoreCase))
+                return "Wa Alaikum Assalam";
+
+            if (Regex.IsMatch(firstLine, @"^dear\b", RegexOptions.IgnoreCase))
+                return "Dear";
+
+            if (Regex.IsMatch(firstLine, @"^hello\b", RegexOptions.IgnoreCase))
+                return "Hello";
+
+            if (Regex.IsMatch(firstLine, @"^hi\b", RegexOptions.IgnoreCase))
                 return "Hi";
 
-            if (text.Contains("hey"))
+            if (Regex.IsMatch(firstLine, @"^hey\b", RegexOptions.IgnoreCase))
                 return "Hey";
 
             return "Hello";
@@ -1391,14 +1394,17 @@ namespace SmartAssistant.Api.Services.AutoReply
         }
 
         private static bool TryGetProposedUtcRange(
-            EmailMessage email,
-            ReminderAutomationSettings settings,
-            out DateTimeOffset startUtc,
-            out DateTimeOffset endUtc)
+    EmailMessage email,
+    ReminderAutomationSettings settings,
+    out DateTimeOffset startUtc,
+    out DateTimeOffset endUtc)
         {
             startUtc = default;
             endUtc = default;
 
+            // Case 1:
+            // Structured calendar invite already contains proper UTC values.
+            // This is the most reliable source, so always trust it first.
             if (email.HasCalendarInvite && email.InviteStartUtc.HasValue && email.InviteEndUtc.HasValue)
             {
                 startUtc = email.InviteStartUtc.Value.ToUniversalTime();
@@ -1406,59 +1412,81 @@ namespace SmartAssistant.Api.Services.AutoReply
                 return endUtc > startUtc;
             }
 
+            // Use complete text instead of scattered subject/snippet patterns.
             if (TryExtractInviteStyleUtcRange(email, settings, out startUtc, out endUtc))
                 return true;
 
-            return TryExtractProposedUtcRange(email, settings, out startUtc, out endUtc);
+            if (TryExtractProposedUtcRange(email, settings, out startUtc, out endUtc))
+                return true;
+
+            return false;
         }
 
         private static bool TryExtractProposedUtcRange(
-            EmailMessage email,
-            ReminderAutomationSettings settings,
-            out DateTimeOffset startUtc,
-            out DateTimeOffset endUtc)
+    EmailMessage email,
+    ReminderAutomationSettings settings,
+    out DateTimeOffset startUtc,
+    out DateTimeOffset endUtc)
         {
             startUtc = default;
             endUtc = default;
 
-            var text = (email.Snippet ?? "") + " " + (email.Subject ?? "");
+            var text = GetFullEmailText(email);
             if (string.IsNullOrWhiteSpace(text))
                 return false;
 
+            // Pattern 1:
+            // between 10:00 AM and 11:00 AM on April 12
             var betweenMatch = Regex.Match(
                 text,
-                @"between\s+(\d{1,2}:\d{2}\s?(AM|PM))\s+and\s+(\d{1,2}:\d{2}\s?(AM|PM))",
-                RegexOptions.IgnoreCase);
+                @"between\s+(?<start>\d{1,2}:\d{2}\s?(?:AM|PM))\s+and\s+(?<end>\d{1,2}:\d{2}\s?(?:AM|PM)).*?(?<date>(January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2}(?:,\s*\d{4})?)",
+                RegexOptions.IgnoreCase | RegexOptions.Singleline);
 
-            if (!betweenMatch.Success)
-                return false;
+            if (betweenMatch.Success)
+            {
+                var dateText = betweenMatch.Groups["date"].Value.Trim();
+                var startText = betweenMatch.Groups["start"].Value.Trim();
+                var endText = betweenMatch.Groups["end"].Value.Trim();
 
-            var time1 = betweenMatch.Groups[1].Value;
-            var time2 = betweenMatch.Groups[3].Value;
+                if (TryBuildUtcRangeFromLocalParts(dateText, startText, endText, settings, out startUtc, out endUtc))
+                    return true;
+            }
 
-            var dateMatch = Regex.Match(
+            // Pattern 2:
+            // April 12, 2026 10:00 AM - 11:00 AM
+            var directRangeMatch = Regex.Match(
                 text,
-                @"(January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2}",
+                @"(?<date>(January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2}(?:,\s*\d{4})?)\s*(?:at\s*)?(?<start>\d{1,2}:\d{2}\s?(?:AM|PM))\s*[-–]\s*(?<end>\d{1,2}:\d{2}\s?(?:AM|PM))",
                 RegexOptions.IgnoreCase);
 
-            if (!dateMatch.Success)
-                return false;
+            if (directRangeMatch.Success)
+            {
+                var dateText = directRangeMatch.Groups["date"].Value.Trim();
+                var startText = directRangeMatch.Groups["start"].Value.Trim();
+                var endText = directRangeMatch.Groups["end"].Value.Trim();
 
-            var year = DateTimeOffset.UtcNow.Year;
+                if (TryBuildUtcRangeFromLocalParts(dateText, startText, endText, settings, out startUtc, out endUtc))
+                    return true;
+            }
 
-            if (!DateTime.TryParse(dateMatch.Value + " " + year, out var parsedDate))
-                return false;
+            // Pattern 3:
+            // 12 Apr 2026 2:00pm - 2:30pm
+            var shortMonthRangeMatch = Regex.Match(
+                text,
+                @"(?<date>\d{1,2}\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+\d{4})\s+(?<start>\d{1,2}(?::\d{2})?\s?(?:am|pm))\s*[-–]\s*(?<end>\d{1,2}(?::\d{2})?\s?(?:am|pm))",
+                RegexOptions.IgnoreCase);
 
-            if (!DateTime.TryParse(parsedDate.ToString("yyyy-MM-dd") + " " + time1, out var localStart))
-                return false;
+            if (shortMonthRangeMatch.Success)
+            {
+                var dateText = shortMonthRangeMatch.Groups["date"].Value.Trim();
+                var startText = shortMonthRangeMatch.Groups["start"].Value.Trim();
+                var endText = shortMonthRangeMatch.Groups["end"].Value.Trim();
 
-            if (!DateTime.TryParse(parsedDate.ToString("yyyy-MM-dd") + " " + time2, out var localEnd))
-                return false;
+                if (TryBuildUtcRangeFromLocalParts(dateText, startText, endText, settings, out startUtc, out endUtc))
+                    return true;
+            }
 
-            startUtc = AppTimeHelper.ConvertLocalDateTimeToUtc(localStart, settings.TimezoneId);
-            endUtc = AppTimeHelper.ConvertLocalDateTimeToUtc(localEnd, settings.TimezoneId);
-
-            return endUtc > startUtc;
+            return false;
         }
 
         private async Task<bool> HasReminderConflictAsync(DateTimeOffset startUtc, DateTimeOffset endUtc, CancellationToken ct)
@@ -1828,26 +1856,30 @@ namespace SmartAssistant.Api.Services.AutoReply
             if (string.IsNullOrWhiteSpace(replyDraftBody))
                 return "Hello";
 
-            var firstLine = replyDraftBody
+            var lines = replyDraftBody
                 .Split(new[] { "\r\n", "\n" }, StringSplitOptions.None)
-                .FirstOrDefault()?.Trim();
+                .Select(line => line.Trim())
+                .Where(line => !string.IsNullOrWhiteSpace(line))
+                .ToList();
 
-            if (string.IsNullOrWhiteSpace(firstLine))
+            if (lines.Count == 0)
                 return "Hello";
 
-            if (firstLine.Equals("Wa Alaikum Assalam", StringComparison.OrdinalIgnoreCase))
+            var firstLine = lines[0];
+
+            if (Regex.IsMatch(firstLine, @"^wa alaikum assalam\b", RegexOptions.IgnoreCase))
                 return "Wa Alaikum Assalam";
 
-            if (firstLine.Equals("Dear", StringComparison.OrdinalIgnoreCase))
+            if (Regex.IsMatch(firstLine, @"^dear\b", RegexOptions.IgnoreCase))
                 return "Dear";
 
-            if (firstLine.Equals("Hello", StringComparison.OrdinalIgnoreCase))
+            if (Regex.IsMatch(firstLine, @"^hello\b", RegexOptions.IgnoreCase))
                 return "Hello";
 
-            if (firstLine.Equals("Hi", StringComparison.OrdinalIgnoreCase))
+            if (Regex.IsMatch(firstLine, @"^hi\b", RegexOptions.IgnoreCase))
                 return "Hi";
 
-            if (firstLine.Equals("Hey", StringComparison.OrdinalIgnoreCase))
+            if (Regex.IsMatch(firstLine, @"^hey\b", RegexOptions.IgnoreCase))
                 return "Hey";
 
             return "Hello";
@@ -1956,6 +1988,117 @@ namespace SmartAssistant.Api.Services.AutoReply
         private static void SetProcessingStatus(EmailProcessed row, string status)
         {
             row.ProcessingStatus = status;
+        }
+        private static bool TryBuildUtcRangeFromLocalParts(
+    string dateText,
+    string startTimeText,
+    string endTimeText,
+    ReminderAutomationSettings settings,
+    out DateTimeOffset startUtc,
+    out DateTimeOffset endUtc)
+        {
+            startUtc = default;
+            endUtc = default;
+
+            var culture = CultureInfo.InvariantCulture;
+
+            var dateFormats = new[]
+            {
+        "MMMM d, yyyy",
+        "MMMM d yyyy",
+        "MMMM d",
+        "d MMM yyyy",
+        "dd MMM yyyy"
+    };
+
+            DateTime parsedDate = default;
+            var parsedDateOk = false;
+
+            for (int formatIndex = 0; formatIndex < dateFormats.Length; formatIndex++)
+            {
+                if (DateTime.TryParseExact(dateText, dateFormats[formatIndex], culture, DateTimeStyles.None, out parsedDate))
+                {
+                    parsedDateOk = true;
+                    break;
+                }
+            }
+
+            if (!parsedDateOk)
+            {
+                // Last fallback
+                if (!DateTime.TryParse(dateText, culture, DateTimeStyles.None, out parsedDate))
+                    return false;
+            }
+
+            // If year was missing, assume current year.
+            if (parsedDate.Year == 1)
+            {
+                parsedDate = new DateTime(
+                    DateTime.UtcNow.Year,
+                    parsedDate.Month,
+                    parsedDate.Day
+                );
+            }
+
+            if (!DateTime.TryParse(parsedDate.ToString("yyyy-MM-dd", culture) + " " + startTimeText, culture, DateTimeStyles.None, out var localStart))
+                return false;
+
+            if (!DateTime.TryParse(parsedDate.ToString("yyyy-MM-dd", culture) + " " + endTimeText, culture, DateTimeStyles.None, out var localEnd))
+                return false;
+
+            startUtc = AppTimeHelper.ConvertLocalDateTimeToUtc(
+                DateTime.SpecifyKind(localStart, DateTimeKind.Unspecified),
+                settings.TimezoneId);
+
+            endUtc = AppTimeHelper.ConvertLocalDateTimeToUtc(
+                DateTime.SpecifyKind(localEnd, DateTimeKind.Unspecified),
+                settings.TimezoneId);
+
+            return endUtc > startUtc;
+        }
+        private static bool IsMatchingConfirmationForPendingRow(EmailMessage email, EmailProcessed candidateRow)
+        {
+            if (candidateRow == null)
+                return false;
+
+            if (!candidateRow.WaitingForExternalConfirmation)
+                return false;
+
+            if (string.IsNullOrWhiteSpace(email.Provider) || string.IsNullOrWhiteSpace(candidateRow.Provider))
+                return false;
+
+            if (!string.Equals(email.Provider, candidateRow.Provider, StringComparison.OrdinalIgnoreCase))
+                return false;
+
+            if (!string.IsNullOrWhiteSpace(email.CalendarEventId))
+            {
+                if (string.Equals(email.CalendarEventId, candidateRow.CalendarEventId, StringComparison.OrdinalIgnoreCase) ||
+                    string.Equals(email.CalendarEventId, candidateRow.SuggestedCalendarEventId, StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+            }
+
+            var incomingSubject = NormalizeSubjectForMatch(email.Subject);
+            var candidateSubject = NormalizeSubjectForMatch(candidateRow.Subject);
+
+            var subjectMatches =
+                !string.IsNullOrWhiteSpace(incomingSubject) &&
+                !string.IsNullOrWhiteSpace(candidateSubject) &&
+                string.Equals(incomingSubject, candidateSubject, StringComparison.OrdinalIgnoreCase);
+
+            var fromMatches =
+                !string.IsNullOrWhiteSpace(email.From) &&
+                !string.IsNullOrWhiteSpace(candidateRow.From) &&
+                string.Equals(email.From.Trim(), candidateRow.From.Trim(), StringComparison.OrdinalIgnoreCase);
+
+            if (subjectMatches && fromMatches)
+                return true;
+
+            if (subjectMatches)
+                return true;
+
+            return false;
         }
         #endregion
     }

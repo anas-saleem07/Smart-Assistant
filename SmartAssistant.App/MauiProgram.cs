@@ -53,13 +53,13 @@ namespace SmartAssistant.App
 
             var baseAddress =
     DeviceInfo.Platform == DevicePlatform.Android
-        ? "http://10.0.2.2:5256/"
+        ? "https://8d5qz3dj-7151.inc1.devtunnels.ms/"
         : "https://localhost:7151/";
 
             builder.Services.AddScoped(_ => new HttpClient
             {
                 BaseAddress = new Uri(baseAddress),
-                Timeout = TimeSpan.FromSeconds(8)
+                Timeout = TimeSpan.FromSeconds(120)
             });
 
 #if DEBUG

@@ -64,9 +64,9 @@
                 <div class="ar-actions">
                     <button class="ar-btn ar-btn-yes"
                             @onclick="() => ApproveSameSlot(pendingItem)"
-                            disabled="@(activeActionId == pendingItem.Id || !pendingItem.ProposedStartUtc.HasValue)">
+                            disabled="@(activeActionId == pendingItem.Id)">
                         @(activeActionId == pendingItem.Id ? "Working..." : "Yes")
-                    </button>
+                    </button>                    
 
                     <button class="ar-btn ar-btn-suggest"
                             @onclick="() => OpenGoogleCalendarForSuggestedSlot(pendingItem)"
@@ -170,6 +170,14 @@
                 {
                     PropertyNameCaseInsensitive = true
                 }) ?? new List<PendingAutoReplyViewModel>();
+                for (int itemIndex = 0; itemIndex < pendingItems.Count; itemIndex++)
+{
+    var item = pendingItems[itemIndex];
+
+    item.IsSuggestedSlotReady =
+        item.SuggestedStartUtc.HasValue ||
+        !string.IsNullOrWhiteSpace(item.SuggestedLocalText);
+}
         }
         catch (TaskCanceledException)
         {
@@ -584,6 +592,146 @@
                timeZoneLabel;
     }
 
+    private async Task HandleRescheduleFlow(PendingAutoReplyViewModel pendingItem)
+    {
+        if (activeActionId.HasValue)
+            return;
+
+        if (!pendingItem.IsSuggestedSlotReady)
+        {
+            await OpenGoogleCalendarForSuggestedSlotForEditing(pendingItem);
+            return;
+        }
+
+        await SendSuggestedSlotAfterRefresh(pendingItem);
+    }
+    private async Task OpenGoogleCalendarForSuggestedSlotForEditing(PendingAutoReplyViewModel pendingItem)
+    {
+        if (activeActionId.HasValue)
+            return;
+
+        try
+        {
+            activeActionId = pendingItem.Id;
+            ClearStatus();
+
+            using var timeoutSource = new CancellationTokenSource(TimeSpan.FromSeconds(12));
+
+            var response = await Http.PostAsJsonAsync(
+                $"api/auto-reply/open-suggested-calendar/{pendingItem.Id}",
+                new { },
+                timeoutSource.Token);
+
+            if (await RedirectIfReconnectRequiredAsync(response, timeoutSource.Token))
+                return;
+
+            var responseBody = await response.Content.ReadAsStringAsync(timeoutSource.Token);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                SetStatus($"Action failed ({(int)response.StatusCode}): {responseBody}", true);
+                return;
+            }
+
+            var result = JsonSerializer.Deserialize<ApprovalCalendarOpenResponse>(
+                responseBody,
+                new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+
+            if (result == null || !result.Success)
+            {
+                SetStatus(result?.Message ?? "Failed to create draft Google Calendar event.", true);
+                return;
+            }
+
+            SetStatus(
+                "Draft suggested slot opened in Google Calendar. Save your preferred time there and return to the app. Then press Send reschedule email.",
+                false);
+
+            await LoadPendingApprovals();
+            await InvokeAsync(StateHasChanged);
+
+            if (!string.IsNullOrWhiteSpace(result.EventHtmlLink))
+            {
+                await Launcher.Default.OpenAsync(result.EventHtmlLink);
+            }
+        }
+        catch (TaskCanceledException)
+        {
+            SetStatus("Request timed out while creating draft Google Calendar event.", true);
+        }
+        catch (Exception exception)
+        {
+            SetStatus("Failed to open Google Calendar: " + exception.Message, true);
+        }
+        finally
+        {
+            activeActionId = null;
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+    private async Task SendSuggestedSlotAfterRefresh(PendingAutoReplyViewModel pendingItem)
+    {
+        if (activeActionId.HasValue)
+            return;
+
+        try
+        {
+            activeActionId = pendingItem.Id;
+            ClearStatus();
+
+            await LoadPendingApprovals();
+
+            var latestPendingItem = pendingItems.FirstOrDefault(item => item.Id == pendingItem.Id);
+            if (latestPendingItem == null)
+            {
+                SetStatus("Pending approval item was not found after refresh.", true);
+                return;
+            }
+
+            if (!latestPendingItem.IsSuggestedSlotReady)
+            {
+                SetStatus("Suggested slot is not ready yet. Please save your preferred time in Google Calendar and try again.", true);
+                return;
+            }
+
+            using var timeoutSource = new CancellationTokenSource(TimeSpan.FromSeconds(8));
+
+            var response = await Http.PostAsJsonAsync(
+                $"api/auto-reply/approve-suggested-slot/{latestPendingItem.Id}",
+                new { },
+                timeoutSource.Token);
+
+            if (await RedirectIfReconnectRequiredAsync(response, timeoutSource.Token))
+                return;
+
+            var responseBody = await response.Content.ReadAsStringAsync(timeoutSource.Token);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                SetStatus($"Action failed ({(int)response.StatusCode}): {responseBody}", true);
+                return;
+            }
+
+            SetStatus("Reschedule email was sent with the selected proposed time.", false);
+            await LoadPendingApprovals();
+        }
+        catch (TaskCanceledException)
+        {
+            SetStatus("Request timed out while sending the reschedule email.", true);
+        }
+        catch (Exception exception)
+        {
+            SetStatus("Failed to send reschedule email: " + exception.Message, true);
+        }
+        finally
+        {
+            activeActionId = null;
+            await InvokeAsync(StateHasChanged);
+        }
+    }
     #endregion
 
     #region Models
@@ -608,6 +756,7 @@
         public string SuggestedLocalText { get; set; } = "";
         public DateTimeOffset? SuggestedStartUtc { get; set; }
         public string? ReplyLastError { get; set; }
+        public bool IsSuggestedSlotReady { get; set; }
     }
 
     public sealed class ApprovalCalendarOpenResponse
