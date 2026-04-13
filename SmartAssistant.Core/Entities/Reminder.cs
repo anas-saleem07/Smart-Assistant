@@ -29,5 +29,7 @@
 
         // What: Stores error message if calendar creation failed.
         public string? CalendarSyncError { get; set; }
+        // NEW: which signed-in email account owns this reminder
+        public string? AccountEmail { get; set; }
     }
 }

@@ -76,7 +76,7 @@
 
                     <button class="ar-btn ar-btn-confirm"
                             @onclick="() => SendSuggestedSlot(pendingItem)"
-                            disabled="@(activeActionId == pendingItem.Id || !pendingItem.SuggestedStartUtc.HasValue)">
+                            disabled="@(activeActionId == pendingItem.Id)">
                         Send reschedule email
                     </button>
 

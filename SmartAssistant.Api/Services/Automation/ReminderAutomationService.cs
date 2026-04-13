@@ -12,19 +12,24 @@ using System.Threading.Tasks;
 
 namespace SmartAssistant.Api.Services.Automation
 {
+    #region Interface
     public interface IReminderAutomationService
     {
         Task<int> ScanAndCreateRemindersAsync(CancellationToken ct);
     }
+    #endregion
 
     public class ReminderAutomationService : IReminderAutomationService
     {
-        private readonly ApplicationDbContext _db;
-        private readonly IReminderService _reminderService;
-        private readonly IEmailClient _emailClient;
-        private readonly ICalendarService _calendarService;
+        #region Fields
         private readonly IAutoReplyService _autoReply;
+        private readonly ICalendarService _calendarService;
+        private readonly ApplicationDbContext _db;
+        private readonly IEmailClient _emailClient;
+        private readonly IReminderService _reminderService;
+        #endregion
 
+        #region Constructor
         public ReminderAutomationService(
             ApplicationDbContext db,
             IReminderService reminderService,
@@ -38,7 +43,9 @@ namespace SmartAssistant.Api.Services.Automation
             _calendarService = calendarService;
             _autoReply = autoReply;
         }
+        #endregion
 
+        #region Public methods
         public async Task<int> ScanAndCreateRemindersAsync(CancellationToken ct)
         {
             var settings = await _db.ReminderAutomationSettings
@@ -61,6 +68,7 @@ namespace SmartAssistant.Api.Services.Automation
                     return 0;
                 }
 
+                var activeAccountEmail = await GetActiveAccountEmailAsync(ct);
                 var sinceUtc = DateTimeOffset.UtcNow.AddHours(-24);
 
                 var importantEmails = await _emailClient.GetImportantEmailsAsync(sinceUtc, ct, settings.GmailQuery);
@@ -100,7 +108,7 @@ namespace SmartAssistant.Api.Services.Automation
 
                     if (IsCancellationEmail(email))
                     {
-                        await MarkProcessedIfNeededAsync(email, ct);
+                        await MarkProcessedIfNeededAsync(email, activeAccountEmail, ct);
                         continue;
                     }
 
@@ -118,7 +126,10 @@ namespace SmartAssistant.Api.Services.Automation
                     }
 
                     var alreadyProcessed = await _db.EmailProcessed
-                        .AnyAsync(item => item.Provider == email.Provider && item.MessageId == email.Id, ct);
+                        .AnyAsync(item =>
+                            item.Provider == email.Provider &&
+                            item.MessageId == email.Id &&
+                            item.AccountEmail == activeAccountEmail, ct);
 
                     if (alreadyProcessed)
                         continue;
@@ -130,9 +141,10 @@ namespace SmartAssistant.Api.Services.Automation
 
                     var isReplyCandidate = hasCalendarInvite || IsMatch(email, replyKeywords);
 
-                    var processedRow = await GetOrCreateProcessedRowAsync(email, ct);
+                    var processedRow = await GetOrCreateProcessedRowAsync(email, activeAccountEmail, ct);
 
-                    if (!string.IsNullOrWhiteSpace(email.CalendarEventId) && string.IsNullOrWhiteSpace(processedRow.CalendarEventId))
+                    if (!string.IsNullOrWhiteSpace(email.CalendarEventId) &&
+                        string.IsNullOrWhiteSpace(processedRow.CalendarEventId))
                     {
                         processedRow.CalendarEventId = email.CalendarEventId;
                     }
@@ -164,7 +176,7 @@ namespace SmartAssistant.Api.Services.Automation
 
                     if (await _reminderService.ExistsEmailReminderAsync(email.Provider, email.Id, email.CalendarEventId))
                     {
-                        await MarkProcessedIfNeededAsync(email, ct);
+                        await MarkProcessedIfNeededAsync(email, activeAccountEmail, ct);
                         continue;
                     }
 
@@ -177,7 +189,8 @@ namespace SmartAssistant.Api.Services.Automation
                         ReminderTime = reminderTime,
                         Type = ReminderType.Email,
                         SourceProvider = email.Provider,
-                        SourceId = email.Id
+                        SourceId = email.Id,
+                        AccountEmail = activeAccountEmail
                     };
 
                     var savedReminder = await _reminderService.AddEmailReminderAsync(emailReminder);
@@ -207,43 +220,9 @@ namespace SmartAssistant.Api.Services.Automation
                 throw;
             }
         }
+        #endregion
 
-        private async Task MarkProcessedIfNeededAsync(EmailMessage email, CancellationToken ct)
-        {
-            var existing = await _db.EmailProcessed
-                .FirstOrDefaultAsync(item => item.Provider == email.Provider && item.MessageId == email.Id, ct);
-
-            if (existing != null)
-            {
-                if (string.IsNullOrWhiteSpace(existing.ProcessingStatus) && IsCancellationEmail(email))
-                {
-                    existing.ProcessingStatus = ProcessingStatuses.RejectedBySender;
-                    existing.ReplyLastError = existing.ReplyLastError ?? "Cancellation processed.";
-                    await _db.SaveChangesAsync(ct);
-                }
-
-                return;
-            }
-
-            _db.EmailProcessed.Add(new EmailProcessed
-            {
-                Provider = email.Provider,
-                MessageId = email.Id,
-                ProcessedOn = DateTimeOffset.UtcNow,
-                CalendarEventId = email.CalendarEventId,
-                ProcessingStatus = IsCancellationEmail(email) ? ProcessingStatuses.RejectedBySender : null,
-                ReplyLastError = IsCancellationEmail(email) ? "Cancellation processed." : null
-            });
-
-            try
-            {
-                await _db.SaveChangesAsync(ct);
-            }
-            catch (DbUpdateException)
-            {
-            }
-        }
-
+        #region Private helpers
         private static string BuildDescription(EmailMessage email)
         {
             var fromPart = string.IsNullOrWhiteSpace(email.From) ? "unknown" : email.From;
@@ -252,36 +231,55 @@ namespace SmartAssistant.Api.Services.Automation
             return "From: " + fromPart + Environment.NewLine + Environment.NewLine + snippetPart;
         }
 
-        private static List<string> ParseKeywords(string csv)
+        private async Task<string?> GetActiveAccountEmailAsync(CancellationToken ct)
         {
-            if (string.IsNullOrWhiteSpace(csv))
-                return new List<string>();
-
-            return csv
-                .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
-                .Select(item => item.Trim())
-                .Where(item => item.Length > 0)
-                .Select(item => item.ToLowerInvariant())
-                .ToList();
+            return await _db.EmailOAuthAccounts
+                .Where(accountItem => accountItem.Provider == "Gmail" && accountItem.Active)
+                .OrderByDescending(accountItem => accountItem.Id)
+                .Select(accountItem => accountItem.Email)
+                .FirstOrDefaultAsync(ct);
         }
 
-        private static bool IsMatch(EmailMessage email, List<string> keywords)
+        private async Task<EmailProcessed> GetOrCreateProcessedRowAsync(
+            EmailMessage email,
+            string? activeAccountEmail,
+            CancellationToken ct)
         {
-            if (keywords == null || keywords.Count == 0)
-                return false;
+            var existing = await _db.EmailProcessed
+                .FirstOrDefaultAsync(item =>
+                    item.Provider == email.Provider &&
+                    item.MessageId == email.Id &&
+                    item.AccountEmail == activeAccountEmail, ct);
 
-            var subject = email.Subject ?? "";
-            var snippet = email.Snippet ?? "";
-            var haystack = (subject + " " + snippet).ToLowerInvariant();
+            if (existing != null)
+                return existing;
 
-            for (int keywordIndex = 0; keywordIndex < keywords.Count; keywordIndex++)
+            var row = new EmailProcessed
             {
-                var keyword = keywords[keywordIndex];
-                if (!string.IsNullOrWhiteSpace(keyword) && haystack.Contains(keyword))
-                    return true;
-            }
+                Provider = email.Provider,
+                MessageId = email.Id,
+                AccountEmail = activeAccountEmail,
+                ProcessedOn = DateTimeOffset.UtcNow,
+                CalendarEventId = email.CalendarEventId
+            };
 
-            return false;
+            _db.EmailProcessed.Add(row);
+
+            try
+            {
+                await _db.SaveChangesAsync(ct);
+                return row;
+            }
+            catch (DbUpdateException)
+            {
+                var again = await _db.EmailProcessed
+                    .FirstAsync(item =>
+                        item.Provider == email.Provider &&
+                        item.MessageId == email.Id &&
+                        item.AccountEmail == activeAccountEmail, ct);
+
+                return again;
+            }
         }
 
         private static bool IsCancellationEmail(EmailMessage email)
@@ -306,36 +304,77 @@ namespace SmartAssistant.Api.Services.Automation
                 text.Contains("this event has been canceled");
         }
 
-        private async Task<EmailProcessed> GetOrCreateProcessedRowAsync(EmailMessage email, CancellationToken ct)
+        private static bool IsMatch(EmailMessage email, List<string> keywords)
+        {
+            if (keywords == null || keywords.Count == 0)
+                return false;
+
+            var subject = email.Subject ?? "";
+            var snippet = email.Snippet ?? "";
+            var haystack = (subject + " " + snippet).ToLowerInvariant();
+
+            for (int keywordIndex = 0; keywordIndex < keywords.Count; keywordIndex++)
+            {
+                var keyword = keywords[keywordIndex];
+                if (!string.IsNullOrWhiteSpace(keyword) && haystack.Contains(keyword))
+                    return true;
+            }
+
+            return false;
+        }
+
+        private async Task MarkProcessedIfNeededAsync(EmailMessage email, string? activeAccountEmail, CancellationToken ct)
         {
             var existing = await _db.EmailProcessed
-                .FirstOrDefaultAsync(item => item.Provider == email.Provider && item.MessageId == email.Id, ct);
+                .FirstOrDefaultAsync(item =>
+                    item.Provider == email.Provider &&
+                    item.MessageId == email.Id &&
+                    item.AccountEmail == activeAccountEmail, ct);
 
             if (existing != null)
-                return existing;
+            {
+                if (string.IsNullOrWhiteSpace(existing.ProcessingStatus) && IsCancellationEmail(email))
+                {
+                    existing.ProcessingStatus = ProcessingStatuses.RejectedBySender;
+                    existing.ReplyLastError = existing.ReplyLastError ?? "Cancellation processed.";
+                    await _db.SaveChangesAsync(ct);
+                }
 
-            var row = new EmailProcessed
+                return;
+            }
+
+            _db.EmailProcessed.Add(new EmailProcessed
             {
                 Provider = email.Provider,
                 MessageId = email.Id,
+                AccountEmail = activeAccountEmail,
                 ProcessedOn = DateTimeOffset.UtcNow,
-                CalendarEventId = email.CalendarEventId
-            };
-
-            _db.EmailProcessed.Add(row);
+                CalendarEventId = email.CalendarEventId,
+                ProcessingStatus = IsCancellationEmail(email) ? ProcessingStatuses.RejectedBySender : null,
+                ReplyLastError = IsCancellationEmail(email) ? "Cancellation processed." : null
+            });
 
             try
             {
                 await _db.SaveChangesAsync(ct);
-                return row;
             }
             catch (DbUpdateException)
             {
-                var again = await _db.EmailProcessed
-                    .FirstAsync(item => item.Provider == email.Provider && item.MessageId == email.Id, ct);
-
-                return again;
             }
         }
+
+        private static List<string> ParseKeywords(string csv)
+        {
+            if (string.IsNullOrWhiteSpace(csv))
+                return new List<string>();
+
+            return csv
+                .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                .Select(item => item.Trim())
+                .Where(item => item.Length > 0)
+                .Select(item => item.ToLowerInvariant())
+                .ToList();
+        }
+        #endregion
     }
 }

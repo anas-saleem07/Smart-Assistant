@@ -15,12 +15,14 @@ namespace SmartAssistant.Api.Controllers
     [Route("api/[controller]")]
     public class ReminderController : ControllerBase
     {
+        #region Fields
         private readonly IReminderService _service;
         private readonly IMapper _mapper;
         private readonly IReminderAutomationService _automation;
         private readonly ApplicationDbContext _db;
         private readonly ICalendarService _calendar;
-
+        #endregion
+        #region Constructor
         public ReminderController(
             IReminderService service,
             IMapper mapper,
@@ -34,7 +36,8 @@ namespace SmartAssistant.Api.Controllers
             _db = db;
             _calendar = calendar;
         }
-
+        #endregion
+        #region Public methods
         [HttpPost("create")]
         public async Task<IActionResult> Create([FromBody] ReminderViewModel vm, CancellationToken ct)
         {
@@ -43,18 +46,15 @@ namespace SmartAssistant.Api.Controllers
 
             var reminder = _mapper.Map<Reminder>(vm);
 
-            // Load settings first so local reminder time can be converted to UTC correctly
             var settings = await _db.ReminderAutomationSettings.FirstAsync(x => x.Id == 1, ct);
 
-            // Convert local UI time (e.g. Karachi time) to UTC before saving
             reminder.ReminderTime = AppTimeHelper.ConvertLocalDateTimeToUtc(
                 DateTime.SpecifyKind(vm.ReminderTime.DateTime, DateTimeKind.Unspecified),
                 settings.TimezoneId);
 
-            // Save reminder (manual reminder)
-            await _service.AddManualReminderAsync(reminder);
+            var activeAccountEmail = await GetActiveAccountEmailAsync(ct);
+            await _service.AddManualReminderAsync(reminder, activeAccountEmail);
 
-            // Calendar is mandatory for manual reminders too
             if (string.IsNullOrWhiteSpace(reminder.CalendarEventId))
             {
                 try
@@ -82,11 +82,12 @@ namespace SmartAssistant.Api.Controllers
         }
 
         [HttpGet("list")]
-        public async Task<ActionResult<List<ReminderViewModel>>> GetReminders()
+        public async Task<ActionResult<List<ReminderViewModel>>> GetReminders(CancellationToken ct)
         {
-            var reminders = await _service.GetAllAsync();
+            var activeAccountEmail = await GetActiveAccountEmailAsync(ct);
+            var reminders = await _service.GetAllAsync(activeAccountEmail);
 
-            var settings = await _db.ReminderAutomationSettings.FirstAsync(x => x.Id == 1);
+            var settings = await _db.ReminderAutomationSettings.FirstAsync(x => x.Id == 1, ct);
 
             var items = reminders.Select(reminder => new ReminderViewModel
             {
@@ -153,6 +154,17 @@ namespace SmartAssistant.Api.Controllers
             await _db.SaveChangesAsync(ct);
             return Ok(settings);
         }
+        #endregion
+        #region Private Method
+        private async Task<string?> GetActiveAccountEmailAsync(CancellationToken ct)
+        {
+            return await _db.EmailOAuthAccounts
+                .Where(accountItem => accountItem.Provider == "Gmail" && accountItem.Active)
+                .OrderByDescending(accountItem => accountItem.Id)
+                .Select(accountItem => accountItem.Email)
+                .FirstOrDefaultAsync(ct);
+        }
+        #endregion
 
         public sealed class UpdateReminderStatusRequest
         {

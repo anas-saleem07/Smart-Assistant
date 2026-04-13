@@ -55,41 +55,41 @@
         public bool AllowAutoReplyAfterOfficeHours { get; set; } = false;
 
     }
+    
+        public class EmailProcessed
+        {
+            public long Id { get; set; }
+            public string Provider { get; set; } = "Gmail"; // or "Outlook"
+            public string MessageId { get; set; } = default!;
+            public DateTimeOffset ProcessedOn { get; set; } = DateTimeOffset.UtcNow;
 
-    public class EmailProcessed
-    {
-        public long Id { get; set; }
-        public string Provider { get; set; } = "Gmail"; // or "Outlook"
-        public string MessageId { get; set; } = default!;
-        public DateTimeOffset ProcessedOn { get; set; } = DateTimeOffset.UtcNow;
+            // NEW: which signed-in email account owns this processed row
+            public string? AccountEmail { get; set; }
 
-        public string? CalendarEventId { get; set; }
-        public DateTimeOffset? CalendarCreatedOn { get; set; }
-        public string? CalendarLastError { get; set; }
+            public string? CalendarEventId { get; set; }
+            public DateTimeOffset? CalendarCreatedOn { get; set; }
+            public string? CalendarLastError { get; set; }
 
-        public bool ReplyNeeded { get; set; }              // Email qualifies for reply but not yet replied
-        public DateTimeOffset? ReplyQueuedOn { get; set; } // When we queued it
-        public bool Replied { get; set; }                  // Reply actually sent
-        public bool WaitingForExternalConfirmation { get; set; }
-        public DateTimeOffset? RepliedOn { get; set; }     // When we replied
-        public string? ReplyLastError { get; set; }        // Last failure reason (quota, api error, etc.)
+            public bool ReplyNeeded { get; set; }
+            public DateTimeOffset? ReplyQueuedOn { get; set; }
+            public bool Replied { get; set; }
+            public bool WaitingForExternalConfirmation { get; set; }
+            public DateTimeOffset? RepliedOn { get; set; }
+            public string? ReplyLastError { get; set; }
 
-        // Auto reply approval workflow (for after office hours)
-        public bool ReplyRequiresApproval { get; set; } = false;
-        public string? ReplyDraftBody { get; set; }              // Prepared reply waiting for approval
-        public DateTimeOffset? ProposedStartUtc { get; set; }    // Extracted proposed start time (optional)
-        public DateTimeOffset? ProposedEndUtc { get; set; }      // Extracted proposed end time (optional)
+            public bool ReplyRequiresApproval { get; set; } = false;
+            public string? ReplyDraftBody { get; set; }
+            public DateTimeOffset? ProposedStartUtc { get; set; }
+            public DateTimeOffset? ProposedEndUtc { get; set; }
 
-        public DateTimeOffset? SuggestedStartUtc { get; set; }
-        public DateTimeOffset? SuggestedEndUtc { get; set; }
-        public string? SuggestedCalendarEventId { get; set; }
-        public string? SuggestedCalendarHtmlLink { get; set; }
-        public string? ProposedTimezoneId { get; set; }
+            public DateTimeOffset? SuggestedStartUtc { get; set; }
+            public DateTimeOffset? SuggestedEndUtc { get; set; }
+            public string? SuggestedCalendarEventId { get; set; }
+            public string? SuggestedCalendarHtmlLink { get; set; }
+            public string? ProposedTimezoneId { get; set; }
 
-        public string? Subject { get; set; }
-        public string? From { get; set; }
-        public string? ProcessingStatus { get; set; }
-
-
+            public string? Subject { get; set; }
+            public string? From { get; set; }
+            public string? ProcessingStatus { get; set; }
+        }
     }
-}

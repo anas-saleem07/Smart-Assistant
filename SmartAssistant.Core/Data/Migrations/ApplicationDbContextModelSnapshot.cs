@@ -76,6 +76,9 @@ namespace SmartAssistant.Core.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
+                    b.Property<string>("AccountEmail")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTimeOffset?>("CalendarCreatedOn")
                         .HasColumnType("datetimeoffset");
 
@@ -94,6 +97,9 @@ namespace SmartAssistant.Core.Data.Migrations
 
                     b.Property<DateTimeOffset>("ProcessedOn")
                         .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("ProcessingStatus")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTimeOffset?>("ProposedEndUtc")
                         .HasColumnType("datetimeoffset");
@@ -160,6 +166,9 @@ namespace SmartAssistant.Core.Data.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("AccountEmail")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CalendarEventId")
                         .HasColumnType("nvarchar(max)");

@@ -244,12 +244,14 @@ namespace SmartAssistant.Api.Services.AutoReply
             if (!IsFinalConfirmationEmail(email))
                 return false;
 
+            var activeAccountEmail = await GetActiveAccountEmailAsync(ct);
             var currentEmailProcessed = await GetOrCreateEmailProcessedRowAsync(email, ct);
             var cutoffUtc = DateTimeOffset.UtcNow.AddDays(-3);
 
             var candidateRows = await _db.EmailProcessed
                 .Where(item =>
                     item.Provider == email.Provider &&
+                    item.AccountEmail == activeAccountEmail &&
                     item.Replied &&
                     !item.ReplyNeeded &&
                     item.SuggestedStartUtc.HasValue &&
@@ -268,7 +270,8 @@ namespace SmartAssistant.Api.Services.AutoReply
 
                 var reminderAlreadyExists = await _db.Reminder.AnyAsync(item =>
                     item.SourceProvider == candidateRow.Provider &&
-                    item.SourceId == candidateRow.MessageId, ct);
+                    item.SourceId == candidateRow.MessageId &&
+                    item.AccountEmail == activeAccountEmail, ct);
 
                 if (reminderAlreadyExists)
                     continue;
@@ -324,13 +327,15 @@ namespace SmartAssistant.Api.Services.AutoReply
                 ReminderTime = finalStartUtc.Value,
                 Type = ReminderType.Email,
                 SourceProvider = matchedRow.Provider,
-                SourceId = matchedRow.MessageId
+                SourceId = matchedRow.MessageId,
+                AccountEmail = activeAccountEmail
             };
 
             var savedReminder = await _db.Reminder
                 .FirstOrDefaultAsync(item =>
                     item.SourceProvider == matchedRow.Provider &&
-                    item.SourceId == matchedRow.MessageId, ct);
+                    item.SourceId == matchedRow.MessageId &&
+                    item.AccountEmail == activeAccountEmail, ct);
 
             if (savedReminder == null)
             {
@@ -461,8 +466,13 @@ namespace SmartAssistant.Api.Services.AutoReply
                 return false;
             }
 
+            var activeAccountEmail = await GetActiveAccountEmailAsync(ct);
+
             var account = await _db.EmailOAuthAccounts
-                .Where(item => item.Provider == email.Provider && item.Active)
+                .Where(item =>
+                    item.Provider == email.Provider &&
+                    item.Active &&
+                    item.Email == activeAccountEmail)
                 .OrderByDescending(item => item.Id)
                 .FirstOrDefaultAsync(ct);
 
@@ -832,12 +842,14 @@ namespace SmartAssistant.Api.Services.AutoReply
         public async Task<List<PendingAutoReplyDto>> GetPendingApprovalsAsync(CancellationToken ct)
         {
             var settings = await _db.ReminderAutomationSettings.FirstAsync(item => item.Id == 1, ct);
+            var activeAccountEmail = await GetActiveAccountEmailAsync(ct);
 
             var pendingRows = await _db.EmailProcessed
                 .Where(item =>
                     item.ReplyNeeded &&
                     !item.Replied &&
-                    item.ReplyRequiresApproval)
+                    item.ReplyRequiresApproval &&
+                    item.AccountEmail == activeAccountEmail)
                 .OrderByDescending(item => item.ReplyQueuedOn)
                 .ToListAsync(ct);
 
@@ -1024,15 +1036,47 @@ namespace SmartAssistant.Api.Services.AutoReply
             }
 
             string replyBody;
+            var shouldUseSuggestedSlot = useSuggestedSlot;
+            var canConfirmImmediately = !shouldUseSuggestedSlot;
 
-            if (!useSuggestedSlot)
+            if (canConfirmImmediately)
             {
                 if (!row.ProposedStartUtc.HasValue || !row.ProposedEndUtc.HasValue)
+                {
+                    if (!row.SuggestedStartUtc.HasValue)
+                    {
+                        var searchFromUtc = DateTimeOffset.UtcNow;
+                        var generatedSuggestedStart = await _calendar.FindNextFreeSlotOnSameDayAsync(searchFromUtc, settings, ct);
+
+                        if (!generatedSuggestedStart.HasValue)
+                            generatedSuggestedStart = await _calendar.FindNextFreeSlotAsync(searchFromUtc, settings, ct);
+
+                        if (generatedSuggestedStart.HasValue)
+                        {
+                            generatedSuggestedStart = await MoveToNextReminderSafeSlotAsync(generatedSuggestedStart.Value, settings, ct);
+                        }
+
+                        if (generatedSuggestedStart.HasValue)
+                        {
+                            row.SuggestedStartUtc = generatedSuggestedStart.Value;
+                            row.SuggestedEndUtc = generatedSuggestedStart.Value.AddMinutes(settings.SlotMinutes);
+                            await _db.SaveChangesAsync(ct);
+                        }
+                    }
+                }
+            }
+
+            if (canConfirmImmediately)
+            {
+                var confirmStartUtc = row.ProposedStartUtc ?? row.SuggestedStartUtc;
+                if (!confirmStartUtc.HasValue)
                     return false;
 
+                var confirmEndUtc = row.ProposedEndUtc ?? row.SuggestedEndUtc ?? confirmStartUtc.Value.AddMinutes(settings.SlotMinutes);
+
                 var isOutsideOfficeHours = IsOutsideOfficeHours(
-                    row.ProposedStartUtc.Value,
-                    row.ProposedEndUtc.Value,
+                    confirmStartUtc.Value,
+                    confirmEndUtc,
                     settings);
 
                 if (!isOutsideOfficeHours)
@@ -1041,13 +1085,13 @@ namespace SmartAssistant.Api.Services.AutoReply
                     try
                     {
                         var hasReminderConflict = await HasReminderConflictAsync(
-                            row.ProposedStartUtc.Value,
-                            row.ProposedEndUtc.Value,
+                            confirmStartUtc.Value,
+                            confirmEndUtc,
                             ct);
 
                         var calendarFree = await _calendar.IsFreeAsync(
-                            row.ProposedStartUtc.Value,
-                            row.ProposedEndUtc.Value,
+                            confirmStartUtc.Value,
+                            confirmEndUtc,
                             settings,
                             ct);
 
@@ -1063,21 +1107,23 @@ namespace SmartAssistant.Api.Services.AutoReply
 
                     if (!isFreeNow)
                     {
-                        row.ReplyLastError = "Original slot is busy. Please send the suggested slot instead.";
+                        row.ReplyLastError = "Selected slot is busy right now. Please use suggested-slot flow.";
                         SetProcessingStatus(row, ProcessingStatuses.Error);
                         await _db.SaveChangesAsync(ct);
                         return false;
                     }
                 }
-
-                var sameSlotText = FormatLocal(row.ProposedStartUtc.Value, settings);
+                var sameSlotText = FormatLocal(confirmStartUtc!.Value, settings);
 
                 replyBody =
                     greeting + "\n\n" +
-                    "Thank you for reaching out. Yes, I can confirm the proposed slot of " + sameSlotText + ".\n" +
+                    "Thank you for reaching out. Yes, I can confirm the slot of " + sameSlotText + ".\n" +
                     "Please proceed accordingly.\n\n" +
                     "Best regards,\n" +
                     senderName;
+
+                row.ProposedStartUtc = confirmStartUtc.Value;
+                row.ProposedEndUtc = confirmEndUtc;
 
                 var savedReminder = await CreateReminderForAcceptedSlotAsync(
                     row,
@@ -1100,7 +1146,28 @@ namespace SmartAssistant.Api.Services.AutoReply
             else
             {
                 if (!row.SuggestedStartUtc.HasValue && string.IsNullOrWhiteSpace(row.SuggestedCalendarEventId))
-                    return false;
+                {
+                    var searchFromUtc = row.ProposedStartUtc ?? DateTimeOffset.UtcNow;
+                    var suggestedStartUtc = await _calendar.FindNextFreeSlotOnSameDayAsync(searchFromUtc, settings, ct);
+
+                    if (!suggestedStartUtc.HasValue)
+                        suggestedStartUtc = await _calendar.FindNextFreeSlotAsync(searchFromUtc, settings, ct);
+
+                    if (suggestedStartUtc.HasValue)
+                        suggestedStartUtc = await MoveToNextReminderSafeSlotAsync(suggestedStartUtc.Value, settings, ct);
+
+                    if (!suggestedStartUtc.HasValue)
+                    {
+                        row.ReplyLastError = "No suggested slot could be generated automatically.";
+                        SetProcessingStatus(row, ProcessingStatuses.Error);
+                        await _db.SaveChangesAsync(ct);
+                        return false;
+                    }
+
+                    row.SuggestedStartUtc = suggestedStartUtc.Value;
+                    row.SuggestedEndUtc = suggestedStartUtc.Value.AddMinutes(settings.SlotMinutes);
+                    await _db.SaveChangesAsync(ct);
+                }
 
                 if (!string.IsNullOrWhiteSpace(row.SuggestedCalendarEventId))
                 {
@@ -1154,7 +1221,10 @@ namespace SmartAssistant.Api.Services.AutoReply
         }
         public async Task<List<ProcessedEmailHistoryDto>> GetProcessedEmailHistoryAsync(CancellationToken ct)
         {
+            var activeAccountEmail = await GetActiveAccountEmailAsync(ct);
+
             var items = await _db.EmailProcessed
+                .Where(item => item.AccountEmail == activeAccountEmail)
                 .OrderByDescending(item => item.ProcessedOn)
                 .Select(item => new ProcessedEmailHistoryDto
                 {
@@ -1500,8 +1570,13 @@ namespace SmartAssistant.Api.Services.AutoReply
 
         private async Task<string> GetSenderNameAsync(string provider, CancellationToken ct)
         {
+            var activeAccountEmail = await GetActiveAccountEmailAsync(ct);
+
             var account = await _db.EmailOAuthAccounts
-                .Where(item => item.Provider == provider && item.Active)
+                .Where(item =>
+                    item.Provider == provider &&
+                    item.Active &&
+                    item.Email == activeAccountEmail)
                 .OrderByDescending(item => item.Id)
                 .FirstOrDefaultAsync(ct);
 
@@ -1706,50 +1781,15 @@ namespace SmartAssistant.Api.Services.AutoReply
         {
             // Only latest reply text should be checked here.
             // Quoted thread history must not override a real confirmation reply.
-            var text = GetLatestReplyText(email).ToLowerInvariant().Trim();
+            var latestText = GetLatestReplyText(email).ToLowerInvariant().Trim();
+            var fullText = GetFullEmailText(email).ToLowerInvariant().Trim();
 
-            if (string.IsNullOrWhiteSpace(text))
+            if (string.IsNullOrWhiteSpace(latestText) && string.IsNullOrWhiteSpace(fullText))
                 return false;
 
             var hasPositiveSignal =
-                text.Contains("confirmed") ||
-                text.Contains("confirming") ||
-                text.Contains("confirm this") ||
-                text.Contains("that works") ||
-                text.Contains("works for me") ||
-                text.Contains("sounds good") ||
-                text.Contains("okay for me") ||
-                text.Contains("ok for me") ||
-                text.Contains("fine with me") ||
-                text.Contains("friday is fine") ||
-                text.Contains("monday is fine") ||
-                text.Contains("tuesday is fine") ||
-                text.Contains("wednesday is fine") ||
-                text.Contains("thursday is fine") ||
-                text.Contains("saturday is fine") ||
-                text.Contains("sunday is fine") ||
-                text.Contains("yes, friday is fine") ||
-                text.Contains("yes friday is fine") ||
-                text.Contains("yes, that is fine") ||
-                text.Contains("yes that is fine") ||
-                text.Contains("yes, that's fine") ||
-                text.Contains("yes that's fine") ||
-                text.Contains("yes, fine") ||
-                text.Contains("yes fine") ||
-                text.Contains("let's do it") ||
-                text.Contains("lets do it") ||
-                text.Contains("see you then") ||
-                text.Contains("i agree") ||
-                text.Contains("agreed") ||
-                text.Contains("accepted") ||
-                text.Contains("yes, that works") ||
-                text.Contains("yes that works") ||
-                text.Contains("yes, confirmed") ||
-                text.Contains("yes confirmed") ||
-                text.Equals("confirmed") ||
-                text.Equals("ok") ||
-                text.Equals("okay") ||
-                text.Equals("agreed");
+                ContainsFinalConfirmationSignal(latestText) ||
+                ContainsFinalConfirmationSignal(fullText);
 
             if (!hasPositiveSignal)
                 return false;
@@ -1759,55 +1799,103 @@ namespace SmartAssistant.Api.Services.AutoReply
 
             return true;
         }
+        private static bool ContainsFinalConfirmationSignal(string text)
+        {
+            if (string.IsNullOrWhiteSpace(text))
+                return false;
+
+            var normalized = text.Trim().ToLowerInvariant();
+
+            if (
+                normalized.Contains("confirmed") ||
+                normalized.Contains("confirming") ||
+                normalized.Contains("confirm this") ||
+                normalized.Contains("that works") ||
+                normalized.Contains("works for me") ||
+                normalized.Contains("sounds good") ||
+                normalized.Contains("okay for me") ||
+                normalized.Contains("ok for me") ||
+                normalized.Contains("fine with me") ||
+                normalized.Contains("friday is fine") ||
+                normalized.Contains("monday is fine") ||
+                normalized.Contains("tuesday is fine") ||
+                normalized.Contains("wednesday is fine") ||
+                normalized.Contains("thursday is fine") ||
+                normalized.Contains("saturday is fine") ||
+                normalized.Contains("sunday is fine") ||
+                normalized.Contains("yes, friday is fine") ||
+                normalized.Contains("yes friday is fine") ||
+                normalized.Contains("yes, that is fine") ||
+                normalized.Contains("yes that is fine") ||
+                normalized.Contains("yes, that's fine") ||
+                normalized.Contains("yes that's fine") ||
+                normalized.Contains("yes, fine") ||
+                normalized.Contains("yes fine") ||
+                normalized.Contains("let's do it") ||
+                normalized.Contains("lets do it") ||
+                normalized.Contains("see you then") ||
+                normalized.Contains("i agree") ||
+                normalized.Contains("agreed") ||
+                normalized.Contains("accepted") ||
+                normalized.Contains("yes, that works") ||
+                normalized.Contains("yes that works") ||
+                normalized.Contains("yes, confirmed") ||
+                normalized.Contains("yes confirmed") ||
+                normalized.Contains("i will be available at that time"))
+            {
+                return true;
+            }
+
+            if (normalized.Equals("confirmed") || normalized.Equals("ok") || normalized.Equals("okay") || normalized.Equals("agreed"))
+                return true;
+
+            return Regex.IsMatch(
+                normalized,
+                @"\b(yes|yeah|yep|sure)\b[\s,\-:]*((i('?| a)m )?(available|free)|that('?| i)s (fine|okay|ok)|works?)",
+                RegexOptions.IgnoreCase);
+        }
 
         private async Task<EmailProcessed> GetOrCreateEmailProcessedRowAsync(EmailMessage email, CancellationToken ct)
         {
+            var activeAccountEmail = await GetActiveAccountEmailAsync(ct);
+
             var existing = await _db.EmailProcessed
-                .FirstOrDefaultAsync(item => item.Provider == email.Provider && item.MessageId == email.Id, ct);
+                .FirstOrDefaultAsync(item =>
+                    item.Provider == email.Provider &&
+                    item.MessageId == email.Id &&
+                    item.AccountEmail == activeAccountEmail, ct);
 
             if (existing != null)
-            {
-                var changed = false;
-
-                if (string.IsNullOrWhiteSpace(existing.Subject) && !string.IsNullOrWhiteSpace(email.Subject))
-                {
-                    existing.Subject = email.Subject.Trim();
-                    changed = true;
-                }
-
-                if (string.IsNullOrWhiteSpace(existing.From) && !string.IsNullOrWhiteSpace(email.From))
-                {
-                    existing.From = email.From.Trim();
-                    changed = true;
-                }
-
-                if (string.IsNullOrWhiteSpace(existing.CalendarEventId) && !string.IsNullOrWhiteSpace(email.CalendarEventId))
-                {
-                    existing.CalendarEventId = email.CalendarEventId;
-                    changed = true;
-                }
-
-                if (changed)
-                {
-                    await _db.SaveChangesAsync(ct);
-                }
-
                 return existing;
-            }
 
             var row = new EmailProcessed
             {
                 Provider = email.Provider,
                 MessageId = email.Id,
+                AccountEmail = activeAccountEmail,
                 ProcessedOn = DateTimeOffset.UtcNow,
-                Subject = string.IsNullOrWhiteSpace(email.Subject) ? null : email.Subject.Trim(),
-                From = string.IsNullOrWhiteSpace(email.From) ? null : email.From.Trim(),
-                CalendarEventId = email.CalendarEventId
+                CalendarEventId = email.CalendarEventId,
+                Subject = email.Subject,
+                From = email.From
             };
 
             _db.EmailProcessed.Add(row);
-            await _db.SaveChangesAsync(ct);
-            return row;
+
+            try
+            {
+                await _db.SaveChangesAsync(ct);
+                return row;
+            }
+            catch (DbUpdateException)
+            {
+                var again = await _db.EmailProcessed
+                    .FirstAsync(item =>
+                        item.Provider == email.Provider &&
+                        item.MessageId == email.Id &&
+                        item.AccountEmail == activeAccountEmail, ct);
+
+                return again;
+            }
         }
 
         private static bool LooksLikeInviteWithTime(EmailMessage email)
@@ -1898,7 +1986,8 @@ namespace SmartAssistant.Api.Services.AutoReply
 
             var existingReminder = await _db.Reminder.FirstOrDefaultAsync(item =>
                 item.SourceProvider == processedRow.Provider &&
-                item.SourceId == processedRow.MessageId, ct);
+                item.SourceId == processedRow.MessageId &&
+                item.AccountEmail == processedRow.AccountEmail, ct);
 
             if (existingReminder != null)
                 return existingReminder;
@@ -1928,7 +2017,8 @@ namespace SmartAssistant.Api.Services.AutoReply
                 ReminderTime = finalStartUtc.Value,
                 Type = ReminderType.Email,
                 SourceProvider = processedRow.Provider,
-                SourceId = processedRow.MessageId
+                SourceId = processedRow.MessageId,
+                AccountEmail = processedRow.AccountEmail
             };
 
             return await AddConfirmedReminderAsync(reminder, ct);
@@ -2099,6 +2189,14 @@ namespace SmartAssistant.Api.Services.AutoReply
                 return true;
 
             return false;
+        }
+        private async Task<string?> GetActiveAccountEmailAsync(CancellationToken ct)
+        {
+            return await _db.EmailOAuthAccounts
+                .Where(accountItem => accountItem.Provider == "Gmail" && accountItem.Active)
+                .OrderByDescending(accountItem => accountItem.Id)
+                .Select(accountItem => accountItem.Email)
+                .FirstOrDefaultAsync(ct);
         }
         #endregion
     }

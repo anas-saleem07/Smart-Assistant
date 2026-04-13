@@ -12,8 +12,8 @@ using SmartAssistant.Api.Data;
 namespace SmartAssistant.Core.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260402132942_AddProcessingfeild")]
-    partial class AddProcessingfeild
+    [Migration("20260408112659_AddAccountEmailAndFixProcessingStatus")]
+    partial class AddAccountEmailAndFixProcessingStatus
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -78,6 +78,9 @@ namespace SmartAssistant.Core.Data.Migrations
                         .HasColumnType("bigint");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("AccountEmail")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTimeOffset?>("CalendarCreatedOn")
                         .HasColumnType("datetimeoffset");
@@ -166,6 +169,9 @@ namespace SmartAssistant.Core.Data.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("AccountEmail")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CalendarEventId")
                         .HasColumnType("nvarchar(max)");

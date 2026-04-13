@@ -5,11 +5,23 @@
 namespace SmartAssistant.Core.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class AddProcessingfeild : Migration
+    public partial class AddAccountEmailAndFixProcessingStatus : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AddColumn<string>(
+                name: "AccountEmail",
+                table: "Reminder",
+                type: "nvarchar(max)",
+                nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "AccountEmail",
+                table: "EmailProcessed",
+                type: "nvarchar(max)",
+                nullable: true);
+
             migrationBuilder.AddColumn<string>(
                 name: "ProcessingStatus",
                 table: "EmailProcessed",
@@ -20,6 +32,14 @@ namespace SmartAssistant.Core.Data.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropColumn(
+                name: "AccountEmail",
+                table: "Reminder");
+
+            migrationBuilder.DropColumn(
+                name: "AccountEmail",
+                table: "EmailProcessed");
+
             migrationBuilder.DropColumn(
                 name: "ProcessingStatus",
                 table: "EmailProcessed");
