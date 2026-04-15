@@ -405,6 +405,11 @@ namespace SmartAssistant.Api.Services.AutoReply
             if (!looksLikeSchedulingEmail)
                 return false;
 
+            if (isRescheduleRequest)
+            {
+                await CleanupForRescheduleAsync(email, settings, ct);
+            }
+
             var processed = await GetOrCreateEmailProcessedRowAsync(email, ct);
             var processedChanged = false;
 
@@ -1041,38 +1046,16 @@ namespace SmartAssistant.Api.Services.AutoReply
 
             if (canConfirmImmediately)
             {
-                if (!row.ProposedStartUtc.HasValue || !row.ProposedEndUtc.HasValue)
-                {
-                    if (!row.SuggestedStartUtc.HasValue)
-                    {
-                        var searchFromUtc = DateTimeOffset.UtcNow;
-                        var generatedSuggestedStart = await _calendar.FindNextFreeSlotOnSameDayAsync(searchFromUtc, settings, ct);
-
-                        if (!generatedSuggestedStart.HasValue)
-                            generatedSuggestedStart = await _calendar.FindNextFreeSlotAsync(searchFromUtc, settings, ct);
-
-                        if (generatedSuggestedStart.HasValue)
-                        {
-                            generatedSuggestedStart = await MoveToNextReminderSafeSlotAsync(generatedSuggestedStart.Value, settings, ct);
-                        }
-
-                        if (generatedSuggestedStart.HasValue)
-                        {
-                            row.SuggestedStartUtc = generatedSuggestedStart.Value;
-                            row.SuggestedEndUtc = generatedSuggestedStart.Value.AddMinutes(settings.SlotMinutes);
-                            await _db.SaveChangesAsync(ct);
-                        }
-                    }
-                }
-            }
-
-            if (canConfirmImmediately)
-            {
-                var confirmStartUtc = row.ProposedStartUtc ?? row.SuggestedStartUtc;
+                var confirmStartUtc = row.ProposedStartUtc;
                 if (!confirmStartUtc.HasValue)
+                {
+                    row.ReplyLastError = "Original proposed time is missing. Please use suggested-slot flow.";
+                    SetProcessingStatus(row, ProcessingStatuses.ApprovalPending);
+                    await _db.SaveChangesAsync(ct);
                     return false;
+                }
 
-                var confirmEndUtc = row.ProposedEndUtc ?? row.SuggestedEndUtc ?? confirmStartUtc.Value.AddMinutes(settings.SlotMinutes);
+                var confirmEndUtc = row.ProposedEndUtc ?? confirmStartUtc.Value.AddMinutes(settings.SlotMinutes);
 
                 var isOutsideOfficeHours = IsOutsideOfficeHours(
                     confirmStartUtc.Value,
@@ -1343,6 +1326,127 @@ namespace SmartAssistant.Api.Services.AutoReply
                 text.Contains("can we move") ||
                 text.Contains("can we shift") ||
                 text.Contains("could we reschedule to");
+        }
+        private async Task CleanupForRescheduleAsync(
+            EmailMessage email,
+            ReminderAutomationSettings settings,
+            CancellationToken ct)
+        {
+            var activeAccountEmail = await GetActiveAccountEmailAsync(ct);
+            var recentCutoffUtc = DateTimeOffset.UtcNow.AddDays(-30);
+
+            var recentProcessedRows = await _db.EmailProcessed
+                .Where(item =>
+                    item.Provider == email.Provider &&
+                    item.AccountEmail == activeAccountEmail &&
+                    item.ProcessedOn >= recentCutoffUtc)
+                .OrderByDescending(item => item.ProcessedOn)
+                .ToListAsync(ct);
+
+            var incomingSubject = NormalizeSubjectForMatch(email.Subject);
+            var incomingFrom = (email.From ?? "").Trim();
+
+            var relatedProcessedRows = recentProcessedRows
+                .Where(item =>
+                    item.MessageId == email.Id ||
+                    (!string.IsNullOrWhiteSpace(email.CalendarEventId) &&
+                        (
+                            item.CalendarEventId == email.CalendarEventId ||
+                            item.SuggestedCalendarEventId == email.CalendarEventId
+                        )) ||
+                    (!string.IsNullOrWhiteSpace(incomingSubject) &&
+                        !string.IsNullOrWhiteSpace(item.Subject) &&
+                        NormalizeSubjectForMatch(item.Subject) == incomingSubject) ||
+                    (!string.IsNullOrWhiteSpace(incomingFrom) &&
+                        !string.IsNullOrWhiteSpace(item.From) &&
+                        string.Equals(item.From.Trim(), incomingFrom, StringComparison.OrdinalIgnoreCase)))
+                .ToList();
+
+            var recentReminders = await _db.Reminder
+                .Where(item =>
+                    item.AccountEmail == activeAccountEmail &&
+                    item.CreatedOn >= recentCutoffUtc.UtcDateTime)
+                .ToListAsync(ct);
+
+            var relatedReminders = recentReminders
+                .Where(item =>
+                    (!string.IsNullOrWhiteSpace(email.CalendarEventId) &&
+                        item.CalendarEventId == email.CalendarEventId) ||
+                    (relatedProcessedRows.Any(processedRow =>
+                        !string.IsNullOrWhiteSpace(item.SourceProvider) &&
+                        !string.IsNullOrWhiteSpace(item.SourceId) &&
+                        item.SourceProvider == processedRow.Provider &&
+                        item.SourceId == processedRow.MessageId)) ||
+                    (!string.IsNullOrWhiteSpace(incomingSubject) &&
+                        !string.IsNullOrWhiteSpace(item.Title) &&
+                        NormalizeSubjectForMatch(item.Title) == incomingSubject))
+                .ToList();
+
+            for (int rowIndex = 0; rowIndex < relatedProcessedRows.Count; rowIndex++)
+            {
+                var row = relatedProcessedRows[rowIndex];
+
+                if (!string.IsNullOrWhiteSpace(row.CalendarEventId) &&
+                    !string.Equals(row.CalendarEventId, email.CalendarEventId, StringComparison.OrdinalIgnoreCase))
+                {
+                    try
+                    {
+                        await _calendar.DeleteEventAsync(row.CalendarEventId, settings, ct);
+                    }
+                    catch
+                    {
+                    }
+                }
+
+                if (!string.IsNullOrWhiteSpace(row.SuggestedCalendarEventId) &&
+                    !string.Equals(row.SuggestedCalendarEventId, email.CalendarEventId, StringComparison.OrdinalIgnoreCase))
+                {
+                    try
+                    {
+                        await _calendar.DeleteEventAsync(row.SuggestedCalendarEventId, settings, ct);
+                    }
+                    catch
+                    {
+                    }
+                }
+
+                row.WaitingForExternalConfirmation = false;
+                row.ReplyNeeded = false;
+                row.ReplyRequiresApproval = false;
+                row.ReplyDraftBody = null;
+                row.SuggestedCalendarHtmlLink = null;
+                row.SuggestedCalendarEventId = null;
+                row.SuggestedStartUtc = null;
+                row.SuggestedEndUtc = null;
+                row.Replied = false;
+                row.RepliedOn = null;
+                row.ReplyLastError = "Reschedule request received. Previous reminder/calendar entry was cleared.";
+                SetProcessingStatus(row, ProcessingStatuses.ReschedulePending);
+            }
+
+            for (int reminderIndex = 0; reminderIndex < relatedReminders.Count; reminderIndex++)
+            {
+                var reminder = relatedReminders[reminderIndex];
+
+                if (!string.IsNullOrWhiteSpace(reminder.CalendarEventId) &&
+                    !string.Equals(reminder.CalendarEventId, email.CalendarEventId, StringComparison.OrdinalIgnoreCase))
+                {
+                    try
+                    {
+                        await _calendar.DeleteEventAsync(reminder.CalendarEventId, settings, ct);
+                    }
+                    catch
+                    {
+                    }
+                }
+            }
+
+            if (relatedReminders.Count > 0)
+            {
+                _db.Reminder.RemoveRange(relatedReminders);
+            }
+
+            await _db.SaveChangesAsync(ct);
         }
 
 
