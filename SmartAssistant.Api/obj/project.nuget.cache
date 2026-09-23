@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "bJqYvWtFU5U=",
+  "dgSpecHash": "fC75DWj30Ok=",
   "success": true,
   "projectFilePath": "D:\\Anas FYP\\SmartAssistant.Api\\SmartAssistant.Api.csproj",
   "expectedPackageFiles": [
@@ -120,6 +120,18 @@
       "warningLevel": 1,
       "filePath": "D:\\Anas FYP\\SmartAssistant.Api\\SmartAssistant.Api.csproj",
       "libraryId": "AutoMapper",
+      "targetGraphs": [
+        "net9.0"
+      ]
+    },
+    {
+      "code": "NU1903",
+      "level": "Warning",
+      "message": "Package 'Microsoft.OpenApi' 2.5.0 has a known high severity vulnerability, https://github.com/advisories/GHSA-v5pm-xwqc-g5wc",
+      "projectPath": "D:\\Anas FYP\\SmartAssistant.Api\\SmartAssistant.Api.csproj",
+      "warningLevel": 1,
+      "filePath": "D:\\Anas FYP\\SmartAssistant.Api\\SmartAssistant.Api.csproj",
+      "libraryId": "Microsoft.OpenApi",
       "targetGraphs": [
         "net9.0"
       ]

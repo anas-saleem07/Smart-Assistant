@@ -51,10 +51,12 @@ namespace SmartAssistant.App
 
             builder.Services.AddMauiBlazorWebView();
 
+            // Android emulator maps host machine localhost to 10.0.2.2.
+            // Use HTTP (5256) in Development to avoid SSL trust issues on emulator.
             var baseAddress =
-    DeviceInfo.Platform == DevicePlatform.Android
-        ? "https://8d5qz3dj-7151.inc1.devtunnels.ms/"
-        : "https://localhost:7151/";
+                DeviceInfo.Platform == DevicePlatform.Android
+                    ? "http://10.0.2.2:5256/"
+                    : "https://localhost:7151/";
 
             builder.Services.AddScoped(_ => new HttpClient
             {
