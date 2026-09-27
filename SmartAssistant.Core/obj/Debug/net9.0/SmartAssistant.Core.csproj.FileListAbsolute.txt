@@ -13,3 +13,18 @@ D:\Anas FYP\SmartAssistant.Core\obj\Debug\net9.0\refint\SmartAssistant.Core.dll
 D:\Anas FYP\SmartAssistant.Core\obj\Debug\net9.0\SmartAssistant.Core.pdb
 D:\Anas FYP\SmartAssistant.Core\obj\Debug\net9.0\SmartAssistant.Core.genruntimeconfig.cache
 D:\Anas FYP\SmartAssistant.Core\obj\Debug\net9.0\ref\SmartAssistant.Core.dll
+C:\Users\BasitAliKhan\source\repos\Smart-Assistant\SmartAssistant.Core\bin\Debug\net9.0\SmartAssistant.Core.deps.json
+C:\Users\BasitAliKhan\source\repos\Smart-Assistant\SmartAssistant.Core\bin\Debug\net9.0\SmartAssistant.Core.runtimeconfig.json
+C:\Users\BasitAliKhan\source\repos\Smart-Assistant\SmartAssistant.Core\bin\Debug\net9.0\SmartAssistant.Core.dll
+C:\Users\BasitAliKhan\source\repos\Smart-Assistant\SmartAssistant.Core\bin\Debug\net9.0\SmartAssistant.Core.pdb
+C:\Users\BasitAliKhan\source\repos\Smart-Assistant\SmartAssistant.Core\obj\Debug\net9.0\SmartAssistant.Core.csproj.AssemblyReference.cache
+C:\Users\BasitAliKhan\source\repos\Smart-Assistant\SmartAssistant.Core\obj\Debug\net9.0\SmartAssistant.Core.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\BasitAliKhan\source\repos\Smart-Assistant\SmartAssistant.Core\obj\Debug\net9.0\SmartAssistant.Core.AssemblyInfoInputs.cache
+C:\Users\BasitAliKhan\source\repos\Smart-Assistant\SmartAssistant.Core\obj\Debug\net9.0\SmartAssistant.Core.AssemblyInfo.cs
+C:\Users\BasitAliKhan\source\repos\Smart-Assistant\SmartAssistant.Core\obj\Debug\net9.0\SmartAssistant.Core.csproj.CoreCompileInputs.cache
+C:\Users\BasitAliKhan\source\repos\Smart-Assistant\SmartAssistant.Core\obj\Debug\net9.0\SmartAssistant.Core.sourcelink.json
+C:\Users\BasitAliKhan\source\repos\Smart-Assistant\SmartAssistant.Core\obj\Debug\net9.0\SmartAssistant.Core.dll
+C:\Users\BasitAliKhan\source\repos\Smart-Assistant\SmartAssistant.Core\obj\Debug\net9.0\refint\SmartAssistant.Core.dll
+C:\Users\BasitAliKhan\source\repos\Smart-Assistant\SmartAssistant.Core\obj\Debug\net9.0\SmartAssistant.Core.pdb
+C:\Users\BasitAliKhan\source\repos\Smart-Assistant\SmartAssistant.Core\obj\Debug\net9.0\SmartAssistant.Core.genruntimeconfig.cache
+C:\Users\BasitAliKhan\source\repos\Smart-Assistant\SmartAssistant.Core\obj\Debug\net9.0\ref\SmartAssistant.Core.dll

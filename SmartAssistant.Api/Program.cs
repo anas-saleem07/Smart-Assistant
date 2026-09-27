@@ -18,7 +18,8 @@ var builder = WebApplication.CreateBuilder(args);
 // --------------------
 builder.Services.AddDbContext<ApplicationDbContext>(dbOptions =>
 {
-    dbOptions.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    dbOptions.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
 // --------------------
@@ -56,14 +57,23 @@ builder.Services
         !string.IsNullOrWhiteSpace(o.WindowsRedirectUri) &&
         !string.IsNullOrWhiteSpace(o.AndroidRedirectUri),
         "GmailOAuth settings are missing.")
-    .ValidateOnStart(); 
-//Gemini API options
-builder.Services.AddOptions<SmartAssistant.Api.Options.GeminiOptions>()
-    .BindConfiguration(SmartAssistant.Api.Options.GeminiOptions.SectionName)
-    .Validate(o => !string.IsNullOrWhiteSpace(o.ApiKey), "Gemini ApiKey missing")
     .ValidateOnStart();
 
-builder.Services.AddHttpClient<SmartAssistant.Api.Services.Ai.IAiClient, SmartAssistant.Api.Services.Ai.GeminiClient>();
+// --------------------
+// Gemini API options
+// --------------------
+builder.Services
+    .AddOptions<GeminiOptions>()
+    .BindConfiguration(GeminiOptions.SectionName)
+    .Validate(
+        o => !string.IsNullOrWhiteSpace(o.ApiKey),
+        "Gemini ApiKey missing")
+    .ValidateOnStart();
+
+builder.Services.AddHttpClient<
+    SmartAssistant.Api.Services.Ai.IAiClient,
+    SmartAssistant.Api.Services.Ai.GeminiClient>();
+
 // --------------------
 // App services
 // --------------------
@@ -71,25 +81,33 @@ builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.AddScoped<IReminderService, ReminderService>();
 builder.Services.AddScoped<IReminderAutomationService, ReminderAutomationService>();
+
+// Register Hangfire job once only.
 builder.Services.AddScoped<ReminderAutomationJob>();
+builder.Services.AddScoped<AutoReplyPendingJob>();
+
 builder.Services.AddScoped<IAutoReplyService, AutoReplyService>();
+
+// Register OAuthTokenHelper once only.
 builder.Services.AddScoped<IOAuthTokenHelper, OAuthTokenHelper>();
-builder.Services.AddScoped<IGoogleConnectionService, GoogleConnectionService>();
-builder.Services.AddScoped<IReminderSettingService, ReminderSettingsService>();
 
-builder.Services.AddScoped<SmartAssistant.Api.Services.Google.IOAuthTokenHelper,
-    SmartAssistant.Api.Services.Google.OAuthTokenHelper>();
+builder.Services.AddScoped<
+    IGoogleConnectionService,
+    GoogleConnectionService>();
 
-builder.Services.AddScoped<SmartAssistant.Api.Services.Calendar.ICalendarService,
+builder.Services.AddScoped<
+    IReminderSettingService,
+    ReminderSettingsService>();
+
+builder.Services.AddScoped<
+    SmartAssistant.Api.Services.Calendar.ICalendarService,
     SmartAssistant.Api.Services.Calendar.GoogleCalendarService>();
-//       IMPORTANT: register ONLY ONE IEmailClient
+
+// IMPORTANT: register ONLY ONE IEmailClient
 builder.Services.AddScoped<IEmailClient, GmailEmailClient>();
 
 builder.Services.AddScoped<IEmailOAuthService, EmailOAuthService>();
 
-//  A small wrapper job class (best practice for Hangfire)
-builder.Services.AddScoped<ReminderAutomationJob>();
-builder.Services.AddScoped<AutoReplyPendingJob>();
 // --------------------
 // MVC + Swagger
 // --------------------
@@ -102,18 +120,26 @@ var app = builder.Build();
 // --------------------
 // HTTP pipeline
 // --------------------
-if (app.Environment.IsDevelopment())
+
+// Swagger is available locally and in the hosted FYP environment.
+if (app.Environment.IsDevelopment() ||
+    app.Environment.IsEnvironment("FypDemo"))
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+}
 
-    //  Dashboard only in Development (simple + safe for FYP)
+// Keep Hangfire dashboard only for local development.
+// Do not expose it publicly on the hosted FYP API.
+if (app.Environment.IsDevelopment())
+{
     app.UseHangfireDashboard("/hangfire");
 }
+
 // NOTE:
 // HTTPS redirection is disabled in Development to allow Android emulator
 // (10.0.2.2) to call the API over HTTP without SSL certificate issues.
-// In Production, HTTPS MUST remain enabled.
+// In FypDemo / Production, HTTPS remains enabled.
 if (!app.Environment.IsDevelopment())
 {
     app.UseHttpsRedirection();
@@ -126,16 +152,29 @@ app.MapControllers();
 // --------------------
 // Hangfire recurring job registration
 // --------------------
-RecurringJob.AddOrUpdate<ReminderAutomationJob>(
+// Use Hangfire's DI-based recurring job manager.
+//
+// Do NOT use the static RecurringJob.AddOrUpdate API here.
+// On the hosted environment JobStorage.Current may not yet be initialized,
+// which caused the application startup failure:
+//
+// "Current JobStorage instance has not been initialized yet."
+//
+// Resolving IRecurringJobManager from DI ensures it uses the Hangfire
+// SQL storage configured above through AddHangfire().
+var recurringJobManager =
+    app.Services.GetRequiredService<IRecurringJobManager>();
+
+recurringJobManager.AddOrUpdate<ReminderAutomationJob>(
     "ReminderAutomationJob",
     job => job.Run(CancellationToken.None),
     "*/10 * * * *" // every 10 minutes
 );
-RecurringJob.AddOrUpdate<AutoReplyPendingJob>(
+
+recurringJobManager.AddOrUpdate<AutoReplyPendingJob>(
     "AutoReplyPendingJob",
     job => job.Run(CancellationToken.None),
     "*/10 * * * *"
 );
+
 app.Run();
-
-

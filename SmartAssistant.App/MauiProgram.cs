@@ -51,13 +51,22 @@ namespace SmartAssistant.App
 
             builder.Services.AddMauiBlazorWebView();
 
-            // Android emulator maps host machine localhost to 10.0.2.2.
-            // Use HTTP (5256) in Development to avoid SSL trust issues on emulator.
-            var baseAddress =
-                DeviceInfo.Platform == DevicePlatform.Android
-                    ? "http://10.0.2.2:5256/"
-                    : "https://localhost:7151/";
+            // DEBUG:
+            // Android uses the Visual Studio Dev Tunnel.
+            // Windows uses the locally running API.
+            //
+            // RELEASE:
+            // Android and Windows both use the hosted FYP API.
+//#if DEBUG
+//            var baseAddress =
+//                DeviceInfo.Platform == DevicePlatform.Android
+//                    ? "https://h4n4qd3b-7151.inc1.devtunnels.ms/"
+//                    : "https://localhost:7151/";
+//#else
+            var baseAddress = "https://assistflow.runasp.net/";
+//#endif
 
+            // Register one HttpClient for API communication.
             builder.Services.AddScoped(_ => new HttpClient
             {
                 BaseAddress = new Uri(baseAddress),

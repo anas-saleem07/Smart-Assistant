@@ -1,23 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Anas FYP\\SmartAssistant.Api\\SmartAssistant.Api.csproj": {}
+    "C:\\Users\\BasitAliKhan\\source\\repos\\Smart-Assistant\\SmartAssistant.Api\\SmartAssistant.Api.csproj": {}
   },
   "projects": {
-    "D:\\Anas FYP\\SmartAssistant.Api\\SmartAssistant.Api.csproj": {
+    "C:\\Users\\BasitAliKhan\\source\\repos\\Smart-Assistant\\SmartAssistant.Api\\SmartAssistant.Api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Anas FYP\\SmartAssistant.Api\\SmartAssistant.Api.csproj",
+        "projectUniqueName": "C:\\Users\\BasitAliKhan\\source\\repos\\Smart-Assistant\\SmartAssistant.Api\\SmartAssistant.Api.csproj",
         "projectName": "SmartAssistant.Api",
-        "projectPath": "D:\\Anas FYP\\SmartAssistant.Api\\SmartAssistant.Api.csproj",
-        "packagesPath": "C:\\Users\\Basit Ali Khan\\.nuget\\packages\\",
-        "outputPath": "D:\\Anas FYP\\SmartAssistant.Api\\obj\\",
+        "projectPath": "C:\\Users\\BasitAliKhan\\source\\repos\\Smart-Assistant\\SmartAssistant.Api\\SmartAssistant.Api.csproj",
+        "packagesPath": "C:\\Users\\BasitAliKhan\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\BasitAliKhan\\source\\repos\\Smart-Assistant\\SmartAssistant.Api\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Basit Ali Khan\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\BasitAliKhan\\source\\repos\\NuGet.Config",
+          "C:\\Users\\BasitAliKhan\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -31,10 +32,11 @@
         },
         "frameworks": {
           "net9.0": {
+            "framework": "net9.0",
             "targetAlias": "net9.0",
             "projectReferences": {
-              "D:\\Anas FYP\\SmartAssistant.Core\\SmartAssistant.Core.csproj": {
-                "projectPath": "D:\\Anas FYP\\SmartAssistant.Core\\SmartAssistant.Core.csproj"
+              "C:\\Users\\BasitAliKhan\\source\\repos\\Smart-Assistant\\SmartAssistant.Core\\SmartAssistant.Core.csproj": {
+                "projectPath": "C:\\Users\\BasitAliKhan\\source\\repos\\Smart-Assistant\\SmartAssistant.Core\\SmartAssistant.Core.csproj"
               }
             }
           }
@@ -53,6 +55,7 @@
       },
       "frameworks": {
         "net9.0": {
+          "framework": "net9.0",
           "targetAlias": "net9.0",
           "dependencies": {
             "AutoMapper": {
@@ -133,24 +136,25 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.316/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.311/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\Anas FYP\\SmartAssistant.Core\\SmartAssistant.Core.csproj": {
+    "C:\\Users\\BasitAliKhan\\source\\repos\\Smart-Assistant\\SmartAssistant.Core\\SmartAssistant.Core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Anas FYP\\SmartAssistant.Core\\SmartAssistant.Core.csproj",
+        "projectUniqueName": "C:\\Users\\BasitAliKhan\\source\\repos\\Smart-Assistant\\SmartAssistant.Core\\SmartAssistant.Core.csproj",
         "projectName": "SmartAssistant.Core",
-        "projectPath": "D:\\Anas FYP\\SmartAssistant.Core\\SmartAssistant.Core.csproj",
-        "packagesPath": "C:\\Users\\Basit Ali Khan\\.nuget\\packages\\",
-        "outputPath": "D:\\Anas FYP\\SmartAssistant.Core\\obj\\",
+        "projectPath": "C:\\Users\\BasitAliKhan\\source\\repos\\Smart-Assistant\\SmartAssistant.Core\\SmartAssistant.Core.csproj",
+        "packagesPath": "C:\\Users\\BasitAliKhan\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\BasitAliKhan\\source\\repos\\Smart-Assistant\\SmartAssistant.Core\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Basit Ali Khan\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\BasitAliKhan\\source\\repos\\NuGet.Config",
+          "C:\\Users\\BasitAliKhan\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -164,6 +168,7 @@
         },
         "frameworks": {
           "net9.0": {
+            "framework": "net9.0",
             "targetAlias": "net9.0",
             "projectReferences": {}
           }
@@ -182,6 +187,7 @@
       },
       "frameworks": {
         "net9.0": {
+          "framework": "net9.0",
           "targetAlias": "net9.0",
           "dependencies": {
             "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
@@ -219,7 +225,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.316/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.311/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
