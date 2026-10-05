@@ -3,12 +3,19 @@
   "WorkspaceRootPath": "C:\\Users\\BasitAliKhan\\source\\repos\\Smart-Assistant\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{328389EB-2784-BD68-722A-003708629086}|SmartAssistant.App\\SmartAssistant.App.csproj|c:\\users\\basitalikhan\\source\\repos\\smart-assistant\\smartassistant.app\\mauiprogram.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{328389EB-2784-BD68-722A-003708629086}|SmartAssistant.App\\SmartAssistant.App.csproj|solutionrelative:smartassistant.app\\mauiprogram.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{491E4BCE-D5BF-311C-425F-C776D5DD1381}|SmartAssistant.Api\\SmartAssistant.Api.csproj|c:\\users\\basitalikhan\\source\\repos\\smart-assistant\\smartassistant.api\\smartassistant.api.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{491E4BCE-D5BF-311C-425F-C776D5DD1381}|SmartAssistant.Api\\SmartAssistant.Api.csproj|solutionrelative:smartassistant.api\\smartassistant.api.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\BasitAliKhan\\AppData\\Roaming\\Microsoft\\UserSecrets\\2c093e04-3d1f-4791-91f1-bde6a1cd8a87\\secrets.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{328389EB-2784-BD68-722A-003708629086}|SmartAssistant.App\\SmartAssistant.App.csproj|c:\\users\\basitalikhan\\source\\repos\\smart-assistant\\smartassistant.app\\smartassistant.app.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
       "RelativeMoniker": "D:0:0:{328389EB-2784-BD68-722A-003708629086}|SmartAssistant.App\\SmartAssistant.App.csproj|solutionrelative:smartassistant.app\\smartassistant.app.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{328389EB-2784-BD68-722A-003708629086}|SmartAssistant.App\\SmartAssistant.App.csproj|c:\\users\\basitalikhan\\source\\repos\\smart-assistant\\smartassistant.app\\mauiprogram.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{328389EB-2784-BD68-722A-003708629086}|SmartAssistant.App\\SmartAssistant.App.csproj|solutionrelative:smartassistant.app\\mauiprogram.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{491E4BCE-D5BF-311C-425F-C776D5DD1381}|SmartAssistant.Api\\SmartAssistant.Api.csproj|c:\\users\\basitalikhan\\source\\repos\\smart-assistant\\smartassistant.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -22,49 +29,65 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{c6f34f0d-7ae5-4f3a-be61-fe0c21ae9eb8}"
             },
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{adc868d0-8493-32f6-941b-672cb3f7d230}"
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "SmartAssistant.Api.csproj",
+              "DocumentMoniker": "C:\\Users\\BasitAliKhan\\source\\repos\\Smart-Assistant\\SmartAssistant.Api\\SmartAssistant.Api.csproj",
+              "RelativeDocumentMoniker": "SmartAssistant.Api\\SmartAssistant.Api.csproj",
+              "ToolTip": "C:\\Users\\BasitAliKhan\\source\\repos\\Smart-Assistant\\SmartAssistant.Api\\SmartAssistant.Api.csproj",
+              "RelativeToolTip": "SmartAssistant.Api\\SmartAssistant.Api.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-10-05T15:42:16.658Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "SmartAssistant.App",
+              "Title": "secrets.json",
+              "DocumentMoniker": "C:\\Users\\BasitAliKhan\\AppData\\Roaming\\Microsoft\\UserSecrets\\2c093e04-3d1f-4791-91f1-bde6a1cd8a87\\secrets.json",
+              "RelativeDocumentMoniker": "..\\..\\..\\AppData\\Roaming\\Microsoft\\UserSecrets\\2c093e04-3d1f-4791-91f1-bde6a1cd8a87\\secrets.json",
+              "ToolTip": "C:\\Users\\BasitAliKhan\\AppData\\Roaming\\Microsoft\\UserSecrets\\2c093e04-3d1f-4791-91f1-bde6a1cd8a87\\secrets.json",
+              "RelativeToolTip": "..\\..\\..\\AppData\\Roaming\\Microsoft\\UserSecrets\\2c093e04-3d1f-4791-91f1-bde6a1cd8a87\\secrets.json",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAkAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-09-25T02:12:33.78Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "SmartAssistant.App.csproj",
               "DocumentMoniker": "C:\\Users\\BasitAliKhan\\source\\repos\\Smart-Assistant\\SmartAssistant.App\\SmartAssistant.App.csproj",
               "RelativeDocumentMoniker": "SmartAssistant.App\\SmartAssistant.App.csproj",
               "ToolTip": "C:\\Users\\BasitAliKhan\\source\\repos\\Smart-Assistant\\SmartAssistant.App\\SmartAssistant.App.csproj",
               "RelativeToolTip": "SmartAssistant.App\\SmartAssistant.App.csproj",
-              "ViewState": "AgIAAAkAAAAAAAAAAAAAACIAAAAzAAAAAAAAAA==",
+              "ViewState": "AgIAAB4AAAAAAAAAAAAkwEkAAAAKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
               "WhenOpened": "2026-09-24T18:41:40.392Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 3,
               "Title": "MauiProgram.cs",
               "DocumentMoniker": "C:\\Users\\BasitAliKhan\\source\\repos\\Smart-Assistant\\SmartAssistant.App\\MauiProgram.cs",
               "RelativeDocumentMoniker": "SmartAssistant.App\\MauiProgram.cs",
               "ToolTip": "C:\\Users\\BasitAliKhan\\source\\repos\\Smart-Assistant\\SmartAssistant.App\\MauiProgram.cs",
               "RelativeToolTip": "SmartAssistant.App\\MauiProgram.cs",
-              "ViewState": "AgIAACoAAAAAAAAAAAAAAEIAAAAIAAAAAAAAAA==",
+              "ViewState": "AgIAACoAAAAAAAAAAAAAAFMAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-24T18:40:00.72Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-09-24T18:40:00.72Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\BasitAliKhan\\source\\repos\\Smart-Assistant\\SmartAssistant.Api\\Program.cs",
               "RelativeDocumentMoniker": "SmartAssistant.Api\\Program.cs",
@@ -72,8 +95,7 @@
               "RelativeToolTip": "SmartAssistant.Api\\Program.cs",
               "ViewState": "AgIAAHgAAAAAAAAAAAAAAJUAAAAVAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-24T03:13:57.93Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-09-24T03:13:57.93Z"
             }
           ]
         }

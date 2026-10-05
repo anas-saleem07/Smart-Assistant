@@ -69,7 +69,7 @@ namespace SmartAssistant.Api.Services.Automation
                 }
 
                 var activeAccountEmail = await GetActiveAccountEmailAsync(ct);
-                var sinceUtc = DateTimeOffset.UtcNow.AddHours(-24);
+                var sinceUtc = DateTimeOffset.UtcNow.AddDays(-14);
 
                 var importantEmails = await _emailClient.GetImportantEmailsAsync(sinceUtc, ct, settings.GmailQuery);
                 if (importantEmails == null || importantEmails.Count == 0)
@@ -90,7 +90,7 @@ namespace SmartAssistant.Api.Services.Automation
 
                 foreach (var email in importantEmails)
                 {
-                    if (email == null)
+                    if (email == null || email.ReceivedOn < sinceUtc)
                         continue;
 
                     if (string.IsNullOrWhiteSpace(email.Provider) || string.IsNullOrWhiteSpace(email.Id))
@@ -149,7 +149,7 @@ namespace SmartAssistant.Api.Services.Automation
                         processedRow.CalendarEventId = email.CalendarEventId;
                     }
 
-                    if (isReplyCandidate)
+                    if (isReplyCandidate && settings.AutoReplyEnabled)
                     {
                         await _db.SaveChangesAsync(ct);
 
@@ -167,20 +167,40 @@ namespace SmartAssistant.Api.Services.Automation
                         continue;
                     }
 
-                    var isReminderCandidate = IsMatch(email, reminderKeywords);
+                    var isReminderCandidate = isReplyCandidate || IsMatch(email, reminderKeywords);
                     if (!isReminderCandidate)
                     {
+                        processedRow.ProcessingStatus = ProcessingStatuses.Skipped;
+                        processedRow.ReplyLastError = "Message did not qualify for reminder creation.";
                         await _db.SaveChangesAsync(ct);
                         continue;
                     }
 
                     if (await _reminderService.ExistsEmailReminderAsync(email.Provider, email.Id, email.CalendarEventId))
                     {
-                        await MarkProcessedIfNeededAsync(email, activeAccountEmail, ct);
+                        processedRow.ProcessingStatus = ProcessingStatuses.ReminderCreated;
+                        await _db.SaveChangesAsync(ct);
                         continue;
                     }
 
                     var reminderTime = DateTimeOffset.UtcNow.AddMinutes(Math.Max(1, settings.DefaultReminderAfterMinutes));
+                    if (!settings.AutoReplyEnabled)
+                    {
+                        if (AutoReplyService.TryGetProposedUtcRange(email, settings, out var startUtc, out var endUtc, allowStartOnly: true))
+                        {
+                            reminderTime = startUtc;
+                            processedRow.ProposedStartUtc = startUtc;
+                            processedRow.ProposedEndUtc = endUtc;
+                        }
+                        else if (isReplyCandidate)
+                        {
+                            processedRow.ProcessingStatus = ProcessingStatuses.Skipped;
+                            processedRow.ReplyLastError = "Reminder skipped: scheduling date/time could not be parsed.";
+                            await _db.SaveChangesAsync(ct);
+                            continue;
+                        }
+
+                    }
 
                     var emailReminder = new Reminder
                     {
@@ -193,7 +213,22 @@ namespace SmartAssistant.Api.Services.Automation
                         AccountEmail = activeAccountEmail
                     };
 
-                    var savedReminder = await _reminderService.AddEmailReminderAsync(emailReminder);
+                    Reminder? savedReminder;
+                    try
+                    {
+                        // Saved together with the reminder by ReminderService's SaveChanges.
+                        processedRow.ProcessingStatus = ProcessingStatuses.ReminderCreated;
+                        processedRow.ReplyLastError = null;
+                        savedReminder = await _reminderService.AddEmailReminderAsync(emailReminder);
+                    }
+                    catch (Exception) when (!ct.IsCancellationRequested)
+                    {
+                        _db.Entry(emailReminder).State = EntityState.Detached;
+                        processedRow.ProcessingStatus = ProcessingStatuses.Error;
+                        processedRow.ReplyLastError ??= "Reminder creation failed while saving the reminder. Check the server error log.";
+                        await _db.SaveChangesAsync(ct);
+                        throw;
+                    }
                     await _db.SaveChangesAsync(ct);
 
                     if (savedReminder != null)
@@ -260,26 +295,14 @@ namespace SmartAssistant.Api.Services.Automation
                 MessageId = email.Id,
                 AccountEmail = activeAccountEmail,
                 ProcessedOn = DateTimeOffset.UtcNow,
-                CalendarEventId = email.CalendarEventId
+                CalendarEventId = email.CalendarEventId,
+                Subject = email.Subject,
+                From = email.From
             };
 
             _db.EmailProcessed.Add(row);
-
-            try
-            {
-                await _db.SaveChangesAsync(ct);
-                return row;
-            }
-            catch (DbUpdateException)
-            {
-                var again = await _db.EmailProcessed
-                    .FirstAsync(item =>
-                        item.Provider == email.Provider &&
-                        item.MessageId == email.Id &&
-                        item.AccountEmail == activeAccountEmail, ct);
-
-                return again;
-            }
+            // Keep this row pending until its processing branch has a result.
+            return row;
         }
 
         private static bool IsCancellationEmail(EmailMessage email)
@@ -350,6 +373,8 @@ namespace SmartAssistant.Api.Services.Automation
                 AccountEmail = activeAccountEmail,
                 ProcessedOn = DateTimeOffset.UtcNow,
                 CalendarEventId = email.CalendarEventId,
+                Subject = email.Subject,
+                From = email.From,
                 ProcessingStatus = IsCancellationEmail(email) ? ProcessingStatuses.RejectedBySender : null,
                 ReplyLastError = IsCancellationEmail(email) ? "Cancellation processed." : null
             });

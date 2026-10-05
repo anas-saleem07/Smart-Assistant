@@ -200,6 +200,14 @@ D:\Anas FYP\SmartAssistant.Api\obj\Debug\net9.0\refint\SmartAssistant.Api.dll
 D:\Anas FYP\SmartAssistant.Api\obj\Debug\net9.0\SmartAssistant.Api.pdb
 D:\Anas FYP\SmartAssistant.Api\obj\Debug\net9.0\SmartAssistant.Api.genruntimeconfig.cache
 D:\Anas FYP\SmartAssistant.Api\obj\Debug\net9.0\ref\SmartAssistant.Api.dll
+C:\Users\BasitAliKhan\source\repos\Smart-Assistant\tests\SchedulingChecks\bin\regression\Debug\net9.0\appsettings.Development.json
+C:\Users\BasitAliKhan\source\repos\Smart-Assistant\tests\SchedulingChecks\bin\regression\Debug\net9.0\appsettings.json
+C:\Users\BasitAliKhan\source\repos\Smart-Assistant\tests\SchedulingChecks\bin\regression\Debug\net9.0\SmartAssistant.Api.staticwebassets.endpoints.json
+C:\Users\BasitAliKhan\source\repos\Smart-Assistant\tests\SchedulingChecks\bin\regression\Debug\net9.0\SmartAssistant.Api.exe
+C:\Users\BasitAliKhan\source\repos\Smart-Assistant\tests\SchedulingChecks\bin\regression\Debug\net9.0\SmartAssistant.Api.deps.json
+C:\Users\BasitAliKhan\source\repos\Smart-Assistant\tests\SchedulingChecks\bin\regression\Debug\net9.0\SmartAssistant.Api.runtimeconfig.json
+C:\Users\BasitAliKhan\source\repos\Smart-Assistant\tests\SchedulingChecks\bin\regression\Debug\net9.0\SmartAssistant.Api.dll
+C:\Users\BasitAliKhan\source\repos\Smart-Assistant\tests\SchedulingChecks\bin\regression\Debug\net9.0\SmartAssistant.Api.pdb
 C:\Users\BasitAliKhan\source\repos\Smart-Assistant\SmartAssistant.Api\bin\Debug\net9.0\appsettings.Development.json
 C:\Users\BasitAliKhan\source\repos\Smart-Assistant\SmartAssistant.Api\bin\Debug\net9.0\appsettings.json
 C:\Users\BasitAliKhan\source\repos\Smart-Assistant\SmartAssistant.Api\bin\Debug\net9.0\SmartAssistant.Api.staticwebassets.endpoints.json

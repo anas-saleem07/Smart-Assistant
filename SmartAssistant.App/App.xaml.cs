@@ -12,6 +12,18 @@
             MainPage = new MainPage();
         }
 
+        protected override void OnStart() => ForegroundState.IsActive = true;
+        protected override void OnResume() => ForegroundState.IsActive = true;
+        protected override void OnSleep() => ForegroundState.IsActive = false;
+
+        protected override Window CreateWindow(IActivationState? activationState)
+        {
+            var window = base.CreateWindow(activationState);
+            window.Activated += (_, _) => ForegroundState.IsActive = true;
+            window.Deactivated += (_, _) => ForegroundState.IsActive = false;
+            return window;
+        }
+
         protected override void OnAppLinkRequestReceived(Uri uri)
         {
             base.OnAppLinkRequestReceived(uri);

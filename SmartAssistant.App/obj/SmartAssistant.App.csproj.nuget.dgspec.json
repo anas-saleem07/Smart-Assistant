@@ -35,8 +35,7 @@
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
-          "net9.0-android": {
-            "framework": "net9.0-android35.0",
+          "net9.0-android35.0": {
             "targetAlias": "net9.0-android",
             "projectReferences": {
               "C:\\Users\\BasitAliKhan\\source\\repos\\Smart-Assistant\\SmartAssistant.Core\\SmartAssistant.Core.csproj": {
@@ -44,8 +43,7 @@
               }
             }
           },
-          "net9.0-ios": {
-            "framework": "net9.0-ios26.5",
+          "net9.0-ios26.5": {
             "targetAlias": "net9.0-ios",
             "projectReferences": {
               "C:\\Users\\BasitAliKhan\\source\\repos\\Smart-Assistant\\SmartAssistant.Core\\SmartAssistant.Core.csproj": {
@@ -53,8 +51,7 @@
               }
             }
           },
-          "net9.0-maccatalyst": {
-            "framework": "net9.0-maccatalyst26.5",
+          "net9.0-maccatalyst26.5": {
             "targetAlias": "net9.0-maccatalyst",
             "projectReferences": {
               "C:\\Users\\BasitAliKhan\\source\\repos\\Smart-Assistant\\SmartAssistant.Core\\SmartAssistant.Core.csproj": {
@@ -62,8 +59,7 @@
               }
             }
           },
-          "net9.0-windows10.0.19041.0": {
-            "framework": "net9.0-windows10.0.19041",
+          "net9.0-windows10.0.19041": {
             "targetAlias": "net9.0-windows10.0.19041.0",
             "projectReferences": {
               "C:\\Users\\BasitAliKhan\\source\\repos\\Smart-Assistant\\SmartAssistant.Core\\SmartAssistant.Core.csproj": {
@@ -85,8 +81,7 @@
         "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
-        "net9.0-android": {
-          "framework": "net9.0-android35.0",
+        "net9.0-android35.0": {
           "targetAlias": "net9.0-android",
           "dependencies": {
             "Microsoft.AspNetCore.Components.WebView.Maui": {
@@ -104,7 +99,7 @@
             "Microsoft.NET.ILLink.Tasks": {
               "suppressParent": "All",
               "target": "Package",
-              "version": "[9.0.13, )",
+              "version": "[9.0.20, )",
               "autoReferenced": true
             }
           },
@@ -119,12 +114,6 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.NETCore.App.Ref",
-              "version": "[9.0.20, 9.0.20]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.Android": {
               "privateAssets": "all"
@@ -133,10 +122,9 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.311/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.318/PortableRuntimeIdentifierGraph.json"
         },
-        "net9.0-ios": {
-          "framework": "net9.0-ios26.5",
+        "net9.0-ios26.5": {
           "targetAlias": "net9.0-ios",
           "dependencies": {
             "Microsoft.AspNetCore.Components.WebView.Maui": {
@@ -154,7 +142,7 @@
             "Microsoft.NET.ILLink.Tasks": {
               "suppressParent": "All",
               "target": "Package",
-              "version": "[9.0.13, )",
+              "version": "[9.0.20, )",
               "autoReferenced": true
             }
           },
@@ -169,12 +157,6 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.NETCore.App.Ref",
-              "version": "[9.0.20, 9.0.20]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.iOS": {
               "privateAssets": "all"
@@ -183,10 +165,9 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.311/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.318/PortableRuntimeIdentifierGraph.json"
         },
-        "net9.0-maccatalyst": {
-          "framework": "net9.0-maccatalyst26.5",
+        "net9.0-maccatalyst26.5": {
           "targetAlias": "net9.0-maccatalyst",
           "dependencies": {
             "Microsoft.AspNetCore.Components.WebView.Maui": {
@@ -204,7 +185,7 @@
             "Microsoft.NET.ILLink.Tasks": {
               "suppressParent": "All",
               "target": "Package",
-              "version": "[9.0.13, )",
+              "version": "[9.0.20, )",
               "autoReferenced": true
             }
           },
@@ -220,12 +201,6 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.NETCore.App.Ref",
-              "version": "[9.0.20, 9.0.20]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.MacCatalyst": {
               "privateAssets": "all"
@@ -234,10 +209,9 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.311/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.318/PortableRuntimeIdentifierGraph.json"
         },
-        "net9.0-windows10.0.19041.0": {
-          "framework": "net9.0-windows10.0.19041",
+        "net9.0-windows10.0.19041": {
           "targetAlias": "net9.0-windows10.0.19041.0",
           "dependencies": {
             "Microsoft.AspNetCore.Components.WebView.Maui": {
@@ -278,7 +252,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.311\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.318\\RuntimeIdentifierGraph.json"
         }
       },
       "runtimes": {
@@ -327,7 +301,6 @@
         },
         "frameworks": {
           "net9.0": {
-            "framework": "net9.0",
             "targetAlias": "net9.0",
             "projectReferences": {}
           }
@@ -346,7 +319,6 @@
       },
       "frameworks": {
         "net9.0": {
-          "framework": "net9.0",
           "targetAlias": "net9.0",
           "dependencies": {
             "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
@@ -384,7 +356,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.311/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.318/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

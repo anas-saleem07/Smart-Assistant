@@ -1,9 +1,10 @@
-﻿using Google.Apis.Auth.OAuth2;
+using Google.Apis.Auth.OAuth2;
 using Google.Apis.Gmail.v1;
 using Google.Apis.Gmail.v1.Data;
 using Google.Apis.Services;
 using SmartAssistant.Api.Services.Google;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace SmartAssistant.Api.Services.Email
 {
@@ -32,45 +33,43 @@ namespace SmartAssistant.Api.Services.Email
                 });
 
                 var request = gmail.Users.Messages.List("me");
-                request.Q = string.IsNullOrWhiteSpace(gmailQuery)
-                    ? "in:inbox newer_than:7d"
-                    : gmailQuery;
-
-                var response = await request.ExecuteAsync(ct);
-
-                if (response.Messages == null)
-                    return [];
+                request.Q = BuildScanQuery(gmailQuery);
 
                 var results = new List<EmailMessage>();
 
-                foreach (var msg in response.Messages.Take(20))
+                do
                 {
-                    var full = await gmail.Users.Messages.Get("me", msg.Id)
-                        .ExecuteAsync(ct);
+                    var response = await request.ExecuteAsync(ct);
+                    foreach (var msg in response.Messages ?? [])
+                    {
+                        var full = await gmail.Users.Messages.Get("me", msg.Id)
+                            .ExecuteAsync(ct);
 
-                    var subject = full.Payload?.Headers?
-                        .FirstOrDefault(h => h.Name == "Subject")?.Value ?? "(no subject)";
+                        var subject = full.Payload?.Headers?
+                            .FirstOrDefault(h => h.Name == "Subject")?.Value ?? "(no subject)";
 
-                    var from = full.Payload?.Headers?
-                        .FirstOrDefault(h => h.Name == "From")?.Value ?? "(unknown)";
+                        var from = full.Payload?.Headers?
+                            .FirstOrDefault(h => h.Name == "From")?.Value ?? "(unknown)";
 
-                    var snippet = full.Snippet ?? "";
+                        var snippet = full.Snippet ?? "";
 
-                    var received = full.InternalDate.HasValue
-                        ? DateTimeOffset.FromUnixTimeMilliseconds(full.InternalDate.Value)
-                        : DateTimeOffset.UtcNow;
+                        var received = full.InternalDate.HasValue
+                            ? DateTimeOffset.FromUnixTimeMilliseconds(full.InternalDate.Value)
+                            : DateTimeOffset.UtcNow;
 
-                    if (received < sinceUtc)
-                        continue;
+                        if (received < sinceUtc)
+                            continue;
 
-                    results.Add(new EmailMessage(
-                        "Gmail",
-                        msg.Id,
-                        subject,
-                        snippet,
-                        received,
-                        from));
-                }
+                        results.Add(new EmailMessage(
+                            "Gmail",
+                            msg.Id,
+                            subject,
+                            snippet,
+                            received,
+                            from));
+                    }
+                    request.PageToken = response.NextPageToken;
+                } while (!string.IsNullOrWhiteSpace(request.PageToken));
 
                 return results;
             }
@@ -80,6 +79,14 @@ namespace SmartAssistant.Api.Services.Email
                 // Gmail token is no longer usable, so inbox polling should fail gracefully.
                 return [];
             }
+        }
+
+        internal static string BuildScanQuery(string? gmailQuery)
+        {
+            var query = string.IsNullOrWhiteSpace(gmailQuery) ? "in:inbox" : gmailQuery;
+            // Normalize persisted seven-day settings too; retain non-date Gmail filters.
+            query = Regex.Replace(query, @"(?<!\S)(?:newer_than|after|newer):\S+", "", RegexOptions.IgnoreCase);
+            return query.Trim() + " newer_than:14d";
         }
 
         public async Task ReplyAsync(string messageId, string body, CancellationToken ct)

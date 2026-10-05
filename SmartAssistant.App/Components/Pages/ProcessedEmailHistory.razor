@@ -1,4 +1,5 @@
-﻿@page "/processed-email-history"
+﻿<ForegroundRefresh @ref="foregroundRefresh" Refresh="LoadHistory" />
+@page "/processed-email-history"
 @inject HttpClient Http
 @using System.Net.Http.Json
 @inject NavigationManager Navigation
@@ -143,6 +144,7 @@
 </div>
 
 @code {
+    private ForegroundRefresh? foregroundRefresh;
     private bool isProcessing;
     private string statusText = "";
     private bool isError;
@@ -199,7 +201,8 @@
             isProcessing = true;
             ClearStatus();
 
-            using var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(8));
+            using var cancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(foregroundRefresh?.Token ?? CancellationToken.None);
+            cancellationTokenSource.CancelAfter(TimeSpan.FromSeconds(8));
 
             items =
                 await Http.GetFromJsonAsync<List<ProcessedEmailHistoryDto>>(
@@ -287,12 +290,15 @@
             "ApprovalPending" => "Approval Pending",
             "ReschedulePending" => "Waiting Reschedule",
             "WaitingSenderConfirmation" => "Waiting Confirmation",
-            "Confirmed" => "Confirmed",
-            "RejectedBySender" => "Rejected",
-            "RejectedByUser" => "Rejected By Me",
-            "Error" => "Error",
-            "AutoAccepted" => "Auto Accepted",
-            _ => "Unknown"
+            "Confirmed" => "Accepted",
+            "RejectedBySender" => "Declined",
+            "RejectedByUser" => "Declined",
+            "Error" => "Failed",
+            "AutoAccepted" => "Accepted",
+            "Replied" => "Replied",
+            "ReminderCreated" => "Reminder Created",
+            "Skipped" => "Skipped",
+            _ => "Not recorded"
         };
     }
 
@@ -311,7 +317,7 @@
 
     private string GetSubjectText(ProcessedEmailHistoryDto item)
     {
-        return string.IsNullOrWhiteSpace(item.Subject) ? "Processed scheduling email" : item.Subject;
+        return string.IsNullOrWhiteSpace(item.Subject) ? "Subject unavailable" : item.Subject;
     }
 
     private string GetSenderText(ProcessedEmailHistoryDto item)
@@ -369,60 +375,6 @@
 
     private string GetReasonText(ProcessedEmailHistoryDto item)
     {
-        if (item.ProcessingStatus == "Confirmed")
-            return "-";
-
-        if (item.ProcessingStatus == "AutoAccepted")
-            return "-";
-
-        if (item.ProcessingStatus == "RejectedByUser")
-        {
-            if (!string.IsNullOrWhiteSpace(item.Details))
-                return item.Details;
-
-            return "Rejected by user due to timing.";
-        }
-
-        if (item.ProcessingStatus == "RejectedBySender")
-        {
-            if (!string.IsNullOrWhiteSpace(item.Details))
-                return item.Details;
-
-            return "Rejected by sender.";
-        }
-
-        if (item.ProcessingStatus == "WaitingSenderConfirmation")
-        {
-            if (!string.IsNullOrWhiteSpace(item.Details))
-                return item.Details;
-
-            return "Waiting for sender confirmation.";
-        }
-
-        if (item.ProcessingStatus == "ApprovalPending")
-        {
-            if (!string.IsNullOrWhiteSpace(item.Details))
-                return item.Details;
-
-            return "Approval pending.";
-        }
-
-        if (item.ProcessingStatus == "ReschedulePending")
-        {
-            if (!string.IsNullOrWhiteSpace(item.Details))
-                return item.Details;
-
-            return "Waiting for reschedule from sender.";
-        }
-
-        if (item.ProcessingStatus == "Error")
-        {
-            if (!string.IsNullOrWhiteSpace(item.Details))
-                return item.Details;
-
-            return "Processing failed.";
-        }
-
         return string.IsNullOrWhiteSpace(item.Details) ? "-" : item.Details;
     }
 
@@ -433,6 +385,7 @@
         public string MessageId { get; set; } = "";
         public string Subject { get; set; } = "";
         public string From { get; set; } = "";
+        public string SenderStatus { get; set; } = "Unknown";
         public string ProcessingStatus { get; set; } = "";
         public string Details { get; set; } = "";
         public DateTimeOffset? ProposedStartUtc { get; set; }
@@ -685,8 +638,14 @@
     .rm-table {
         width: 100%;
         border-collapse: collapse;
-        min-width: 760px;
+        min-width: 900px;
+        table-layout: fixed;
     }
+
+    .rm-table th:first-child { width: 28%; }
+    .rm-table th:nth-child(2) { width: 24%; }
+    .rm-table th:nth-child(3) { width: 28%; }
+    .rm-table th:nth-child(4) { width: 20%; }
 
         .rm-table thead th {
             text-align: left;
@@ -704,6 +663,8 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.06);
             color: rgba(232, 236, 255, 0.92);
             line-height: 1.5;
+            overflow-wrap: anywhere;
+            white-space: pre-line;
         }
 
     .rm-badge {
@@ -711,6 +672,7 @@
         border-radius: 999px;
         color: rgba(232, 236, 255, 0.88);
         display: inline-block;
+        white-space: nowrap;
     }
 
     .rm-badge-pending {

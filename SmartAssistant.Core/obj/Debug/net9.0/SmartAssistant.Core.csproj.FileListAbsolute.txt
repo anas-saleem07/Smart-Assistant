@@ -13,6 +13,18 @@ D:\Anas FYP\SmartAssistant.Core\obj\Debug\net9.0\refint\SmartAssistant.Core.dll
 D:\Anas FYP\SmartAssistant.Core\obj\Debug\net9.0\SmartAssistant.Core.pdb
 D:\Anas FYP\SmartAssistant.Core\obj\Debug\net9.0\SmartAssistant.Core.genruntimeconfig.cache
 D:\Anas FYP\SmartAssistant.Core\obj\Debug\net9.0\ref\SmartAssistant.Core.dll
+C:\Users\BasitAliKhan\source\repos\Smart-Assistant\tests\SchedulingChecks\bin\regression\Debug\net9.0\SmartAssistant.Core.deps.json
+C:\Users\BasitAliKhan\source\repos\Smart-Assistant\tests\SchedulingChecks\bin\regression\Debug\net9.0\SmartAssistant.Core.runtimeconfig.json
+C:\Users\BasitAliKhan\source\repos\Smart-Assistant\tests\SchedulingChecks\bin\regression\Debug\net9.0\SmartAssistant.Core.dll
+C:\Users\BasitAliKhan\source\repos\Smart-Assistant\tests\SchedulingChecks\bin\regression\Debug\net9.0\SmartAssistant.Core.pdb
+C:\Users\BasitAliKhan\source\repos\Smart-Assistant\tests\SchedulingChecks\bin\maui-validation\SmartAssistant.Core.deps.json
+C:\Users\BasitAliKhan\source\repos\Smart-Assistant\tests\SchedulingChecks\bin\maui-validation\SmartAssistant.Core.runtimeconfig.json
+C:\Users\BasitAliKhan\source\repos\Smart-Assistant\tests\SchedulingChecks\bin\maui-validation\SmartAssistant.Core.dll
+C:\Users\BasitAliKhan\source\repos\Smart-Assistant\tests\SchedulingChecks\bin\maui-validation\SmartAssistant.Core.pdb
+C:\Users\BasitAliKhan\source\repos\Smart-Assistant\tests\SchedulingChecks\bin\android-validation\SmartAssistant.Core.deps.json
+C:\Users\BasitAliKhan\source\repos\Smart-Assistant\tests\SchedulingChecks\bin\android-validation\SmartAssistant.Core.runtimeconfig.json
+C:\Users\BasitAliKhan\source\repos\Smart-Assistant\tests\SchedulingChecks\bin\android-validation\SmartAssistant.Core.dll
+C:\Users\BasitAliKhan\source\repos\Smart-Assistant\tests\SchedulingChecks\bin\android-validation\SmartAssistant.Core.pdb
 C:\Users\BasitAliKhan\source\repos\Smart-Assistant\SmartAssistant.Core\bin\Debug\net9.0\SmartAssistant.Core.deps.json
 C:\Users\BasitAliKhan\source\repos\Smart-Assistant\SmartAssistant.Core\bin\Debug\net9.0\SmartAssistant.Core.runtimeconfig.json
 C:\Users\BasitAliKhan\source\repos\Smart-Assistant\SmartAssistant.Core\bin\Debug\net9.0\SmartAssistant.Core.dll

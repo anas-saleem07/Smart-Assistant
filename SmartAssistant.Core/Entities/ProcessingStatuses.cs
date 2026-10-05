@@ -2,6 +2,8 @@
 {
     public static class ProcessingStatuses
     {
+        public const string ReminderCreated = "ReminderCreated";
+        public const string Skipped = "Skipped";
         public const string ApprovalPending = "ApprovalPending";
         public const string ReschedulePending = "ReschedulePending";
         public const string WaitingSenderConfirmation = "WaitingSenderConfirmation";

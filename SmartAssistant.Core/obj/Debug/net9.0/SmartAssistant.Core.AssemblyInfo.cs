@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SmartAssistant.Core")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3b7ed0b8ac5868229ace9d67c2d48330d9411dc0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+deba9f3b1703cec799d7dcae49a43f6024ee19dc")]
 [assembly: System.Reflection.AssemblyProductAttribute("SmartAssistant.Core")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SmartAssistant.Core")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

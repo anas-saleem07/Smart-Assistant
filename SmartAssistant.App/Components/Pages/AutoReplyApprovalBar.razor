@@ -6,6 +6,7 @@
 @inject HttpClient Http
 @inject NavigationManager Nav
 @implements IDisposable
+<ForegroundRefresh @ref="foregroundRefresh" Refresh="RefreshPendingAsync" />
 
 @if (!string.IsNullOrWhiteSpace(statusText))
 {
@@ -63,8 +64,8 @@
 
                 <div class="ar-actions">
                     <button class="ar-btn ar-btn-yes"
-                            @onclick="() => ApproveSameSlot(pendingItem)"
-                            disabled="@(activeActionId == pendingItem.Id)">
+                            @onclick="() => ApproveAvailableSlot(pendingItem)"
+                            disabled="@(activeActionId == pendingItem.Id || !pendingItem.CanApproveOriginal)">
                         @(activeActionId == pendingItem.Id ? "Working..." : "Yes")
                     </button>                    
 
@@ -92,62 +93,29 @@
 }
 
 @code {
+    private ForegroundRefresh? foregroundRefresh;
     private bool isError;
     private string statusText = "";
     private List<PendingAutoReplyViewModel> pendingItems = new();
-    private PeriodicTimer? refreshTimer;
-    private CancellationTokenSource? refreshCancellationSource;
     private long? activeActionId;
-
-    #region Lifecycle
-
-    protected override async Task OnInitializedAsync()
+    private readonly SemaphoreSlim loadGate = new(1, 1);
+    protected override Task OnInitializedAsync() => LoadPendingApprovals();
+    public void Dispose() { }
+    private async Task RefreshPendingAsync()
     {
+        if (activeActionId.HasValue) return;
         await LoadPendingApprovals();
-
-        refreshCancellationSource = new CancellationTokenSource();
-        refreshTimer = new PeriodicTimer(TimeSpan.FromSeconds(10));
-
-        _ = RunRefreshLoopAsync(refreshCancellationSource.Token);
+        StateHasChanged();
     }
-
-    public void Dispose()
-    {
-        refreshCancellationSource?.Cancel();
-        refreshTimer?.Dispose();
-        refreshCancellationSource?.Dispose();
-    }
-
-    #endregion
-
     #region Private Methods
-
-    private async Task RunRefreshLoopAsync(CancellationToken cancellationToken)
-    {
-        try
-        {
-            while (refreshTimer != null && await refreshTimer.WaitForNextTickAsync(cancellationToken))
-            {
-                if (!activeActionId.HasValue)
-                {
-                    await InvokeAsync(async () =>
-                    {
-                        await LoadPendingApprovals();
-                        StateHasChanged();
-                    });
-                }
-            }
-        }
-        catch
-        {
-        }
-    }
 
     private async Task LoadPendingApprovals()
     {
+        await loadGate.WaitAsync();
         try
         {
-            using var timeoutSource = new CancellationTokenSource(TimeSpan.FromSeconds(8));
+            using var timeoutSource = CancellationTokenSource.CreateLinkedTokenSource(foregroundRefresh?.Token ?? CancellationToken.None);
+            timeoutSource.CancelAfter(TimeSpan.FromSeconds(8));
 
             var response = await Http.GetAsync(
                 "api/auto-reply/pending",
@@ -187,14 +155,21 @@
         {
             SetStatus("Failed to load pending approvals: " + exception.Message, true);
         }
+        finally { loadGate.Release(); }
     }
 
-    private async Task ApproveSameSlot(PendingAutoReplyViewModel item)
+    private async Task ApproveAvailableSlot(PendingAutoReplyViewModel item)
     {
+        if (!item.CanApproveOriginal)
+        {
+            SetStatus("Use Send reschedule email to propose the suggested slot.", true);
+            return;
+        }
+
         await SendSimpleActionAsync(
             item,
             $"api/auto-reply/approve-same-slot/{item.Id}",
-            "Original slot approved. Reminder created and acceptance email sent.");
+            "Selected slot approved. Reminder created and acceptance email sent.");
     }
 
     private async Task SendSuggestedSlot(PendingAutoReplyViewModel item)
@@ -755,6 +730,13 @@
         public string ProposedLocalText { get; set; } = "";
         public string SuggestedLocalText { get; set; } = "";
         public DateTimeOffset? SuggestedStartUtc { get; set; }
+        public DateTimeOffset? SuggestedEndUtc { get; set; }
+        public bool HasSuggestedDraft { get; set; }
+        public bool CanApproveOriginal => HasOriginalSlot && !HasSuggestedDraft;
+        public bool HasOriginalSlot => ProposedStartUtc.HasValue &&
+            (!ProposedEndUtc.HasValue || ProposedEndUtc > ProposedStartUtc);
+        public bool HasSuggestedSlot => SuggestedStartUtc.HasValue &&
+            (!SuggestedEndUtc.HasValue || SuggestedEndUtc > SuggestedStartUtc);
         public string? ReplyLastError { get; set; }
         public bool IsSuggestedSlotReady { get; set; }
     }

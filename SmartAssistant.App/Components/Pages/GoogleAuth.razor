@@ -1,4 +1,5 @@
-﻿@page "/google-auth"
+﻿<ForegroundRefresh @ref="foregroundRefresh" Refresh="LoadStatusAsync" />
+@page "/google-auth"
 @inject HttpClient Http
 @inject NavigationManager Navigation
 @using System.Net.Http.Json
@@ -96,6 +97,8 @@
 </div>
 
 @code {
+    private ForegroundRefresh? foregroundRefresh;
+    private bool statusLoading;
     private bool isLoading = true;
     private bool isBusy;
     private bool isError;
@@ -185,12 +188,15 @@
 
     private async Task LoadStatusAsync()
     {
+        if (statusLoading) return;
+        statusLoading = true;
         try
         {
             isLoading = true;
             ClearStatus();
 
-            using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(8));
+            using var cts = CancellationTokenSource.CreateLinkedTokenSource(foregroundRefresh?.Token ?? CancellationToken.None);
+            cts.CancelAfter(TimeSpan.FromSeconds(8));
 
             var response = await Http.GetAsync("api/google-oauth/status", cts.Token);
             var body = await response.Content.ReadAsStringAsync(cts.Token);
@@ -221,6 +227,7 @@
         }
         finally
         {
+            statusLoading = false;
             isLoading = false;
             await InvokeAsync(StateHasChanged);
         }

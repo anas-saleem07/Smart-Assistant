@@ -1,4 +1,5 @@
-﻿@page "/"
+﻿<ForegroundRefresh @ref="foregroundRefresh" Refresh="LoadStatusAsync" />
+@page "/"
 @page "/gmail"
 @layout SmartAssistant.App.Components.Layout.AuthLayout
 @inject HttpClient Http
@@ -115,8 +116,10 @@
 </div>
 
 @code {
+    private ForegroundRefresh? foregroundRefresh;
     private const string DashboardRoute = "/reminders";
 
+    private bool statusLoading;
     private bool isLoading = true;
     private bool isBusy;
     private bool isError;
@@ -162,11 +165,14 @@
 
     private async Task LoadStatusAsync()
     {
+        if (statusLoading) return;
+        statusLoading = true;
         try
         {
             isLoading = true;
 
-            using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(8));
+            using var cts = CancellationTokenSource.CreateLinkedTokenSource(foregroundRefresh?.Token ?? CancellationToken.None);
+            cts.CancelAfter(TimeSpan.FromSeconds(8));
 
             var response = await Http.GetAsync("api/google-oauth/status", cts.Token);
             var body = await response.Content.ReadAsStringAsync(cts.Token);
@@ -212,6 +218,7 @@
         }
         finally
         {
+            statusLoading = false;
             isLoading = false;
             await InvokeAsync(StateHasChanged);
         }
