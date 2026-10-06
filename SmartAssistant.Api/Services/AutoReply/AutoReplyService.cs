@@ -33,6 +33,7 @@ namespace SmartAssistant.Api.Services.AutoReply
 
     public sealed class PendingAutoReplyDto
     {
+        public bool IsSlotAvailable { get; set; }
         public bool HasSuggestedDraft { get; set; }
         public long Id { get; set; }
         public string Provider { get; set; } = "";
@@ -967,8 +968,27 @@ namespace SmartAssistant.Api.Services.AutoReply
                     await _db.SaveChangesAsync(ct);
                 }
 
+                var isSlotAvailable = false;
+                if (pendingRow.ProposedStartUtc is { } originalStart)
+                {
+                    var originalEnd = pendingRow.ProposedEndUtc ?? originalStart.AddMinutes(settings.SlotMinutes);
+                    if (originalEnd > originalStart)
+                    {
+                        try
+                        {
+                            isSlotAvailable = !await HasReminderConflictAsync(originalStart, originalEnd, ct)
+                                && await _calendar.IsFreeAsync(originalStart, originalEnd, settings, ct);
+                        }
+                        catch (Exception) when (!ct.IsCancellationRequested)
+                        {
+                            // Availability could not be established; do not enable acceptance.
+                        }
+                    }
+                }
+
                 result.Add(new PendingAutoReplyDto
                 {
+                    IsSlotAvailable = isSlotAvailable,
                     Id = pendingRow.Id,
                     HasSuggestedDraft = !string.IsNullOrWhiteSpace(pendingRow.SuggestedCalendarEventId),
                     Provider = pendingRow.Provider ?? "",

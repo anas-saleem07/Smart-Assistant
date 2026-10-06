@@ -110,7 +110,7 @@ public static class HistoryApprovalChecks
                     Check(row.ReplyLastError == "Original proposed time is missing.", "Saving a draft does not overwrite the actual missing-time reason");
                 var refreshed = (List<AutoReplyApprovalBar.PendingAutoReplyViewModel>)typeof(AutoReplyApprovalBar)
                     .GetField("pendingItems", BindingFlags.Instance | BindingFlags.NonPublic)!.GetValue(component)!;
-                Check(refreshed.Single().HasSuggestedDraft && !refreshed.Single().CanApproveOriginal && !await fixture.Db.Reminder.AnyAsync(), "Draft immediately switches controls without finalizing a reminder");
+                Check(refreshed.Single().HasSuggestedDraft && refreshed.Single().CanApproveOriginal == (scenario == "original-draft") && !await fixture.Db.Reminder.AnyAsync(), "Draft does not disable an available original slot or finalize a reminder");
             }
             else
             {
@@ -126,6 +126,33 @@ public static class HistoryApprovalChecks
             }
         }
 
+        foreach (var conflict in new[] { "none", "calendar", "reminder" })
+        {
+            using var fixture = new Fixture();
+            var row = fixture.AddRow(ProcessingStatuses.ApprovalPending);
+            row.ReplyNeeded = row.ReplyRequiresApproval = true;
+            row.ProposedStartUtc = fixture.Calendar.Suggestion;
+            row.SuggestedStartUtc = row.ProposedStartUtc.Value.AddHours(2);
+            row.SuggestedCalendarEventId = "draft-event";
+            fixture.Calendar.Free = conflict != "calendar";
+            if (conflict == "reminder") fixture.Db.Reminder.Add(new Reminder { Id = Guid.NewGuid(), Type = ReminderType.Manual,
+                ReminderTime = row.ProposedStartUtc.Value, AccountEmail = Fixture.Account });
+            await fixture.Db.SaveChangesAsync();
+            await using var ui = new UiSession(fixture);
+            var html = await ui.RenderPendingAsync();
+            var component = (AutoReplyApprovalBar)ui.Activator.Components.Single(x => x is AutoReplyApprovalBar);
+            var item = ((List<AutoReplyApprovalBar.PendingAutoReplyViewModel>)typeof(AutoReplyApprovalBar)
+                .GetField("pendingItems", BindingFlags.Instance | BindingFlags.NonPublic)!.GetValue(component)!).Single();
+            Check(item.CanApproveOriginal == (conflict == "none"), conflict + ": Yes follows existing availability despite draft and missing EndTime");
+            var yesTag = System.Text.RegularExpressions.Regex.Match(html, "<button class=\"ar-btn ar-btn-yes\"[^>]*>").Value;
+            Check(yesTag.Length > 0 && yesTag.Contains("disabled") == (conflict != "none"), conflict + ": rendered Yes disabled attribute matches availability");
+            await ui.Renderer.Dispatcher.InvokeAsync(async () => await (Task)typeof(AutoReplyApprovalBar)
+                .GetMethod("ApproveAvailableSlot", BindingFlags.Instance | BindingFlags.NonPublic)!.Invoke(component, new object[] { item })!);
+            if (conflict == "none")
+                Check((await fixture.Db.Reminder.SingleAsync()).ReminderTime == item.ProposedStartUtc && row.ProcessingStatus == ProcessingStatuses.Confirmed && fixture.Email.Replies == 1,
+                    "Enabled Yes accepts exactly the original slot through existing reminder/reply flow");
+            else Check(fixture.Handler.Posts.Count == 0 && !await fixture.Db.Reminder.AnyAsync(x => x.Type == ReminderType.Email), "Unavailable Yes does not submit acceptance or create reminder");
+        }
         using (var fixture = new Fixture())
         {
             var row = fixture.AddRow(ProcessingStatuses.ApprovalPending);

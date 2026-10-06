@@ -408,4 +408,3 @@ C:\Users\BasitAliKhan\source\repos\Smart-Assistant\SmartAssistant.Api\obj\Debug\
 C:\Users\BasitAliKhan\source\repos\Smart-Assistant\SmartAssistant.Api\obj\Debug\net9.0\SmartAssistant.Api.pdb
 C:\Users\BasitAliKhan\source\repos\Smart-Assistant\SmartAssistant.Api\obj\Debug\net9.0\SmartAssistant.Api.genruntimeconfig.cache
 C:\Users\BasitAliKhan\source\repos\Smart-Assistant\SmartAssistant.Api\obj\Debug\net9.0\ref\SmartAssistant.Api.dll
-C:\Users\BasitAliKhan\source\repos\Smart-Assistant\SmartAssistant.Api\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt

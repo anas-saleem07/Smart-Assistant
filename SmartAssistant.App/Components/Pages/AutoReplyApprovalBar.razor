@@ -732,7 +732,8 @@
         public DateTimeOffset? SuggestedStartUtc { get; set; }
         public DateTimeOffset? SuggestedEndUtc { get; set; }
         public bool HasSuggestedDraft { get; set; }
-        public bool CanApproveOriginal => HasOriginalSlot && !HasSuggestedDraft;
+        public bool IsSlotAvailable { get; set; }
+        public bool CanApproveOriginal => HasOriginalSlot && IsSlotAvailable;
         public bool HasOriginalSlot => ProposedStartUtc.HasValue &&
             (!ProposedEndUtc.HasValue || ProposedEndUtc > ProposedStartUtc);
         public bool HasSuggestedSlot => SuggestedStartUtc.HasValue &&
